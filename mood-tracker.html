@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <a href="mood-tracker.html">Mood Tracker</a>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood Tracker - Understanding Psychology</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <style>
+        :root {
+            --primary: #a388ee;
+            --secondary: #f5f0ff;
+            --background: #ffffff;
+            --text: #2c2c2c;
+            --spacing: 2rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        nav {
+            background: white;
+            padding: 1.5rem 10%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            position: relative;
+        }
+
+        .mood-hero {
+            background: linear-gradient(135deg, #f0e6ff, #e6f0ff);
+            padding-top: 120px;
+            min-height: 40vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing);
+        }
+
+        #mood-tracker-root {
+            padding: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="cognitive.html">Cognitive Psychology</a>
+            <a href="developmental.html">Development</a>
+            <a href="social.html">Social Psychology</a>
+            <a href="research.html">Research</a>
+            <a href="mood-tracker.html">Mood Tracker</a>
+            <a href="resources.html">Resources</a>
+        </div>
+    </nav>
+
+    <section class="mood-hero">
+        <div class="container">
+            <div data-aos="fade-up">
+                <h1>Daily Mood Tracker</h1>
+                <p>Track your emotional well-being and receive AI-powered insights and coping strategies.</p>
+            </div>
+        </div>
+    </section>
+
+    <div id="mood-tracker-root"></div>
+
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+    </script>
+</body>
+</html>
