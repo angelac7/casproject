@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding Psychology</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary: #7c5dfa;
+            --primary-light: #a388ee;
+            --secondary: #f5f0ff;
+            --background: #ffffff;
+            --text: #2c2c2c;
+            --spacing: 2rem;
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Cursor Effect */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.2s ease;
+            display: none;
+        }
+
+        .cursor-dot {
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            display: none;
+        }
+
+        @media (min-width: 1024px) {
+            .cursor, .cursor-dot {
+                display: block;
+            }
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: transparent;
+            z-index: 1001;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+            width: 0%;
+            transition: width 0.3s ease-out;
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1.5rem 10%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        nav.scrolled {
+            padding: 1rem 10%;
+            background: rgba(255, 255, 255, 0.98);
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            transition: var(--transition);
+            font-size: 1.1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: 0;
+            left: -100%;
+            background-color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a:hover::before {
+            left: 0;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(135deg, var(--secondary) 0%, #ffffff 100%);
+            margin-top: 60px;
+            padding: 0 5%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--primary-light) 0%, transparent 70%);
+            opacity: 0.1;
+            animation: pulse 15s infinite;
+        }
+
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .shape {
+            position: absolute;
+            background: var(--primary-light);
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 20s infinite;
+        }
+
+        .shape:nth-child(1) {
+            width: 100px;
+            height: 100px;
+            left: 10%;
+            top: 20%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            right: 15%;
+            top: 30%;
+            animation-delay: -5s;
+        }
+
+        .shape:nth-child(3) {
+            width: 80px;
+            height: 80px;
+            left: 20%;
+            bottom: 20%;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            animation: slideUp 1s ease-out;
+            position: relative;
+        }
+
+        .hero h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--primary);
+            animation: expandWidth 1s ease-out 0.5s forwards;
+        }
+
+        @keyframes expandWidth {
+            from { width: 0; }
+            to { width: 100px; }
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 0.5s forwards;
+        }
+
+        /* Topic Cards */
+        .topic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            padding: 2rem 0;
+        }
+
+        .topic-card {
+            background: var(--secondary);
+            padding: 2.5rem;
+            border-radius: 20px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .topic-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-light) 0%, transparent 100%);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .topic-card:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .topic-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .topic-card .icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+            transform: translateZ(30px);
+        }
+
+        .topic-card:hover .icon {
+            transform: translateZ(50px) scale(1.1);
+        }
+
+        .topic-card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.7rem;
+            position: relative;
+            transform: translateZ(20px);
+        }
+
+        .topic-card p {
+            transform: translateZ(10px);
+            transition: var(--transition);
+        }
+
+        .learn-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 1rem;
+            transition: var(--transition);
+            transform: translateZ(15px);
+        }
+
+        .learn-more::after {
+            content: '→';
+            transition: var(--transition);
+        }
+
+        .learn-more:hover::after {
+            transform: translateX(5px);
+        }
+
+        /* Content Section */
+        .content-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        .content-text {
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content-text::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            width: 100px;
+            height: 100px;
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            opacity: 0.2;
+            z-index: -1;
+            transition: var(--transition);
+        }
+
+        .content-text:hover::before {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .content-text h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
+            position: relative;
+        }
+
+        .content-text h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--primary);
+            transition: var(--transition);
+        }
+
+        .content-text:hover h2::after {
+            width: 100px;
+        }
+
+        .content-image {
+            background: var(--secondary);
+            padding: 2rem;
+            border-radius: 20px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .content-image:hover {
+            transform: scale(1.02) rotateY(5deg);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .content-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            transition: var(--transition);
+            transform: translateZ(20px);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text);
+            color: white;
+            padding: 4rem 0;
+            margin-top: 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+        }
+
+        /* Scroll to Top */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--primary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(100px);
+            transition: var(--transition);
+            z-index: 999;
+        }
+
+        .scroll-to-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .scroll-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+
+            .content-section {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .topic-card {
+                padding: 2rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .loader-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .loader-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--secondary);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loader-text {
+            color: var(--primary);
+            font-size: 1.2rem;
+            animation: fadeInOut 2s infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Page Transition */
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary);
+            transform: translateY(100%);
+            z-index: 9998;
+            pointer-events: none;
+        }
+
+        .page-transition.active {
+            animation: pageTransition 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes pageTransition {
+            0% { transform: translateY(100%); }
+            100% { transform: translateY(-100%); }
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: absolute;
+            background: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+            z-index: 1000;
+        }
+
+        .tooltip::before {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 8px solid transparent;
+            border-top-color: var(--primary);
+        }
+
+        /* Interactive Elements */
+        .interactive-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor"></div>
+    <div class="cursor-dot"></div>
+    <div class="page-transition"></div>
+    
+    <div class="progress-container">
+        <div class="progress-bar"></div>
+    </div>
+
+    <div class="loader">
+        <div class="loader-content">
+            <div class="loader-spinner"></div>
+            <div class="loader-text">Loading amazing content...</div>
+        </div>
+    </div>
+
+    <nav>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link" data-tooltip="Back to Home">Home</a>
+            <a href="cognitive.html" class="nav-link" data-tooltip="Explore Cognitive Psychology">Cognitive Psychology</a>
+            <a href="developmental.html" class="nav-link" data-tooltip="Learn About Development">Development</a>
+            <a href="social.html" class="nav-link" data-tooltip="Understand Social Behavior">Social Psychology</a>
+            <a href="research.html" class="nav-link" data-tooltip="Latest Research">Research</a>
+            <a href="mood-tracker.html" class="nav-link" data-tooltip="Track Your Mood">Mood Tracker</a>
+            <a href="resources.html" class="nav-link" data-tooltip="Helpful Resources">Resources</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="interactive-bg"></div>
+        <div class="floating-shapes">
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+        </div>
+        <div class="hero-content" data-aos="fade-up" data-aos-duration="1200">
+            <h1>Understanding Psychology</h1>
+            <p>Explore the fascinating world of human behavior, cognition, and mental processes. Learn about the scientific study of mind and behavior through comprehensive resources and expert insights.</p>
+        </div>
+    </section>
+
+    <section class="container">
+        <h2 class="section-title" data-aos="fade-up">Key Topics in Psychology</h2>
+        <div class="topic-grid">
+            <div class="topic-card" data-aos="fade-up" data-aos-delay="100">
+                <i class="fas fa-brain icon"></i>
+                <h3>Cognitive Psychology</h3>
+                <p>Explore how humans think, remember, learn, and perceive. Understand the mental processes that drive our daily experiences.</p>
+                <a href="cognitive.html" class="learn-more">Learn More</a>
+            </div>
+            <div class="topic-card" data-aos="fade-up" data-aos-delay="200">
+                <i class="fas fa-child icon"></i>
+                <h3>Developmental Psychology</h3>
+                <p>Discover how humans develop throughout their lifespan, from infancy through late adulthood.</p>
+                <a href="developmental.html" class="learn-more">Learn More</a>
+            </div>
+            <div class="topic-card" data-aos="fade-up" data-aos-delay="300">
+                <i class="fas fa-users icon"></i>
+                <h3>Social Psychology</h3>
+                <p>Understand how social interactions shape our behavior, attitudes, and perceptions of others.</p>
+                <a href="social.html" class="learn-more">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="container">
+        <div class="content-section">
+            <div class="content-text" data-aos="fade-right">
+                <h2>Latest Research</h2>
+                <p>Stay updated with the latest discoveries in psychological science. Our research section provides accessible summaries of recent studies and their implications for understanding human behavior.</p>
+                <a href="research.html" class="learn-more">Explore Research</a>
+            </div>
+            <div class="content-image" data-aos="fade-left">
+                <img src="/api/placeholder/400/300" alt="Research illustration">
+            </div>
+        </div>
+    </section>
+
+    <div class="scroll-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Understanding Psychology. Educational Resource</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Custom cursor
+        const cursor = document.querySelector('.cursor');
+        const cursorDot = document.querySelector('.cursor-dot');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            cursorDot.style.left = e.clientX + 'px';
+            cursorDot.style.top = e.clientY + 'px';
+
+            // Scale effect on clickable elements
+            const target = e.target;
+            if (target.tagName.toLowerCase() === 'a' || target.classList.contains('topic-card')) {
+                cursor.style.transform = 'scale(1.5)';
+            } else {
+                cursor.style.transform = 'scale(1)';
+            }
+        });
+
+        // Progress bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.querySelector('.progress-bar').style.width = scrolled + '%';
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Scroll to top button
+        const scrollToTop = document.querySelector('.scroll-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                scrollToTop.classList.add('visible');
+            } else {
+                scrollToTop.classList.remove('visible');
+            }
+        });
+
+        scrollToTop.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Interactive background effect
+        const interactiveBg = document.querySelector('.interactive-bg');
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            interactiveBg.style.background = `radial-gradient(circle at ${x * 100}% ${y * 100}%, 
+                rgba(124, 93, 250, 0.1) 0%, 
+                rgba(124, 93, 250, 0.05) 20%, 
+                transparent 50%)`;
+        });
+
+        // Tooltips
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            const tooltip = document.createElement('div');
+            tooltip.classList.add('tooltip');
+            tooltip.textContent = link.getAttribute('data-tooltip');
+            document.body.appendChild(tooltip);
+
+            link.addEventListener('mouseenter', (e) => {
+                const rect = link.getBoundingClientRect();
+                tooltip.style.left = rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2) + 'px';
+                tooltip.style.top = rect.bottom + 10 + 'px';
+                tooltip.style.opacity = '1';
+            });
+
+            link.addEventListener('mouseleave', () => {
+                tooltip.style.opacity = '0';
+            });
+        });
+
+        // Page load animation
+        window.addEventListener('load', () => {
+            const loader = document.querySelector('.loader');
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500);
+            }, 2000);
+        });
+
+        // Page transition
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                if (link.hostname === window.location.hostname) {
+                    e.preventDefault();
+                    const pageTransition = document.querySelector('.page-transition');
+                    pageTransition.classList.add('active');
+                    
+                    setTimeout(() => {
+                        window.location = link.href;
+                    }, 500);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
