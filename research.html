@@ -166,6 +166,8 @@
             margin: 0 auto;
             padding: 2rem;
             animation: fadeSlideIn 1s ease-out;
+            position: relative;
+            z-index: 1;
         }
 
         .hero h1 {
@@ -177,175 +179,244 @@
             margin-bottom: 1.5rem;
         }
 
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 var(--spacing);
         }
 
-        /* Research Methods Section */
-        .methods-grid {
+        /* Assessment Tools Section */
+        .assessment-tools {
+            padding: 4rem 0;
+            background: var(--secondary);
+        }
+
+        .assessment-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
-            padding: 4rem 0;
+            padding: 2rem;
         }
 
-        .method-card {
+        .assessment-card {
             background: white;
-            border-radius: 15px;
+            border-radius: 12px;
             padding: 2rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
             position: relative;
             overflow: hidden;
         }
 
-        .method-card::before {
+        .assessment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .assessment-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            z-index: 0;
-        }
-
-        .method-card:hover {
-            transform: translateY(-10px) rotate(1deg);
-            animation: glowEffect 2s infinite;
-        }
-
-        .method-card:hover::before {
-            opacity: 0.1;
-        }
-
-        .method-card h3 {
-            color: var(--primary);
-            margin-bottom: 1rem;
-            position: relative;
-        }
-
-        /* Interactive Tools Section */
-        .tools-section {
-            background: var(--secondary);
-            padding: 4rem 0;
-        }
-
-        .tool-card {
-            background: white;
-            border-radius: 15px;
-            padding: 2rem;
-            margin: 2rem 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transform: scaleX(0);
             transition: transform 0.3s ease;
         }
 
-        .tool-card:hover {
-            transform: translateY(-5px);
+        .assessment-card:hover::before {
+            transform: scaleX(1);
         }
 
-        .input-field {
-            width: 100%;
+        .assessment-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .assessment-card:hover .assessment-icon {
+            background: var(--primary);
+            color: white;
+        }
+
+        .assessment-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .assessment-description {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        .assessment-questions {
+            display: none;
+            margin-top: 1.5rem;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .assessment-card.active .assessment-questions {
+            display: block;
+        }
+
+        .question-item {
+            background: var(--secondary);
             padding: 1rem;
-            margin: 0.5rem 0;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: slideIn 0.5s ease-out forwards;
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .rating-scale {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .rating-button {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .rating-button:hover,
+        .rating-button.selected {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Symptom Checker Styles */
+        .symptom-checker {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .symptom-button {
+            padding: 1rem;
             border: 2px solid var(--primary);
             border-radius: 8px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .input-field:focus {
-            outline: none;
-            box-shadow: 0 0 10px rgba(163, 136, 238, 0.3);
-        }
-
-        .button {
-            background: linear-gradient(45deg, var(--primary), var(--accent));
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 8px;
+            background: white;
             cursor: pointer;
             transition: all 0.3s ease;
+        }
+
+        .symptom-button.selected {
+            background: var(--primary);
+            color: white;
+        }
+
+        .symptom-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .selected-symptoms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
             margin: 1rem 0;
-            position: relative;
-            overflow: hidden;
         }
 
-        .button::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
+        .symptom-tag {
+            background: var(--secondary);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .analyze-button {
             width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .button:hover {
-            transform: translateY(-2px);
-        }
-
-        .button:hover::after {
-            left: 100%;
-        }
-
-        /* Timeline Section */
-        .timeline {
-            padding: 4rem 0;
-            position: relative;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 0;
-            transform: translateX(-50%);
-            width: 2px;
-            height: 100%;
+            padding: 1rem 2rem;
             background: var(--primary);
-            opacity: 0.3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 1rem 0;
+            transition: background-color 0.3s ease;
         }
 
-        .timeline-item {
-            width: calc(50% - 30px);
-            margin: 2rem 0;
-            padding: 2rem;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            position: relative;
-            animation: fadeSlideIn 0.5s ease-out;
+        .analyze-button:hover {
+            background: var(--accent);
         }
 
-        .timeline-item:nth-child(odd) {
-            margin-left: auto;
+        .diagnosis-result {
+            margin-top: 2rem;
+            padding: 1rem;
+            border-radius: 8px;
+            display: none;
         }
 
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: var(--primary);
-            border-radius: 50%;
-            top: 50%;
+        .diagnosis-result.warning {
+            background: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
         }
 
-        .timeline-item:nth-child(odd)::before {
-            left: -40px;
-            transform: translateY(-50%);
+        .diagnosis-result.info {
+            background: #cce5ff;
+            border: 1px solid #b8daff;
+            color: #004085;
         }
 
-        .timeline-item:nth-child(even)::before {
-            right: -40px;
-            transform: translateY(-50%);
+        /* Input Styles */
+        input[type="text"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--secondary);
+            border-radius: 8px;
+            margin-top: 0.5rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary);
         }
 
         /* Floating Action Button */
@@ -364,38 +435,31 @@
             color: white;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-size: 1.5rem;
+            z-index: 1000;
         }
 
         .fab:hover {
             transform: scale(1.1);
             box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            background: var(--accent);
         }
 
-        /* Statistics Dashboard */
-        .stats-dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            padding: 2rem 0;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            color: var(--primary);
+        /* Progress Bar */
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--secondary);
             margin: 1rem 0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            width: 0;
+            transition: width 0.3s ease;
         }
 
         /* Responsive Design */
@@ -409,17 +473,36 @@
                 font-size: 2.5rem;
             }
 
-            .timeline::before {
-                left: 20px;
+            .grid-container {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             }
 
-            .timeline-item {
-                width: calc(100% - 50px);
-                margin-left: 50px !important;
+            .assessment-grid {
+                grid-template-columns: 1fr;
+                padding: 1rem;
             }
 
-            .timeline-item::before {
-                left: -40px !important;
+            .assessment-card {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .assessment-title {
+                font-size: 1.25rem;
+            }
+
+            .rating-scale {
+                justify-content: space-between;
+            }
+
+            .rating-button {
+                width: 25px;
+                height: 25px;
             }
         }
     </style>
@@ -428,8 +511,7 @@
     <!-- Loading Screen -->
     <div class="loader">
         <div class="loading-spinner"></div>
-    </div>
-
+    </div
     <nav>
         <div class="nav-links">
             <a href="index.html">Home</a>
@@ -449,124 +531,251 @@
         </div>
     </section>
 
-    <section class="container">
-        <h2 data-aos="fade-up">Research Statistics</h2>
-        <div class="stats-dashboard">
-            <div class="stat-card" data-aos="fade-up" data-aos-delay="100">
-                <h3>Active Studies</h3>
-                <div class="stat-number" data-value="150">0</div>
-                <p>Ongoing Research Projects</p>
-            </div>
-            <div class="stat-card" data-aos="fade-up" data-aos-delay="200">
-                <h3>Participants</h3>
-                <div class="stat-number" data-value="5000">0</div>
-                <p>Research Participants</p>
-            </div>
-            <div class="stat-card" data-aos="fade-up" data-aos-delay="300">
-                <h3>Publications</h3>
-                <div class="stat-number" data-value="75">0</div>
-                <p>Published Studies</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="container">
-        <h2 data-aos="fade-up">Research Methods</h2>
-        <div class="methods-grid">
-            <div class="method-card" data-aos="fade-up" data-aos-delay="100">
-                <h3>Experimental Research</h3>
-                <p>The gold standard of psychological research:</p>
-                <ul>
-                    <li>Controlled environments</li>
-                    <li>Random assignment</li>
-                    <li>Variable manipulation</li>
-                    <li>Statistical analysis</li>
-                </ul>
-                <button class="button" onclick="showMethodDetails('experimental')">Learn More</button>
-            </div>
-            <div class="method-card" data-aos="fade-up" data-aos-delay="200">
-                <h3>Observational Studies</h3>
-                <p>Naturalistic research approaches:</p>
-                <ul>
-                    <li>Field studies</li>
-                    <li>Behavioral observation</li>
-                    <li>Case studies</li>
-                    <li>Longitudinal research</li>
-                </ul>
-                <button class="button" onclick="showMethodDetails('observational')">Learn More</button>
-            </div>
-            <div class="method-card" data-aos="fade-up" data-aos-delay="300">
-                <h3>Correlational Research</h3>
-                <p>Understanding relationships between variables:</p>
-                <ul>
-                    <li>Survey methods</li>
-                    <li>Data analysis</li>
-                    <li>Pattern identification</li>
-                    <li>Statistical correlation</li>
-                </ul>
-                <button class="button" onclick="showMethodDetails('correlational')">Learn More</button>
-            </div>
-        </div>
-    </section>
-
-    <section class="tools-section">
+    <!-- Assessment Tools Section -->
+    <section class="assessment-tools">
         <div class="container">
-            <h2 data-aos="fade-up">Research Tools</h2>
-            <div class="tool-card" data-aos="fade-up">
-                <h3>Statistical Analysis Calculator</h3>
-                <div class="input-group">
-                    <input type="text" class="input-field" id="dataset" placeholder="Enter dataset (comma-separated numbers)">
-                    <select class="input-field" id="analysisType">
-                        <option value="mean">Mean</option>
-                        <option value="median">Median</option>
-                        <option value="mode">Mode</option>
-                        <option value="standardDev">Standard Deviation</option>
-                    </select>
-                    <button class="button" onclick="performAnalysis()">Calculate</button>
+            <h2 class="text-center mb-8" data-aos="fade-up">Psychological Assessment Tools</h2>
+            <div class="assessment-grid">
+                <!-- Mental Health Screening -->
+                <div class="assessment-card" data-aos="fade-up">
+                    <div class="assessment-icon">🧠</div>
+                    <h3 class="assessment-title">Mental Health Screening</h3>
+                    <p class="assessment-description">Non-diagnostic screening tools for common mental health concerns.</p>
+                    <div class="assessment-questions">
+                        <div class="question-item">
+                            <p>Over the past 2 weeks, how often have you felt down or depressed?</p>
+                            <div class="rating-scale">
+                                <button class="rating-button">1</button>
+                                <button class="rating-button">2</button>
+                                <button class="rating-button">3</button>
+                                <button class="rating-button">4</button>
+                                <button class="rating-button">5</button>
+                            </div>
+                        </div>
+                        <div class="question-item">
+                            <p>How often do you feel overwhelmed by daily tasks?</p>
+                            <div class="rating-scale">
+                                <button class="rating-button">1</button>
+                                <button class="rating-button">2</button>
+                                <button class="rating-button">3</button>
+                                <button class="rating-button">4</button>
+                                <button class="rating-button">5</button>
+                            </div>
+                        </div>
+                        <div class="question-item">
+                            <p>Do you experience difficulty sleeping?</p>
+                            <div class="rating-scale">
+                                <button class="rating-button">1</button>
+                                <button class="rating-button">2</button>
+                                <button class="rating-button">3</button>
+                                <button class="rating-button">4</button>
+                                <button class="rating-button">5</button>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                    </div>
                 </div>
-                <div id="analysisResult" class="result-display"></div>
-            </div>
 
-            <div class="tool-card" data-aos="fade-up">
-                <h3>Sample Size Calculator</h3>
-                <div class="input-group">
-                    <input type="number" class="input-field" id="confidenceLevel" placeholder="Confidence Level (%)">
-                    <input type="number" class="input-field" id="marginError" placeholder="Margin of Error (%)">
-                    <input type="number" class="input-field" id="populationSize" placeholder="Population Size">
-                    <button class="button" onclick="calculateSampleSize()">Calculate Sample Size</button>
+                <!-- Cognitive Function Tests -->
+                <div class="assessment-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="assessment-icon">💡</div>
+                    <h3 class="assessment-title">Cognitive Function Tests</h3>
+                    <p class="assessment-description">Tests for attention, problem-solving, and critical thinking.</p>
+                    <div class="assessment-questions">
+                        <div class="question-item">
+                            <p>Complete the pattern: 2, 4, 8, 16, __</p>
+                            <input type="text" class="p-2 border rounded mt-2 w-full" placeholder="Enter your answer">
+                        </div>
+                        <div class="question-item">
+                            <p>What word does not belong: Apple, Orange, Potato, Banana</p>
+                            <input type="text" class="p-2 border rounded mt-2 w-full" placeholder="Enter your answer">
+                        </div>
+                        <div class="question-item">
+                            <p>How many triangles can you spot in the diagram below?</p>
+                            <div class="geometric-diagram">
+                                <!-- SVG diagram would go here -->
+                            </div>
+                            <input type="text" class="p-2 border rounded mt-2 w-full" placeholder="Enter number of triangles">
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                    </div>
                 </div>
-                <div id="sampleSizeResult" class="result-display"></div>
+
+                <!-- Personality Type Assessment -->
+                <div class="assessment-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="assessment-icon">❤️</div>
+                    <h3 class="assessment-title">Personality Assessment</h3>
+                    <p class="assessment-description">Explore your personality traits and tendencies.</p>
+                    <div class="assessment-questions">
+                        <div class="question-item">
+                            <p>In social situations, do you prefer to initiate or observe?</p>
+                            <div class="rating-scale">
+                                <button class="rating-button">1</button>
+                                <button class="rating-button">2</button>
+                                <button class="rating-button">3</button>
+                                <button class="rating-button">4</button>
+                                <button class="rating-button">5</button>
+                            </div>
+                        </div>
+                        <div class="question-item">
+                            <p>How do you typically make important decisions?</p>
+                            <div class="rating-scale">
+                                <button class="rating-button">1</button>
+                                <button class="rating-button">2</button>
+                                <button class="rating-button">3</button>
+                                <button class="rating-button">4</button>
+                                <button class="rating-button">5</button>
+                            </div>
+                        </div>
+                        <div class="question-item">
+                            <p>What energizes you more: time alone or time with others?</p>
+                            <div class="rating-scale">
+                                <button class="rating-button">1</button>
+                                <button class="rating-button">2</button>
+                                <button class="rating-button">3</button>
+                                <button class="rating-button">4</button>
+                                <button class="rating-button">5</button>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Emotional Intelligence -->
+                <div class="assessment-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="assessment-icon">📊</div>
+                    <h3 class="assessment-title">Emotional Intelligence</h3>
+                    <p class="assessment-description">Evaluate your emotional awareness and management.</p>
+                    <div class="assessment-questions">
+                        <div class="question-item">
+                            <p>How well can you identify your emotions as they occur?</p>
+                            <div class="rating-scale">
+                                <button class="rating-button">1</button>
+                                <button class="rating-button">2</button>
+                                <button class="rating-button">3</button>
+                                <button class="rating-button">4</button>
+                                <button class="rating-button">5</button>
+                            </div>
+                        </div>
+                        <div class="question-item">
+                            <p>How do you typically respond to stress?</p>
+                            <div class="rating-scale">
+                                <button class="rating-button">1</button>
+                                <button class="rating-button">2</button>
+                                <button class="rating-button">3</button>
+                                <button class="rating-button">4</button>
+                                <button class="rating-button">5</button>
+                            </div>
+                        </div>
+                        <div class="question-item">
+                            <p>Can you easily recognize others' emotional states?</p>
+                            <div class="rating-scale">
+                                <button class="rating-button">1</button>
+                                <button class="rating-button">2</button>
+                                <button class="rating-button">3</button>
+                                <button class="rating-button">4</button>
+                                <button class="rating-button">5</button>
+                            </div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Behavioral Pattern Analysis -->
+                <div class="assessment-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="assessment-icon">📈</div>
+                    <h3 class="assessment-title">Behavioral Pattern Analysis</h3>
+                    <p class="assessment-description">Analyze your behavioral tendencies and habits.</p>
+                    <div class="assessment-questions">
+                        <div class="question-item">
+                            <p>How consistent are your daily routines?</p>
+                            <div class="rating-scale">
+                                <button class="rating-button">1</button>
+                                <button class="rating-button">2</button>
+                                <button class="rating-button">3</button>
+                                <button class="rating-button">4</button>
+                                <button class="rating-button">5</button>
+                            </div>
+                        </div>
+                        <div class="question-item">
+                            <p>How do you typically react to unexpected changes?</p>
+                            <div class="rating-scale">
+                                <button class="rating-button">1</button>
+                                <button class="rating-button">2</button>
+                                <button class="rating-button">3</button>
+                                <button class="rating-button">4</button>
+                                <button class="rating-button">5</button>
+                            </div>
+                        </div>
+                        <div class="question-item">
+                            <p>What motivates you to achieve your goals?</p>
+                            <input type="text" class="p-2 border rounded mt-2 w-full" placeholder="Describe your motivation">
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Memory and Learning -->
+                <div class="assessment-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="assessment-icon">🧩</div>
+                    <h3 class="assessment-title">Memory & Learning Tests</h3>
+                    <p class="assessment-description">Test your memory and learning capabilities.</p>
+                    <div class="assessment-questions">
+                        <div class="question-item">
+                            <p>Recall the sequence: Red, Blue, Green, Yellow, Purple</p>
+                            <input type="text" class="p-2 border rounded mt-2 w-full" placeholder="Enter the sequence">
+                        </div>
+                        <div class="question-item">
+                            <p>Remember this number: 847-291-365</p>
+                            <button class="memory-test-button">Hide Number</button>
+                            <input type="text" class="p-2 border rounded mt-2 w-full" placeholder="Enter the number" style="display: none;">
+                        </div>
+                        <div class="question-item">
+                            <p>Memorize this pattern: ○□△○□△○</p>
+                            <button class="memory-test-button">Hide Pattern</button>
+                            <input type="text" class="p-2 border rounded mt-2 w-full" placeholder="Reproduce the pattern" style="display: none;">
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="timeline container">
-        <h2 data-aos="fade-up">Research Timeline</h2>
-        <div class="timeline-item" data-aos="fade-right">
-            <h3>2024</h3>
-            <p>Latest Findings in Cognitive Research</p>
-            <ul>
-                <li>Neural correlates of decision-making</li>
-                <li>Memory formation mechanisms</li>
-                <li>Attention processing studies</li>
-            </ul>
-            <button class="button" onclick="showTimelineDetails('2024')">View Details</button>
-        </div>
-        <div class="timeline-item" data-aos="fade-left">
-            <h3>2023</h3>
-            <p>Breakthrough Studies in Social Psychology</p>
-            <ul>
-                <li>Group dynamics research</li>
-                <li>Social media impact studies</li>
-                <li>Cross-cultural psychology findings</li>
-            </ul>
-            <button class="button" onclick="showTimelineDetails('2023')">View Details</button>
+    <section class="container">
+        <h2 data-aos="fade-up">Scientific Symptom Research</h2>
+        <div class="symptom-checker bg-white rounded-lg shadow-lg p-6">
+            <h3>Symptom Analysis Tool</h3>
+            <p class="text-gray-600 mb-4">Select up to 4 symptoms to analyze potential patterns. Please note that this list does not include all possible symptoms. If yours does not appear here please consult a healthcare professional.</p>
+            
+            <div id="symptoms-grid" class="grid-container"></div>
+            
+            <div class="selected-symptoms" id="selected-symptoms"></div>
+            
+            <button onclick="analyzeSymptoms()" class="analyze-button">
+                Analyze Symptoms
+            </button>
+            
+            <div id="diagnosis-result" class="diagnosis-result"></div>
         </div>
     </section>
 
     <!-- Floating Action Button -->
     <div class="fab" onclick="scrollToTop()">↑</div>
 
+    <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script>
         // Initialize AOS
@@ -579,88 +788,72 @@
         // Hide loader when page is loaded
         window.addEventListener('load', () => {
             document.querySelector('.loader').classList.add('hidden');
-            animateStatistics();
         });
 
-        // Animate statistics numbers
-        function animateStatistics() {
-            const stats = document.querySelectorAll('.stat-number');
-            stats.forEach(stat => {
-                const targetValue = parseInt(stat.dataset.value);
-                let currentValue = 0;
-                const increment = targetValue / 100;
-                const interval = setInterval(() => {
-                    if (currentValue < targetValue) {
-                        currentValue += increment;
-                        stat.textContent = Math.round(currentValue);
-                    } else {
-                        stat.textContent = targetValue;
-                        clearInterval(interval);
-                    }
-                }, 20);
+        // Assessment Card Functionality
+        document.querySelectorAll('.assessment-card').forEach(card => {
+            card.addEventListener('click', () => {
+                // Remove active class from all cards
+                document.querySelectorAll('.assessment-card').forEach(c => {
+                    c.classList.remove('active');
+                });
+                // Add active class to clicked card
+                card.classList.add('active');
+
+                // Initialize progress bar
+                const progressBar = card.querySelector('.progress-fill');
+                if (progressBar) {
+                    let questions = card.querySelectorAll('.question-item');
+                    let answeredQuestions = 0;
+                    updateProgress(progressBar, answeredQuestions, questions.length);
+                }
             });
-        }
+        });
 
-        // Statistical Analysis
-        function performAnalysis() {
-            const dataset = document.getElementById('dataset').value
-                .split(',')
-                .map(num => parseFloat(num.trim()));
-            const analysisType = document.getElementById('analysisType').value;
-            let result;
+        // Rating Button Functionality
+        document.querySelectorAll('.rating-button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                // Remove selected class from all buttons in the same group
+                const parent = e.target.closest('.rating-scale');
+                parent.querySelectorAll('.rating-button').forEach(b => {
+                    b.classList.remove('selected');
+                });
+                // Add selected class to clicked button
+                button.classList.add('selected');
+                
+                // Update progress
+                const card = button.closest('.assessment-card');
+                const progressBar = card.querySelector('.progress-fill');
+                if (progressBar) {
+                    const questions = card.querySelectorAll('.question-item');
+                    const answeredQuestions = card.querySelectorAll('.rating-button.selected').length;
+                    updateProgress(progressBar, answeredQuestions, questions.length);
+                }
+                
+                e.stopPropagation(); // Prevent card from toggling
+            });
+        });
 
-            switch(analysisType) {
-                case 'mean':
-                    result = dataset.reduce((a, b) => a + b) / dataset.length;
-                    break;
-                case 'median':
-                    const sorted = dataset.sort((a, b) => a - b);
-                    const mid = Math.floor(sorted.length / 2);
-                    result = sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
-                    break;
-                case 'standardDev':
-                    const mean = dataset.reduce((a, b) => a + b) / dataset.length;
-                    result = Math.sqrt(dataset.reduce((sq, n) => sq + Math.pow(n - mean, 2), 0) / dataset.length);
-                    break;
-            }
+        // Memory Test Button Functionality
+        document.querySelectorAll('.memory-test-button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const questionItem = e.target.closest('.question-item');
+                const input = questionItem.querySelector('input');
+                if (button.textContent === 'Hide Number' || button.textContent === 'Hide Pattern') {
+                    button.textContent = 'Show Input';
+                    input.style.display = 'block';
+                } else {
+                    button.textContent = questionItem.querySelector('p').textContent.includes('number') ? 'Hide Number' : 'Hide Pattern';
+                    input.style.display = 'none';
+                }
+                e.stopPropagation();
+            });
+        });
 
-            document.getElementById('analysisResult').innerHTML = `
-                <h4>${analysisType.charAt(0).toUpperCase() + analysisType.slice(1)}</h4>
-                <p>${result.toFixed(2)}</p>
-            `;
-        }
-
-        // Sample Size Calculator
-        function calculateSampleSize() {
-            const confidenceLevel = document.getElementById('confidenceLevel').value;
-            const marginError = document.getElementById('marginError').value;
-            const populationSize = document.getElementById('populationSize').value;
-
-            // Simple sample size calculation
-            const z = 1.96; // 95% confidence level
-            const e = marginError / 100;
-            const N = populationSize;
-            const p = 0.5;
-
-            const sampleSize = Math.ceil(
-                (N * Math.pow(z, 2) * p * (1-p)) / 
-                (Math.pow(e, 2) * (N-1) + Math.pow(z, 2) * p * (1-p))
-            );
-
-            document.getElementById('sampleSizeResult').innerHTML = `
-                <h4>Required Sample Size</h4>
-                <p>${sampleSize} participants</p>
-            `;
-        }
-
-        // Method Details
-        function showMethodDetails(method) {
-            alert(`Detailed information about ${method} research method will be shown here.`);
-        }
-
-        // Timeline Details
-        function showTimelineDetails(year) {
-            alert(`Research details from ${year} will be shown here.`);
+        // Progress Bar Update Function
+        function updateProgress(progressBar, answered, total) {
+            const percentage = (answered / total) * 100;
+            progressBar.style.width = `${percentage}%`;
         }
 
         // Scroll to Top
@@ -680,327 +873,180 @@
                 fab.style.display = 'none';
             }
         });
+
+        // Disease patterns and symptoms
+        const diseasePatterns = {
+            // Respiratory Infections
+            "Common Cold": ["Cough", "Fever", "Fatigue", "Breathing Problems"],
+            "Flu": ["Fever", "Fatigue", "Body Aches", "Headache", "Cough", "Sore Throat", "Chills"],
+            "Pneumonia": ["Cough", "Fever", "Chest Pain", "Breathing Problems", "Fatigue", "Sweating", "Chills"],
+            "Bronchitis": ["Cough", "Sore Throat", "Fatigue", "Breathing Problems", "Wheezing"],
+            "COVID-19": ["Cough", "Fever", "Fatigue", "Shortness of Breath", "Loss of Taste", "Loss of Smell", "Headache", "Muscle Pain", "Sore Throat", "Chills"],
+            "Tuberculosis": ["Cough", "Fever", "Fatigue", "Night Sweats", "Chest Pain", "Weight Loss"],
+            "Asthma": ["Wheezing", "Breathing Problems", "Cough", "Shortness of Breath", "Chest Pain"],
+
+            // Digestive Disorders
+            "Food Poisoning": ["Nausea", "Vomiting", "Diarrhea", "Abdominal Pain", "Fever", "Fatigue"],
+            "Gastritis": ["Abdominal Pain", "Nausea", "Vomiting", "Indigestion", "Heartburn", "Loss of Appetite"],
+            "Irritable Bowel Syndrome (IBS)": ["Abdominal Pain", "Diarrhea", "Constipation", "Bloating", "Fatigue"],
+            "GERD": ["Heartburn", "Indigestion", "Cough", "Chest Pain", "Sore Throat"],
+            "Peptic Ulcer": ["Abdominal Pain", "Indigestion", "Nausea", "Vomiting", "Loss of Appetite"],
+            "Gallstones": ["Abdominal Pain", "Nausea", "Vomiting", "Fatigue", "Bloating"],
+            "Celiac Disease": ["Diarrhea", "Abdominal Pain", "Fatigue", "Weight Loss", "Bloating", "Nausea"],
+
+            // Neurological Conditions
+            "Migraine": ["Headache", "Nausea", "Dizziness", "Fatigue", "Sensitivity to Light", "Visual Disturbances"],
+            "Tension Headache": ["Headache", "Fatigue", "Muscle Pain", "Dizziness", "Irritability"],
+            "Epilepsy": ["Seizures", "Confusion", "Memory Loss", "Fatigue", "Dizziness"],
+            "Multiple Sclerosis": ["Muscle Weakness", "Numbness", "Fatigue", "Vision Problems", "Dizziness"],
+            "Parkinson's Disease": ["Muscle Weakness", "Tremors", "Fatigue", "Dizziness", "Loss of Coordination"],
+            "Stroke": ["Numbness", "Confusion", "Dizziness", "Vision Problems", "Headache", "Weakness"],
+
+            // Cardiovascular Conditions
+            "Heart Attack": ["Chest Pain", "Shortness of Breath", "Fatigue", "Sweating", "Nausea", "Dizziness"],
+            "Heart Failure": ["Fatigue", "Shortness of Breath", "Swollen Legs", "Chest Pain", "Rapid Heartbeat"],
+            "Arrhythmia": ["Irregular Heartbeat", "Dizziness", "Fatigue", "Shortness of Breath", "Chest Pain"],
+            "Hypertension": ["Headache", "Dizziness", "Fatigue", "Shortness of Breath", "Chest Pain"],
+
+            // Mental Health Conditions
+            "Depression": ["Fatigue", "Loss of Appetite", "Sleep Problems", "Difficulty Concentrating", "Loss of Interest"],
+            "Anxiety Disorder": ["Anxiety", "Panic Attacks", "Rapid Heartbeat", "Sweating", "Dizziness"],
+            "Bipolar Disorder": ["Mood Swings", "Sleep Problems", "Loss of Appetite", "Fatigue", "Difficulty Concentrating"],
+            "Schizophrenia": ["Hallucinations", "Paranoia", "Difficulty Concentrating", "Sleep Problems", "Loss of Interest"],
+
+            // Endocrine Disorders
+            "Diabetes": ["Excessive Thirst", "Frequent Urination", "Fatigue", "Blurred Vision", "Weight Loss"],
+            "Hypothyroidism": ["Fatigue", "Weight Gain", "Cold Sensitivity", "Dry Skin", "Depression"],
+            "Hyperthyroidism": ["Weight Loss", "Heat Sensitivity", "Rapid Heartbeat", "Anxiety", "Tremors"]
+        };
+
+        // Complete symptoms array
+        const symptoms = [
+            // Digestive System
+            "Abdominal Pain", "Indigestion", "Heartburn", "Constipation", "Diarrhea", "Nausea", "Vomiting", 
+            "Bloody Stool", "Loss of Appetite", "Bloating", "Gas", "Flatulence",
+
+            // Respiratory System
+            "Breathing Problems", "Cough", "Wheezing", "Shortness of Breath", "Chest Pain", "Sore Throat",
+            "Hoarseness", "Lung Pain", "Mucus Production", "Tightness in Chest",
+
+            // Cardiovascular System
+            "Chest Pain", "Heartburn", "Palpitations", "Weak Pulse", "Rapid Heartbeat", "Swollen Legs",
+            "Dizziness", "Fainting", "Irregular Heartbeat", "Blood Pressure Changes",
+
+            // Neurological
+            "Headache", "Dizziness and Vertigo", "Seizures", "Tingling or Numbness", "Loss of Coordination",
+            "Confusion", "Memory Loss", "Blurred Vision", "Tinnitus (Ringing in Ears)", "Loss of Taste", "Loss of Smell",
+            "Sensitivity to Light", "Sensitivity to Sound", "Visual Disturbances",
+
+            // Musculoskeletal
+            "Joint Pain", "Muscle Pain", "Back Pain", "Neck Pain", "Muscle Weakness", "Stiffness",
+            "Limited Range of Motion", "Swelling", "Muscle Spasms", "Bone Pain",
+
+            // Psychological
+            "Anxiety", "Depression", "Mood Swings", "Irritability", "Sleep Problems", "Fatigue",
+            "Stress", "Panic Attacks", "Poor Concentration", "Changes in Appetite",
+
+            // Skin and Hair
+            "Rash", "Itching", "Dry Skin", "Excessive Sweating", "Hair Loss", "Nail Changes",
+            "Skin Discoloration", "Bruising", "Skin Lesions", "Changes in Moles",
+
+            // General
+            "Fever", "Chills", "Night Sweats", "Weight Loss", "Weight Gain", "Fatigue",
+            "Weakness", "Loss of Balance", "Poor Appetite", "Excessive Thirst",
+
+            // Immune System
+            "Frequent Infections", "Slow Healing", "Enlarged Lymph Nodes", "Allergic Reactions",
+            "Autoimmune Symptoms", "Inflammation", "Joint Swelling", "Skin Reactions",
+
+            // Endocrine System
+            "Heat Intolerance", "Cold Intolerance", "Excessive Hunger", "Excessive Thirst",
+            "Frequent Urination", "Hormonal Changes", "Menstrual Changes", "Blood Sugar Changes"
+        ];
+
+        let selectedSymptoms = [];
+
+        // Initialize symptom buttons
+        function initializeSymptomChecker() {
+            const gridContainer = document.getElementById('symptoms-grid');
+            symptoms.forEach(symptom => {
+                const button = document.createElement('button');
+                button.className = 'symptom-button';
+                button.textContent = symptom;
+                button.onclick = () => toggleSymptom(symptom);
+                gridContainer.appendChild(button);
+            });
+        }
+
+        // Toggle symptom selection
+        function toggleSymptom(symptom) {
+            const index = selectedSymptoms.indexOf(symptom);
+            if (index > -1) {
+                selectedSymptoms.splice(index, 1);
+            } else if (selectedSymptoms.length < 4) {
+                selectedSymptoms.push(symptom);
+            }
+            updateUI();
+        }
+
+        // Update UI based on selections
+        function updateUI() {
+            const buttons = document.querySelectorAll('.symptom-button');
+            buttons.forEach(button => {
+                const isSelected = selectedSymptoms.includes(button.textContent);
+                button.className = 'symptom-button' + (isSelected ? ' selected' : '');
+                button.disabled = selectedSymptoms.length >= 4 && !isSelected;
+            });
+
+            const selectedContainer = document.getElementById('selected-symptoms');
+            selectedContainer.innerHTML = selectedSymptoms
+                .map(symptom => `<span class="symptom-tag">${symptom}</span>`)
+                .join('');
+        }
+
+        // Analyze symptoms
+        function analyzeSymptoms() {
+            if (selectedSymptoms.length === 0) {
+                showDiagnosis("Please select at least one symptom.", "warning");
+                return;
+            }
+
+            // Calculate matches
+            const matches = Object.entries(diseasePatterns).map(([disease, symptoms]) => {
+                const matchCount = symptoms.filter(s => selectedSymptoms.includes(s)).length;
+                const percentage = (matchCount / symptoms.length) * 100;
+                return { disease, percentage };
+            });
+
+            // Find best match
+            const bestMatch = matches.reduce((prev, current) => 
+                current.percentage > prev.percentage ? current : prev
+            );
+
+            if (bestMatch.percentage >= 50) {
+                showDiagnosis(
+                    `Based on your symptoms, you may have ${bestMatch.disease} (${Math.round(bestMatch.percentage)}% match).<br><br>
+                    <em>This is not a medical diagnosis. Please consult a healthcare professional.</em>`,
+                    "info"
+                );
+            } else {
+                showDiagnosis(
+                    "No clear pattern matched. Please consult a healthcare professional for proper diagnosis.",
+                    "warning"
+                );
+            }
+        }
+
+        // Show diagnosis result
+        function showDiagnosis(message, type) {
+            const diagnosisResult = document.getElementById('diagnosis-result');
+            diagnosisResult.innerHTML = message;
+            diagnosisResult.className = `diagnosis-result ${type}`;
+            diagnosisResult.style.display = 'block';
+        }
+
+        // Initialize when page loads
+        window.addEventListener('load', initializeSymptomChecker);
     </script>
 </body>
 </html>
-<section class="container">
-    <h2 data-aos="fade-up">Scientific Symptom Research</h2>
-    <div class="symptom-checker bg-white rounded-lg shadow-lg p-6">
-        <h3>Symptom Analysis Tool</h3>
-        <p class="text-gray-600 mb-4">Select up to 4 symptoms to analyze potential patterns. Please note that this list does not include all possible symptoms. If yours does not appear here please consult a healthcare professional.
-        </p>
-        
-        <div id="symptoms-grid" class="grid-container"></div>
-        
-        <div class="selected-symptoms" id="selected-symptoms"></div>
-        
-        <button onclick="analyzeSymptoms()" class="analyze-button">
-            Analyze Symptoms
-        </button>
-        
-        <div id="diagnosis-result" class="diagnosis-result"></div>
-    </div>
-</section>
-
-<!-- Add this CSS to your existing style section -->
-<style>
-    .symptom-checker {
-        max-width: 1200px;
-        margin: 0 auto;
-        background: white;
-        padding: 2rem;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    .grid-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 1rem;
-        margin: 2rem 0;
-    }
-
-    .symptom-button {
-        padding: 1rem;
-        border: 2px solid var(--primary);
-        border-radius: 8px;
-        background: white;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .symptom-button.selected {
-        background: var(--primary);
-        color: white;
-    }
-
-    .symptom-button:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-    }
-
-    .selected-symptoms {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        margin: 1rem 0;
-    }
-
-    .symptom-tag {
-        background: var(--secondary);
-        color: var(--primary);
-        padding: 0.5rem 1rem;
-        border-radius: 20px;
-        font-size: 0.9rem;
-    }
-
-    .analyze-button {
-        width: 100%;
-        padding: 1rem 2rem;
-        background: var(--primary);
-        color: white;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        margin: 1rem 0;
-        transition: background-color 0.3s ease;
-    }
-
-    .analyze-button:hover {
-        background: var(--accent);
-    }
-
-    .diagnosis-result {
-        margin-top: 2rem;
-        padding: 1rem;
-        border-radius: 8px;
-        display: none;
-    }
-
-    .diagnosis-result.warning {
-        background: #fff3cd;
-        border: 1px solid #ffeeba;
-        color: #856404;
-    }
-
-    .diagnosis-result.info {
-        background: #cce5ff;
-        border: 1px solid #b8daff;
-        color: #004085;
-    }
-
-    @media (max-width: 768px) {
-        .grid-container {
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        }
-    }
-</style>
-
-<script>
-    // Symptoms array
-    const symptoms = [
-        // Digestive System
-        "Abdominal Pain", "Indigestion", "Heartburn", "Constipation", "Diarrhea", "Nausea", "Vomiting", "Bloody Stool", "Loss of Appetite", "Bloating", "Gas", "Flatulence", 
-
-        // Respiratory System
-        "Breathing Problems", "Cough", "Wheezing", "Shortness of Breath", "Chest Pain", "Sore Throat", "Hoarseness", "Lung Pain", "Mucus Production", "Tightness in Chest",
-
-        // Cardiovascular System
-        "Chest Pain", "Heartburn", "Palpitations", "Weak Pulse", "Rapid Heartbeat", "Swollen Legs", "Dizziness", "Fainting", "Irregular Heartbeat", "Blood Pressure Changes",
-
-        // Neurological
-        "Headache", "Dizziness and Vertigo", "Seizures", "Tingling or Numbness", "Loss of Coordination", "Confusion", "Memory Loss", "Blurred Vision", "Sensitivity to Light", 
-
-        // Integumentary (Skin, Hair, Nails)
-        "Hives", "Itching", "Rashes", "Dry Skin", "Hair Loss", "Skin Discoloration", "Bruises", "Swelling", "Scaly Skin", "Nail Changes",
-
-        // Endocrine & Metabolic
-        "Fatigue", "Unexplained Weight Loss", "Excessive Thirst", "Increased Hunger", "Heat Sensitivity", "Cold Sensitivity", "Excessive Sweating", "Poor Heat Tolerance",
-
-        // Immune & Inflammatory
-        "Fever", "Chills", "Sweating", "Joint Pain", "Muscle Weakness", "Muscle Pain", "Swollen Lymph Nodes", "Fatigue", "Inflammation",
-
-        // Hematologic (Blood)
-        "Mouth Bleeding", "Ear Bleeding", "Rectal Bleeding", "Unexplained Bruising", "Excessive Bleeding", "Anemia Symptoms", "Easy Bruising", "Excessive Menstrual Bleeding",
-
-        // Urinary System
-        "Painful Urination", "Frequent Urination", "Dark Urine", "Blood in Urine", "Incontinence", "Urinary Retention",
-
-        // Psychological & Mental Health
-        "Anxiety", "Depression", "Insomnia", "Irritability", "Mood Swings", "Panic Attacks", "Difficulty Concentrating", "Hallucinations", "Paranoia", "Obsessive Thoughts",
-
-        // Sensory
-        "Blurred Vision", "Tinnitus (Ringing in Ears)", "Loss of Taste", "Loss of Smell", "Sensitivity to Light", "Sensitivity to Sound", "Visual Disturbances",
-
-        // Miscellaneous
-        "Choking", "Heat Illness", "Hypothermia", "Motion Sickness", "Bad Breath", "Weakness", "Numbness", "Pale Skin", "Cold Hands/Feet", "Fainting",
-    ];
-
-    // Disease patterns
-    const diseasePatterns = {
-        // Respiratory Infections
-        "Common Cold": ["Cough", "Fever", "Fatigue", "Breathing Problems"],
-        "Flu": ["Fever", "Fatigue", "Body Aches", "Headache", "Cough", "Sore Throat", "Chills"],
-        "Pneumonia": ["Cough", "Fever", "Chest Pain", "Breathing Problems", "Fatigue", "Sweating", "Chills"],
-        "Bronchitis": ["Cough", "Sore Throat", "Fatigue", "Breathing Problems", "Wheezing"],
-        "COVID-19": ["Cough", "Fever", "Fatigue", "Shortness of Breath", "Loss of Taste or Smell", "Headache", "Muscle Aches", "Sore Throat", "Congestion", "Chills"],
-        "Tuberculosis": ["Cough", "Fever", "Fatigue", "Night Sweats", "Chest Pain", "Coughing Up Blood", "Weight Loss"],
-        "Asthma": ["Wheezing", "Breathing Problems", "Cough", "Shortness of Breath", "Chest Tightness"],
-        
-        // Digestive Disorders
-        "Food Poisoning": ["Nausea and Vomiting", "Diarrhea", "Abdominal Pain", "Fever", "Fatigue"],
-        "Gastritis": ["Abdominal Pain", "Nausea and Vomiting", "Indigestion", "Heartburn", "Loss of Appetite"],
-        "Irritable Bowel Syndrome (IBS)": ["Abdominal Pain", "Diarrhea", "Constipation", "Bloating", "Fatigue", "Mucus in Stool"],
-        "Gastroesophageal Reflux Disease (GERD)": ["Heartburn", "Indigestion", "Cough", "Chest Pain", "Sore Throat", "Difficulty Swallowing"],
-        "Peptic Ulcer": ["Abdominal Pain", "Indigestion", "Nausea", "Vomiting", "Loss of Appetite"],
-        "Gallstones": ["Abdominal Pain", "Nausea and Vomiting", "Fatigue", "Bloating", "Jaundice"],
-        "Celiac Disease": ["Diarrhea", "Abdominal Pain", "Fatigue", "Weight Loss", "Bloating", "Nausea"],
-        
-        // Neurological Conditions
-        "Migraine": ["Headache", "Nausea and Vomiting", "Dizziness and Vertigo", "Fatigue", "Sensitivity to Light", "Visual Disturbances"],
-        "Tension Headache": ["Headache", "Fatigue", "Neck Pain", "Dizziness", "Irritability"],
-        "Epilepsy": ["Seizures", "Loss of Consciousness", "Confusion", "Memory Loss", "Muscle Spasms"],
-        "Multiple Sclerosis": ["Muscle Weakness", "Numbness", "Fatigue", "Vision Problems", "Dizziness", "Loss of Coordination"],
-        "Parkinson's Disease": ["Tremors", "Muscle Rigidity", "Slow Movements", "Fatigue", "Dizziness", "Difficulty Walking"],
-        "Stroke": ["Sudden Numbness or Weakness", "Confusion", "Dizziness", "Vision Problems", "Difficulty Speaking", "Severe Headache"],
-        
-        // Cardiovascular Conditions
-        "Heart Attack": ["Chest Pain", "Shortness of Breath", "Fatigue", "Sweating", "Nausea", "Pain in Left Arm", "Dizziness"],
-        "Heart Failure": ["Fatigue", "Shortness of Breath", "Swollen Legs", "Chest Pain", "Rapid Heartbeat"],
-        "Arrhythmia": ["Irregular Heartbeat", "Dizziness", "Fatigue", "Shortness of Breath", "Chest Pain"],
-        "Hypertension (High Blood Pressure)": ["Headache", "Dizziness", "Fatigue", "Shortness of Breath", "Chest Pain"],
-        "Deep Vein Thrombosis (DVT)": ["Swelling", "Pain in Leg", "Redness", "Warmth in Affected Area"],
-        
-        // Endocrine Disorders
-        "Diabetes Mellitus": ["Excessive Thirst", "Frequent Urination", "Fatigue", "Blurry Vision", "Unexplained Weight Loss", "Nausea"],
-        "Hypothyroidism": ["Fatigue", "Weight Gain", "Cold Sensitivity", "Dry Skin", "Constipation", "Depression", "Muscle Weakness"],
-        "Hyperthyroidism": ["Weight Loss", "Fatigue", "Nervousness", "Increased Heart Rate", "Tremors", "Sweating", "Heat Sensitivity"],
-        "Addison's Disease": ["Fatigue", "Weight Loss", "Dizziness", "Salt Cravings", "Muscle Weakness", "Nausea", "Dark Skin", "Low Blood Pressure"],
-        "Cushing's Syndrome": ["Weight Gain", "Fatigue", "Depression", "High Blood Pressure", "Buffalo Hump", "Skin Bruising"],
-        
-        // Autoimmune Disorders
-        "Rheumatoid Arthritis": ["Joint Pain", "Swelling", "Morning Stiffness", "Fatigue", "Fever", "Weakness"],
-        "Lupus": ["Fatigue", "Joint Pain", "Rashes", "Chest Pain", "Headache", "Swollen Lymph Nodes"],
-        "Multiple Sclerosis": ["Fatigue", "Muscle Weakness", "Vision Problems", "Difficulty Walking", "Dizziness", "Memory Loss"],
-        "Graves' Disease": ["Weight Loss", "Rapid Heartbeat", "Fatigue", "Heat Sensitivity", "Tremors", "Eye Problems"],
-        
-        // Skin Conditions
-        "Psoriasis": ["Red, Scaly Skin", "Itching", "Dry Skin", "Cracked Skin", "Swollen Joints"],
-        "Eczema": ["Itching", "Rashes", "Redness", "Swelling", "Dry Skin", "Blisters"],
-        "Acne": ["Pimples", "Blackheads", "Whiteheads", "Oily Skin", "Redness"],
-        "Rosacea": ["Redness", "Visible Blood Vessels", "Pimples", "Burning Sensation", "Itching", "Dryness"],
-        "Shingles": ["Painful Rash", "Blisters", "Burning Sensation", "Itching", "Fever", "Fatigue"],
-        
-        // Infectious Diseases
-        "HIV/AIDS": ["Fever", "Fatigue", "Night Sweats", "Weight Loss", "Swollen Lymph Nodes", "Sore Throat"],
-        "Hepatitis": ["Fatigue", "Jaundice", "Abdominal Pain", "Loss of Appetite", "Nausea", "Dark Urine", "Light-colored Stool"],
-        "Malaria": ["Fever", "Chills", "Sweating", "Headache", "Muscle Aches", "Fatigue", "Nausea and Vomiting"],
-        "Chickenpox": ["Fever", "Itching", "Rash", "Fatigue", "Loss of Appetite"],
-        "Mononucleosis": ["Fever", "Sore Throat", "Fatigue", "Swollen Lymph Nodes", "Headache", "Rash"],
-        
-        // Mental Health Conditions
-        "Depression": ["Fatigue", "Sadness", "Loss of Interest", "Sleep Disturbances", "Appetite Changes", "Difficulty Concentrating", "Irritability"],
-        "Anxiety": ["Restlessness", "Fatigue", "Difficulty Concentrating", "Irritability", "Muscle Tension", "Sleep Disturbances"],
-        "Bipolar Disorder": ["Mood Swings", "Fatigue", "Irritability", "Sleep Disturbances", "Impulsivity", "Depression", "Mania"],
-        "Schizophrenia": ["Hallucinations", "Delusions", "Disorganized Thinking", "Lack of Motivation", "Difficulty Concentrating"],
-        "Post-Traumatic Stress Disorder (PTSD)": ["Flashbacks", "Nightmares", "Irritability", "Sleep Problems", "Hypervigilance", "Avoidance Behaviors"],
-        
-        // Musculoskeletal Disorders
-        "Osteoarthritis": ["Joint Pain", "Swelling", "Stiffness", "Reduced Range of Motion", "Fatigue"],
-        "Rheumatoid Arthritis": ["Joint Pain", "Swelling", "Fatigue", "Morning Stiffness", "Fever", "Weakness"],
-        "Fibromyalgia": ["Widespread Pain", "Fatigue", "Sleep Disturbances", "Memory Problems", "Headache", "Numbness and Tingling"],
-        "Gout": ["Joint Pain", "Redness", "Swelling", "Tenderness", "Heat in Affected Area"],
-        
-        // Other Conditions
-        "Heat Stroke": ["Heat Illness", "Dizziness and Vertigo", "Headache", "Nausea and Vomiting", "Confusion", "Loss of Consciousness"],
-        "Anemia": ["Fatigue", "Pale Skin", "Shortness of Breath", "Dizziness", "Cold Hands and Feet", "Rapid Heartbeat"]
-    };
-
-    let selectedSymptoms = [];
-
-    // Initialize symptom buttons
-    function initializeSymptomChecker() {
-        const gridContainer = document.getElementById('symptoms-grid');
-        symptoms.forEach(symptom => {
-            const button = document.createElement('button');
-            button.className = 'symptom-button';
-            button.textContent = symptom;
-            button.onclick = () => toggleSymptom(symptom);
-            gridContainer.appendChild(button);
-        });
-    }
-
-    // Toggle symptom selection
-    function toggleSymptom(symptom) {
-        const index = selectedSymptoms.indexOf(symptom);
-        if (index > -1) {
-            selectedSymptoms.splice(index, 1);
-        } else if (selectedSymptoms.length < 4) {
-            selectedSymptoms.push(symptom);
-        }
-        updateUI();
-    }
-
-    // Update UI based on selections
-    function updateUI() {
-        // Update buttons
-        const buttons = document.querySelectorAll('.symptom-button');
-        buttons.forEach(button => {
-            const isSelected = selectedSymptoms.includes(button.textContent);
-            button.className = 'symptom-button' + (isSelected ? ' selected' : '');
-            button.disabled = selectedSymptoms.length >= 4 && !isSelected;
-        });
-
-        // Update selected symptoms display
-        const selectedContainer = document.getElementById('selected-symptoms');
-        selectedContainer.innerHTML = selectedSymptoms
-            .map(symptom => `<span class="symptom-tag">${symptom}</span>`)
-            .join('');
-    }
-
-    // Analyze symptoms
-    function analyzeSymptoms() {
-        const diagnosisResult = document.getElementById('diagnosis-result');
-        
-        if (selectedSymptoms.length === 0) {
-            showDiagnosis("Please select at least one symptom.", "warning");
-            return;
-        }
-
-        // Calculate matches
-        const matches = Object.entries(diseasePatterns).map(([disease, symptoms]) => {
-            const matchCount = symptoms.filter(s => selectedSymptoms.includes(s)).length;
-            const percentage = (matchCount / symptoms.length) * 100;
-            return { disease, percentage };
-        });
-
-        // Find best match
-        const bestMatch = matches.reduce((prev, current) => 
-            current.percentage > prev.percentage ? current : prev
-        );
-
-        if (bestMatch.percentage >= 50) {
-            showDiagnosis(
-                `Based on your symptoms, you may have ${bestMatch.disease} (${Math.round(bestMatch.percentage)}% match).<br><br>
-                <em>This is not a medical diagnosis. Please consult a healthcare professional.</em>`,
-                "info"
-            );
-        } else {
-            showDiagnosis(
-                "No clear pattern matched. Please consult a healthcare professional for proper diagnosis.",
-                "warning"
-            );
-        }
-    }
-
-    // Show diagnosis result
-    function showDiagnosis(message, type) {
-        const diagnosisResult = document.getElementById('diagnosis-result');
-        diagnosisResult.innerHTML = message;
-        diagnosisResult.className = `diagnosis-result ${type}`;
-        diagnosisResult.style.display = 'block';
-    }
-
-    // Initialize when page loads
-    window.addEventListener('load', initializeSymptomChecker);
-</script>
