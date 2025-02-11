@@ -683,3 +683,324 @@
     </script>
 </body>
 </html>
+<section class="container">
+    <h2 data-aos="fade-up">Scientific Symptom Research</h2>
+    <div class="symptom-checker bg-white rounded-lg shadow-lg p-6">
+        <h3>Symptom Analysis Tool</h3>
+        <p class="text-gray-600 mb-4">Select up to 4 symptoms to analyze potential patterns. Please note that this list does not include all possible symptoms. If yours does not appear here please consult a healthcare professional.
+        </p>
+        
+        <div id="symptoms-grid" class="grid-container"></div>
+        
+        <div class="selected-symptoms" id="selected-symptoms"></div>
+        
+        <button onclick="analyzeSymptoms()" class="analyze-button">
+            Analyze Symptoms
+        </button>
+        
+        <div id="diagnosis-result" class="diagnosis-result"></div>
+    </div>
+</section>
+
+<!-- Add this CSS to your existing style section -->
+<style>
+    .symptom-checker {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+        margin: 2rem 0;
+    }
+
+    .symptom-button {
+        padding: 1rem;
+        border: 2px solid var(--primary);
+        border-radius: 8px;
+        background: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .symptom-button.selected {
+        background: var(--primary);
+        color: white;
+    }
+
+    .symptom-button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .selected-symptoms {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin: 1rem 0;
+    }
+
+    .symptom-tag {
+        background: var(--secondary);
+        color: var(--primary);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+    }
+
+    .analyze-button {
+        width: 100%;
+        padding: 1rem 2rem;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin: 1rem 0;
+        transition: background-color 0.3s ease;
+    }
+
+    .analyze-button:hover {
+        background: var(--accent);
+    }
+
+    .diagnosis-result {
+        margin-top: 2rem;
+        padding: 1rem;
+        border-radius: 8px;
+        display: none;
+    }
+
+    .diagnosis-result.warning {
+        background: #fff3cd;
+        border: 1px solid #ffeeba;
+        color: #856404;
+    }
+
+    .diagnosis-result.info {
+        background: #cce5ff;
+        border: 1px solid #b8daff;
+        color: #004085;
+    }
+
+    @media (max-width: 768px) {
+        .grid-container {
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        }
+    }
+</style>
+
+<script>
+    // Symptoms array
+    const symptoms = [
+        // Digestive System
+        "Abdominal Pain", "Indigestion", "Heartburn", "Constipation", "Diarrhea", "Nausea", "Vomiting", "Bloody Stool", "Loss of Appetite", "Bloating", "Gas", "Flatulence", 
+
+        // Respiratory System
+        "Breathing Problems", "Cough", "Wheezing", "Shortness of Breath", "Chest Pain", "Sore Throat", "Hoarseness", "Lung Pain", "Mucus Production", "Tightness in Chest",
+
+        // Cardiovascular System
+        "Chest Pain", "Heartburn", "Palpitations", "Weak Pulse", "Rapid Heartbeat", "Swollen Legs", "Dizziness", "Fainting", "Irregular Heartbeat", "Blood Pressure Changes",
+
+        // Neurological
+        "Headache", "Dizziness and Vertigo", "Seizures", "Tingling or Numbness", "Loss of Coordination", "Confusion", "Memory Loss", "Blurred Vision", "Sensitivity to Light", 
+
+        // Integumentary (Skin, Hair, Nails)
+        "Hives", "Itching", "Rashes", "Dry Skin", "Hair Loss", "Skin Discoloration", "Bruises", "Swelling", "Scaly Skin", "Nail Changes",
+
+        // Endocrine & Metabolic
+        "Fatigue", "Unexplained Weight Loss", "Excessive Thirst", "Increased Hunger", "Heat Sensitivity", "Cold Sensitivity", "Excessive Sweating", "Poor Heat Tolerance",
+
+        // Immune & Inflammatory
+        "Fever", "Chills", "Sweating", "Joint Pain", "Muscle Weakness", "Muscle Pain", "Swollen Lymph Nodes", "Fatigue", "Inflammation",
+
+        // Hematologic (Blood)
+        "Mouth Bleeding", "Ear Bleeding", "Rectal Bleeding", "Unexplained Bruising", "Excessive Bleeding", "Anemia Symptoms", "Easy Bruising", "Excessive Menstrual Bleeding",
+
+        // Urinary System
+        "Painful Urination", "Frequent Urination", "Dark Urine", "Blood in Urine", "Incontinence", "Urinary Retention",
+
+        // Psychological & Mental Health
+        "Anxiety", "Depression", "Insomnia", "Irritability", "Mood Swings", "Panic Attacks", "Difficulty Concentrating", "Hallucinations", "Paranoia", "Obsessive Thoughts",
+
+        // Sensory
+        "Blurred Vision", "Tinnitus (Ringing in Ears)", "Loss of Taste", "Loss of Smell", "Sensitivity to Light", "Sensitivity to Sound", "Visual Disturbances",
+
+        // Miscellaneous
+        "Choking", "Heat Illness", "Hypothermia", "Motion Sickness", "Bad Breath", "Weakness", "Numbness", "Pale Skin", "Cold Hands/Feet", "Fainting",
+    ];
+
+    // Disease patterns
+    const diseasePatterns = {
+        // Respiratory Infections
+        "Common Cold": ["Cough", "Fever", "Fatigue", "Breathing Problems"],
+        "Flu": ["Fever", "Fatigue", "Body Aches", "Headache", "Cough", "Sore Throat", "Chills"],
+        "Pneumonia": ["Cough", "Fever", "Chest Pain", "Breathing Problems", "Fatigue", "Sweating", "Chills"],
+        "Bronchitis": ["Cough", "Sore Throat", "Fatigue", "Breathing Problems", "Wheezing"],
+        "COVID-19": ["Cough", "Fever", "Fatigue", "Shortness of Breath", "Loss of Taste or Smell", "Headache", "Muscle Aches", "Sore Throat", "Congestion", "Chills"],
+        "Tuberculosis": ["Cough", "Fever", "Fatigue", "Night Sweats", "Chest Pain", "Coughing Up Blood", "Weight Loss"],
+        "Asthma": ["Wheezing", "Breathing Problems", "Cough", "Shortness of Breath", "Chest Tightness"],
+        
+        // Digestive Disorders
+        "Food Poisoning": ["Nausea and Vomiting", "Diarrhea", "Abdominal Pain", "Fever", "Fatigue"],
+        "Gastritis": ["Abdominal Pain", "Nausea and Vomiting", "Indigestion", "Heartburn", "Loss of Appetite"],
+        "Irritable Bowel Syndrome (IBS)": ["Abdominal Pain", "Diarrhea", "Constipation", "Bloating", "Fatigue", "Mucus in Stool"],
+        "Gastroesophageal Reflux Disease (GERD)": ["Heartburn", "Indigestion", "Cough", "Chest Pain", "Sore Throat", "Difficulty Swallowing"],
+        "Peptic Ulcer": ["Abdominal Pain", "Indigestion", "Nausea", "Vomiting", "Loss of Appetite"],
+        "Gallstones": ["Abdominal Pain", "Nausea and Vomiting", "Fatigue", "Bloating", "Jaundice"],
+        "Celiac Disease": ["Diarrhea", "Abdominal Pain", "Fatigue", "Weight Loss", "Bloating", "Nausea"],
+        
+        // Neurological Conditions
+        "Migraine": ["Headache", "Nausea and Vomiting", "Dizziness and Vertigo", "Fatigue", "Sensitivity to Light", "Visual Disturbances"],
+        "Tension Headache": ["Headache", "Fatigue", "Neck Pain", "Dizziness", "Irritability"],
+        "Epilepsy": ["Seizures", "Loss of Consciousness", "Confusion", "Memory Loss", "Muscle Spasms"],
+        "Multiple Sclerosis": ["Muscle Weakness", "Numbness", "Fatigue", "Vision Problems", "Dizziness", "Loss of Coordination"],
+        "Parkinson's Disease": ["Tremors", "Muscle Rigidity", "Slow Movements", "Fatigue", "Dizziness", "Difficulty Walking"],
+        "Stroke": ["Sudden Numbness or Weakness", "Confusion", "Dizziness", "Vision Problems", "Difficulty Speaking", "Severe Headache"],
+        
+        // Cardiovascular Conditions
+        "Heart Attack": ["Chest Pain", "Shortness of Breath", "Fatigue", "Sweating", "Nausea", "Pain in Left Arm", "Dizziness"],
+        "Heart Failure": ["Fatigue", "Shortness of Breath", "Swollen Legs", "Chest Pain", "Rapid Heartbeat"],
+        "Arrhythmia": ["Irregular Heartbeat", "Dizziness", "Fatigue", "Shortness of Breath", "Chest Pain"],
+        "Hypertension (High Blood Pressure)": ["Headache", "Dizziness", "Fatigue", "Shortness of Breath", "Chest Pain"],
+        "Deep Vein Thrombosis (DVT)": ["Swelling", "Pain in Leg", "Redness", "Warmth in Affected Area"],
+        
+        // Endocrine Disorders
+        "Diabetes Mellitus": ["Excessive Thirst", "Frequent Urination", "Fatigue", "Blurry Vision", "Unexplained Weight Loss", "Nausea"],
+        "Hypothyroidism": ["Fatigue", "Weight Gain", "Cold Sensitivity", "Dry Skin", "Constipation", "Depression", "Muscle Weakness"],
+        "Hyperthyroidism": ["Weight Loss", "Fatigue", "Nervousness", "Increased Heart Rate", "Tremors", "Sweating", "Heat Sensitivity"],
+        "Addison's Disease": ["Fatigue", "Weight Loss", "Dizziness", "Salt Cravings", "Muscle Weakness", "Nausea", "Dark Skin", "Low Blood Pressure"],
+        "Cushing's Syndrome": ["Weight Gain", "Fatigue", "Depression", "High Blood Pressure", "Buffalo Hump", "Skin Bruising"],
+        
+        // Autoimmune Disorders
+        "Rheumatoid Arthritis": ["Joint Pain", "Swelling", "Morning Stiffness", "Fatigue", "Fever", "Weakness"],
+        "Lupus": ["Fatigue", "Joint Pain", "Rashes", "Chest Pain", "Headache", "Swollen Lymph Nodes"],
+        "Multiple Sclerosis": ["Fatigue", "Muscle Weakness", "Vision Problems", "Difficulty Walking", "Dizziness", "Memory Loss"],
+        "Graves' Disease": ["Weight Loss", "Rapid Heartbeat", "Fatigue", "Heat Sensitivity", "Tremors", "Eye Problems"],
+        
+        // Skin Conditions
+        "Psoriasis": ["Red, Scaly Skin", "Itching", "Dry Skin", "Cracked Skin", "Swollen Joints"],
+        "Eczema": ["Itching", "Rashes", "Redness", "Swelling", "Dry Skin", "Blisters"],
+        "Acne": ["Pimples", "Blackheads", "Whiteheads", "Oily Skin", "Redness"],
+        "Rosacea": ["Redness", "Visible Blood Vessels", "Pimples", "Burning Sensation", "Itching", "Dryness"],
+        "Shingles": ["Painful Rash", "Blisters", "Burning Sensation", "Itching", "Fever", "Fatigue"],
+        
+        // Infectious Diseases
+        "HIV/AIDS": ["Fever", "Fatigue", "Night Sweats", "Weight Loss", "Swollen Lymph Nodes", "Sore Throat"],
+        "Hepatitis": ["Fatigue", "Jaundice", "Abdominal Pain", "Loss of Appetite", "Nausea", "Dark Urine", "Light-colored Stool"],
+        "Malaria": ["Fever", "Chills", "Sweating", "Headache", "Muscle Aches", "Fatigue", "Nausea and Vomiting"],
+        "Chickenpox": ["Fever", "Itching", "Rash", "Fatigue", "Loss of Appetite"],
+        "Mononucleosis": ["Fever", "Sore Throat", "Fatigue", "Swollen Lymph Nodes", "Headache", "Rash"],
+        
+        // Mental Health Conditions
+        "Depression": ["Fatigue", "Sadness", "Loss of Interest", "Sleep Disturbances", "Appetite Changes", "Difficulty Concentrating", "Irritability"],
+        "Anxiety": ["Restlessness", "Fatigue", "Difficulty Concentrating", "Irritability", "Muscle Tension", "Sleep Disturbances"],
+        "Bipolar Disorder": ["Mood Swings", "Fatigue", "Irritability", "Sleep Disturbances", "Impulsivity", "Depression", "Mania"],
+        "Schizophrenia": ["Hallucinations", "Delusions", "Disorganized Thinking", "Lack of Motivation", "Difficulty Concentrating"],
+        "Post-Traumatic Stress Disorder (PTSD)": ["Flashbacks", "Nightmares", "Irritability", "Sleep Problems", "Hypervigilance", "Avoidance Behaviors"],
+        
+        // Musculoskeletal Disorders
+        "Osteoarthritis": ["Joint Pain", "Swelling", "Stiffness", "Reduced Range of Motion", "Fatigue"],
+        "Rheumatoid Arthritis": ["Joint Pain", "Swelling", "Fatigue", "Morning Stiffness", "Fever", "Weakness"],
+        "Fibromyalgia": ["Widespread Pain", "Fatigue", "Sleep Disturbances", "Memory Problems", "Headache", "Numbness and Tingling"],
+        "Gout": ["Joint Pain", "Redness", "Swelling", "Tenderness", "Heat in Affected Area"],
+        
+        // Other Conditions
+        "Heat Stroke": ["Heat Illness", "Dizziness and Vertigo", "Headache", "Nausea and Vomiting", "Confusion", "Loss of Consciousness"],
+        "Anemia": ["Fatigue", "Pale Skin", "Shortness of Breath", "Dizziness", "Cold Hands and Feet", "Rapid Heartbeat"]
+    };
+
+    let selectedSymptoms = [];
+
+    // Initialize symptom buttons
+    function initializeSymptomChecker() {
+        const gridContainer = document.getElementById('symptoms-grid');
+        symptoms.forEach(symptom => {
+            const button = document.createElement('button');
+            button.className = 'symptom-button';
+            button.textContent = symptom;
+            button.onclick = () => toggleSymptom(symptom);
+            gridContainer.appendChild(button);
+        });
+    }
+
+    // Toggle symptom selection
+    function toggleSymptom(symptom) {
+        const index = selectedSymptoms.indexOf(symptom);
+        if (index > -1) {
+            selectedSymptoms.splice(index, 1);
+        } else if (selectedSymptoms.length < 4) {
+            selectedSymptoms.push(symptom);
+        }
+        updateUI();
+    }
+
+    // Update UI based on selections
+    function updateUI() {
+        // Update buttons
+        const buttons = document.querySelectorAll('.symptom-button');
+        buttons.forEach(button => {
+            const isSelected = selectedSymptoms.includes(button.textContent);
+            button.className = 'symptom-button' + (isSelected ? ' selected' : '');
+            button.disabled = selectedSymptoms.length >= 4 && !isSelected;
+        });
+
+        // Update selected symptoms display
+        const selectedContainer = document.getElementById('selected-symptoms');
+        selectedContainer.innerHTML = selectedSymptoms
+            .map(symptom => `<span class="symptom-tag">${symptom}</span>`)
+            .join('');
+    }
+
+    // Analyze symptoms
+    function analyzeSymptoms() {
+        const diagnosisResult = document.getElementById('diagnosis-result');
+        
+        if (selectedSymptoms.length === 0) {
+            showDiagnosis("Please select at least one symptom.", "warning");
+            return;
+        }
+
+        // Calculate matches
+        const matches = Object.entries(diseasePatterns).map(([disease, symptoms]) => {
+            const matchCount = symptoms.filter(s => selectedSymptoms.includes(s)).length;
+            const percentage = (matchCount / symptoms.length) * 100;
+            return { disease, percentage };
+        });
+
+        // Find best match
+        const bestMatch = matches.reduce((prev, current) => 
+            current.percentage > prev.percentage ? current : prev
+        );
+
+        if (bestMatch.percentage >= 50) {
+            showDiagnosis(
+                `Based on your symptoms, you may have ${bestMatch.disease} (${Math.round(bestMatch.percentage)}% match).<br><br>
+                <em>This is not a medical diagnosis. Please consult a healthcare professional.</em>`,
+                "info"
+            );
+        } else {
+            showDiagnosis(
+                "No clear pattern matched. Please consult a healthcare professional for proper diagnosis.",
+                "warning"
+            );
+        }
+    }
+
+    // Show diagnosis result
+    function showDiagnosis(message, type) {
+        const diagnosisResult = document.getElementById('diagnosis-result');
+        diagnosisResult.innerHTML = message;
+        diagnosisResult.className = `diagnosis-result ${type}`;
+        diagnosisResult.style.display = 'block';
+    }
+
+    // Initialize when page loads
+    window.addEventListener('load', initializeSymptomChecker);
+</script>
