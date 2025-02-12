@@ -146,7 +146,7 @@
       0%, 100% { transform: translateY(-50%) scale(1); opacity: 1; }
       50% { transform: translateY(-50%) scale(1.5); opacity: 0.5; }
     }
-    /* Floating Info (for quiz feedback & random facts) */
+    /* Floating Info */
     .floating-info {
       position: fixed;
       bottom: 80px;
@@ -165,7 +165,7 @@
       transform: translateX(-50%) translateY(-10px);
     }
     /* ===============================
-       NAVIGATION (Updated for Mobile Compatibility)
+       NAVIGATION (Mobile Compatible)
        =============================== */
     nav {
       background: rgba(255,255,255,0.95);
@@ -188,7 +188,6 @@
       from { transform: translateY(-100%); }
       to { transform: translateY(0); }
     }
-    /* NEW: Wrap nav items inside a container */
     .nav-container {
       display: flex;
       justify-content: space-between;
@@ -605,7 +604,7 @@
     <div class="progress-bar"></div>
   </div>
 
-  <!-- Navigation (Updated with Mobile Compatibility) -->
+  <!-- Navigation -->
   <nav>
     <div class="nav-container">
       <div class="nav-logo">
@@ -626,11 +625,14 @@
     </div>
   </nav>
 
-  <!-- Hero Section for Development -->
+  <!-- Hero Section for Development (Mobile Compatible) -->
   <section class="dev-hero">
     <div class="hero-content" data-aos="fade-up">
       <h1>Developmental Psychology</h1>
-      <p>Explore the fascinating journey of human development—from infancy to late adulthood. Understand how cognitive, social, and emotional changes shape who we become.</p>
+      <p>
+        Explore the fascinating journey of human development—from infancy to late adulthood.
+        Understand how cognitive, social, and emotional changes shape who we become.
+      </p>
     </div>
   </section>
 
@@ -915,7 +917,7 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
 
-      /* Mobile Menu Toggle Functionality */
+      /* Mobile Menu Toggle */
       const mobileToggle = document.querySelector('.mobile-menu-toggle');
       const navLinks = document.querySelector('.nav-links');
       mobileToggle.addEventListener('click', () => {
@@ -1039,7 +1041,7 @@
         if (!isDown) return;
         e.preventDefault();
         const x = e.pageX - timelineContainer.offsetLeft;
-        const walk = (x - startX) * 2; // Adjust scroll speed
+        const walk = (x - startX) * 2;
         timelineContainer.scrollLeft = scrollLeft - walk;
       });
 
