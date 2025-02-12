@@ -1,685 +1,843 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cognitive Psychology - Interactive Learning</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cognitive Psychology - Interactive Learning</title>
+  
+  <!-- AOS & Font Awesome -->
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+  />
+  
+  <style>
+    /* Import Poppins font (same as index.html) */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    :root {
+      --primary: #7c5dfa;
+      --primary-light: #a388ee;
+      --secondary: #f5f0ff;
+      --background: #ffffff;
+      --text: #2c2c2c;
+      --spacing: 2rem;
+      --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
     
-    <style>
-        :root {
-            --primary: #a388ee;
-            --secondary: #f5f0ff;
-            --background: #ffffff;
-            --text: #2c2c2c;
-            --accent: #7c4dff;
-            --success: #4CAF50;
-            --error: #ff6b6b;
-            --spacing: 2rem;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', sans-serif;
-        }
-
-        body {
-            background: var(--background);
-            color: var(--text);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* Enhanced Loader Animation */
-        .loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            transition: opacity 0.5s ease;
-        }
-
-        .loader.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .loader-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid var(--secondary);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        nav {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 1.5rem 10%;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-        }
-
-        .nav-links {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 3rem;
-        }
-
-        .nav-links a {
-            color: var(--text);
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            transition: all 0.3s ease;
-            font-size: 1.1rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: var(--primary);
-            transform: translateX(-100%);
-            transition: transform 0.3s ease;
-        }
-
-        .nav-links a:hover::after {
-            transform: translateX(0);
-        }
-
-        .cognitive-hero {
-            background: linear-gradient(135deg, #f0e6ff, #e6f0ff);
-            padding: 160px 0 80px;
-            min-height: 80vh;
-            display: flex;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cognitive-hero::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: url('/api/placeholder/1200/800') center/cover;
-            opacity: 0.1;
-            animation: pulse 4s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        .hero-content {
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-content h1 {
-            font-size: 4rem;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 1.5rem;
-            animation: slideInDown 1s ease-out;
-        }
-
-        .hero-content p {
-            font-size: 1.3rem;
-            max-width: 800px;
-            margin: 0 auto;
-            animation: fadeIn 1s ease-out 0.5s both;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 var(--spacing);
-        }
-
-        /* Enhanced Brain Sections */
-        .brain-sections {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            padding: 4rem 0;
-        }
-
-        .brain-card {
-            background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-        }
-
-        .brain-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            z-index: 0;
-        }
-
-        .brain-card:hover {
-            transform: translateY(-10px) rotate(1deg);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-        }
-
-        .brain-card:hover::before {
-            opacity: 0.1;
-        }
-
-        .brain-card > * {
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Memory Timeline */
-        .memory-timeline {
-            position: relative;
-            padding: 4rem 0;
-        }
-
-        .memory-timeline::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 2px;
-            height: 100%;
-            background: var(--primary);
-            opacity: 0.3;
-        }
-
-        .timeline-item {
-            display: flex;
-            gap: 2rem;
-            margin: 2rem 0;
-            padding: 2rem;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            position: relative;
-            width: calc(50% - 3rem);
-            margin-left: auto;
-        }
-
-        .timeline-item:nth-child(even) {
-            margin-right: auto;
-            margin-left: 0;
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: var(--primary);
-            border-radius: 50%;
-            left: -40px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .timeline-item:nth-child(even)::before {
-            left: auto;
-            right: -40px;
-        }
-
-        /* Enhanced Interactive Elements */
-        .interactive-section {
-            background: var(--secondary);
-            padding: 6rem 0;
-            margin: 4rem 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .memory-game {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1rem;
-            max-width: 800px;
-            margin: 2rem auto;
-        }
-
-        .memory-card {
-            aspect-ratio: 1;
-            background: white;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .memory-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-        }
-
-        /* Enhanced Quiz Section */
-        .quiz-section {
-            padding: 4rem 0;
-        }
-
-        .quiz-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .quiz-option {
-            padding: 1rem 2rem;
-            margin: 0.5rem 0;
-            border: 2px solid var(--primary);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .quiz-option::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--primary);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 0;
-        }
-
-        .quiz-option:hover::before {
-            opacity: 0.1;
-        }
-
-        .quiz-option.correct {
-            background: var(--success);
-            color: white;
-            border-color: var(--success);
-        }
-
-        .quiz-option.incorrect {
-            background: var(--error);
-            color: white;
-            border-color: var(--error);
-        }
-
-        /* Progress Bar */
-        .progress-indicator {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: rgba(0,0,0,0.1);
-            z-index: 1001;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: var(--primary);
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        /* Floating Info */
-        .floating-info {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: white;
-            padding: 1.5rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-            transform: translateY(150%);
-            transition: transform 0.3s ease;
-            z-index: 1000;
-            max-width: 300px;
-        }
-
-        .floating-info.show {
-            transform: translateY(0);
-        }
-
-        @media (max-width: 768px) {
-            .nav-links {
-                flex-direction: column;
-                padding: 1rem 0;
-            }
-
-            .hero-content h1 {
-                font-size: 2.5rem;
-            }
-
-            .memory-timeline::before {
-                left: 20px;
-            }
-
-            .timeline-item {
-                width: calc(100% - 40px);
-                margin-left: 40px !important;
-            }
-
-            .timeline-item::before {
-                left: -30px !important;
-            }
-        }
-
-        @keyframes slideInDown {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-    </style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    body {
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    
+    /* ---------------- Loader Animation ---------------- */
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      transition: opacity 0.5s ease;
+    }
+    
+    .loader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    
+    .loader-spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid var(--secondary);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* ---------------- Progress Bar ---------------- */
+    .progress-indicator {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: transparent;
+      z-index: 1001;
+      overflow: hidden;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+      width: 0%;
+      transition: width 0.3s ease-out;
+      position: relative;
+      animation: progressGlow 2s infinite;
+    }
+    
+    @keyframes progressGlow {
+      0%, 100% { box-shadow: 0 0 10px var(--primary); }
+      50% { box-shadow: 0 0 20px var(--primary-light); }
+    }
+    
+    .progress-bar::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 10px;
+      height: 10px;
+      background: var(--primary);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--primary);
+      animation: progressDot 2s infinite;
+    }
+    
+    @keyframes progressDot {
+      0%, 100% { transform: translateY(-50%) scale(1); opacity: 1; }
+      50% { transform: translateY(-50%) scale(1.5); opacity: 0.5; }
+    }
+    
+    /* ---------------- Navigation ---------------- */
+    nav {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 1.5rem 10%;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+      transition: var(--transition);
+    }
+    
+    /* Toggle to hide the nav bar (optional feature) */
+    nav.nav-hidden {
+      transform: translateY(-100%);
+      opacity: 0;
+      pointer-events: none;
+    }
+    
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+    
+    .nav-logo a {
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    
+    .nav-links {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 3rem;
+    }
+    
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      transition: var(--transition);
+      font-size: 1.1rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--primary);
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+    
+    .nav-links a:hover::after {
+      transform: translateX(0);
+    }
+    
+    /* Mobile menu toggle (hamburger icon) */
+    .mobile-menu-toggle {
+      display: none;
+    }
+    
+    @media (max-width: 768px) {
+      .mobile-menu-toggle {
+        display: block;
+        position: absolute;
+        top: 50%;
+        right: 5%;
+        transform: translateY(-50%);
+        font-size: 1.5rem;
+        color: var(--text);
+        cursor: pointer;
+        z-index: 1100;
+      }
+      .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 70%;
+        height: 100vh;
+        background: rgba(255, 255, 255, 0.98);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 1.5rem;
+        transition: right 0.3s ease;
+        z-index: 1050;
+      }
+      .nav-links.active {
+        right: 0;
+      }
+    }
+    
+    /* Optional nav-toggle button to show/hide the entire nav bar */
+    .nav-toggle {
+      position: fixed;
+      bottom: 30px;
+      left: 30px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 1002;
+      transition: var(--transition);
+    }
+    
+    .nav-toggle:hover {
+      background: var(--primary-light);
+      transform: translateY(-5px);
+    }
+    
+    /* ---------------- Cognitive Hero Section ---------------- */
+    .cognitive-hero {
+      background: linear-gradient(135deg, #f0e6ff, #e6f0ff);
+      padding: 160px 0 80px;
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      margin-top: 60px; /* offset for fixed nav */
+    }
+    
+    .cognitive-hero::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: url('/api/placeholder/1200/800') center/cover;
+      opacity: 0.1;
+      animation: pulse 4s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    .hero-content {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      animation: contentFadeIn 1.5s ease-out;
+    }
+    
+    @keyframes contentFadeIn {
+      from { opacity: 0; transform: translateY(50px) scale(0.9); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    
+    .hero-content h1 {
+      font-size: 4rem;
+      background: linear-gradient(45deg, var(--primary), var(--primary-light));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 1.5rem;
+      animation: slideInDown 1s ease-out;
+    }
+    
+    @keyframes slideInDown {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    
+    .hero-content p {
+      font-size: 1.3rem;
+      max-width: 800px;
+      margin: 0 auto;
+      animation: fadeIn 1s ease-out 0.5s both;
+    }
+    
+    /* ---------------- Container ---------------- */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--spacing);
+    }
+    
+    /* ---------------- Core Cognitive Processes ---------------- */
+    .brain-sections {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      padding: 4rem 0;
+    }
+    
+    .brain-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    
+    .brain-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, var(--primary), var(--primary-light));
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      z-index: 0;
+    }
+    
+    .brain-card:hover {
+      transform: translateY(-10px) rotate(1deg);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    }
+    
+    .brain-card:hover::before {
+      opacity: 0.1;
+    }
+    
+    .brain-card > * {
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* ---------------- Memory Timeline ---------------- */
+    .memory-timeline {
+      position: relative;
+      padding: 4rem 0;
+    }
+    
+    .memory-timeline::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 100%;
+      background: var(--primary);
+      opacity: 0.3;
+    }
+    
+    .timeline-item {
+      display: flex;
+      gap: 2rem;
+      margin: 2rem 0;
+      padding: 2rem;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      transition: var(--transition);
+      position: relative;
+      width: calc(50% - 3rem);
+      margin-left: auto;
+    }
+    
+    .timeline-item:nth-child(even) {
+      margin-right: auto;
+      margin-left: 0;
+    }
+    
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: var(--primary);
+      border-radius: 50%;
+      left: -40px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    
+    .timeline-item:nth-child(even)::before {
+      left: auto;
+      right: -40px;
+    }
+    
+    /* ---------------- Interactive Memory Game ---------------- */
+    .interactive-section {
+      background: var(--secondary);
+      padding: 6rem 0;
+      margin: 4rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .memory-game {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      max-width: 800px;
+      margin: 2rem auto;
+    }
+    
+    .memory-card {
+      aspect-ratio: 1;
+      background: white;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .memory-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* ---------------- Quiz Section ---------------- */
+    .quiz-section {
+      padding: 4rem 0;
+    }
+    
+    .quiz-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .quiz-option {
+      padding: 1rem 2rem;
+      margin: 0.5rem 0;
+      border: 2px solid var(--primary);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .quiz-option::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--primary);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 0;
+    }
+    
+    .quiz-option:hover::before {
+      opacity: 0.1;
+    }
+    
+    .quiz-option.correct {
+      background: var(--success);
+      color: white;
+      border-color: var(--success);
+    }
+    
+    .quiz-option.incorrect {
+      background: var(--error);
+      color: white;
+      border-color: var(--error);
+    }
+    
+    /* ---------------- Floating Info ---------------- */
+    .floating-info {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+      transform: translateY(150%);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+      max-width: 300px;
+    }
+    
+    .floating-info.show {
+      transform: translateY(0);
+    }
+    
+    @media (max-width: 768px) {
+      .hero-content h1 {
+        font-size: 2.5rem;
+      }
+      .memory-timeline::before {
+        left: 20px;
+      }
+      .timeline-item {
+        width: calc(100% - 40px);
+        margin-left: 40px !important;
+      }
+      .timeline-item::before {
+        left: -30px !important;
+      }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div class="loader">
-        <div class="loader-spinner"></div>
+  <!-- Loader -->
+  <div class="loader">
+    <div class="loader-spinner"></div>
+  </div>
+  
+  <!-- Progress Indicator -->
+  <div class="progress-indicator">
+    <div class="progress-bar"></div>
+  </div>
+  
+  <!-- Navigation Bar -->
+  <nav>
+    <div class="nav-container">
+      <div class="nav-logo">
+        <a href="index.html">JAspire</a>
+      </div>
+      <div class="mobile-menu-toggle">
+        <i class="fas fa-bars"></i>
+      </div>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="cognitive.html">Cognitive Psychology</a>
+        <a href="developmental.html">Development</a>
+        <a href="social.html">Social Psychology</a>
+        <a href="research.html">Research</a>
+        <a href="mood-tracker.html">Mood Tracker</a>
+        <a href="resources.html">Resources</a>
+      </div>
     </div>
-
-    <!-- Progress Indicator -->
-    <div class="progress-indicator">
-        <div class="progress-bar"></div>
+  </nav>
+  
+  <!-- Optional Nav Toggle Button -->
+  <button class="nav-toggle"><i class="fas fa-times"></i></button>
+  
+  <!-- Cognitive Hero Section -->
+  <section class="cognitive-hero">
+    <div class="container">
+      <div class="hero-content" data-aos="fade-up">
+        <h1>Cognitive Psychology</h1>
+        <p>Explore the fascinating world of mental processes, from perception and memory to problem-solving and decision-making.</p>
+      </div>
     </div>
-
-    <nav>
-        <div class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="cognitive.html">Cognitive Psychology</a>
-            <a href="developmental.html">Development</a>
-            <a href="social.html">Social Psychology</a>
-            <a href="research.html">Research</a>
-            <a href="mood-tracker.html">Mood Tracker</a>
-            <a href="resources.html">Resources</a>
-        </div>
-    </nav>
-
-    <section class="cognitive-hero">
-        <div class="container">
-            <div class="hero-content" data-aos="fade-up">
-                <h1>Cognitive Psychology</h1>
-                <p>Explore the fascinating world of mental processes, from perception and memory to problem-solving and decision-making.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="container">
-        <h2 class="section-title" data-aos="fade-up">Core Cognitive Processes</h2>
-        <div class="brain-sections">
-            <div class="brain-card" data-aos="flip-left" data-aos-delay="100">
-                <h3>Memory Systems</h3>
-                <p>Understanding how we store, process, and retrieve information:</p>
-                <ul>
-                    <li>Sensory memory (0.25-4 seconds)</li>
-                    <li>Working memory (15-30 seconds)</li>
-                    <li>Long-term memory (lifetime)</li>
-                    <li>Procedural memory (skills)</li>
-                </ul>
-            </div>
-            <div class="brain-card" data-aos="flip-left" data-aos-delay="200">
-                <h3>Perception</h3>
-                <p>How we interpret sensory information:</p>
-                <ul>
-                    <li>Pattern recognition</li>
-                    <li>Perceptual organization</li>
-                    <li>Top-down processing</li>
-                    <li>Bottom-up processing</li>
-                </ul>
-            </div>
-            <div class="brain-card" data-aos="flip-left" data-aos-delay="300">
-                <h3>Problem Solving</h3>
-                <p>Advanced cognitive strategies:</p>
-                <ul>
-                    <li>Critical thinking</li>
-                    <li>Decision making</li>
-                    <li>Abstract reasoning</li>
-                    <li>Creative problem-solving</li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <section class="interactive-section">
-        <div class="container">
-            <h2 class="section-title" data-aos="fade-up">Interactive Memory Game</h2>
-            <p class="section-description" data-aos="fade-up">Test your working memory with this pattern matching game</p>
-            <div class="memory-game" id="memoryGame">
-                <!-- Memory cards will be generated by JavaScript -->
-            </div>
-        </div>
-    </section>
-
-    <section class="container">
-        <h2 class="section-title" data-aos="fade-up">Memory Processing</h2>
-        <div class="memory-timeline">
-            <div class="timeline-item" data-aos="fade-right">
-                <div class="timeline-content">
-                    <h3>Sensory Memory</h3>
-                    <p>The initial stage of memory:</p>
-                    <ul>
-                        <li>Iconic (visual) memory: ~250ms</li>
-                        <li>Echoic (auditory) memory: 2-4s</li>
-                        <li>Haptic (touch) memory</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="timeline-item" data-aos="fade-left">
-                <div class="timeline-content">
-                    <h3>Working Memory</h3>
-                    <p>Active information processing:</p>
-                    <ul>
-                        <li>Phonological loop</li>
-                        <li>Visuospatial sketchpad</li>
-                        <li>Central executive system</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="timeline-item" data-aos="fade-right">
-                <div class="timeline-content">
-                    <h3>Long-term Memory</h3>
-                    <p>Permanent storage system:</p>
-                    <ul>
-                        <li>Episodic memory</li>
-                        <li>Semantic memory</li>
-                        <li>Procedural memory</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="quiz-section">
-        <div class="container">
-            <h2 class="section-title" data-aos="fade-up">Test Your Knowledge</h2>
-            <div class="quiz-container" data-aos="fade-up">
-                <div class="quiz-question">
-                    <h3>Question 1:</h3>
-                    <p>Which type of memory has the shortest duration?</p>
-                    <div class="quiz-options">
-                        <div class="quiz-option" data-correct="true">Sensory Memory</div>
-                        <div class="quiz-option" data-correct="false">Working Memory</div>
-                        <div class="quiz-option" data-correct="false">Long-term Memory</div>
-                        <div class="quiz-option" data-correct="false">Procedural Memory</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <div class="floating-info" id="floatingInfo">
-        <h4>Quick Fact</h4>
-        <p id="randomFact"></p>
+  </section>
+  
+  <!-- Core Cognitive Processes Section -->
+  <section class="container">
+    <h2 class="section-title" data-aos="fade-up">Core Cognitive Processes</h2>
+    <div class="brain-sections">
+      <div class="brain-card" data-aos="flip-left" data-aos-delay="100">
+        <h3>Memory Systems</h3>
+        <p>Understanding how we store, process, and retrieve information:</p>
+        <ul>
+          <li>Sensory memory (0.25–4 seconds)</li>
+          <li>Working memory (15–30 seconds)</li>
+          <li>Long-term memory (lifetime)</li>
+          <li>Procedural memory (skills)</li>
+        </ul>
+      </div>
+      <div class="brain-card" data-aos="flip-left" data-aos-delay="200">
+        <h3>Perception</h3>
+        <p>How we interpret sensory information:</p>
+        <ul>
+          <li>Pattern recognition</li>
+          <li>Perceptual organization</li>
+          <li>Top-down processing</li>
+          <li>Bottom-up processing</li>
+        </ul>
+      </div>
+      <div class="brain-card" data-aos="flip-left" data-aos-delay="300">
+        <h3>Problem Solving</h3>
+        <p>Advanced cognitive strategies:</p>
+        <ul>
+          <li>Critical thinking</li>
+          <li>Decision making</li>
+          <li>Abstract reasoning</li>
+          <li>Creative problem-solving</li>
+        </ul>
+      </div>
     </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-    <script>
-        // Initialize AOS
-        AOS.init({
-            duration: 1000,
-            once: true,
-            offset: 200
+  </section>
+  
+  <!-- Interactive Memory Game Section -->
+  <section class="interactive-section">
+    <div class="container">
+      <h2 class="section-title" data-aos="fade-up">Interactive Memory Game</h2>
+      <p class="section-description" data-aos="fade-up">
+        Test your working memory with this pattern matching game.
+      </p>
+      <div class="memory-game" id="memoryGame">
+        <!-- Memory cards will be generated via JavaScript -->
+      </div>
+    </div>
+  </section>
+  
+  <!-- Memory Timeline Section -->
+  <section class="container">
+    <h2 class="section-title" data-aos="fade-up">Memory Processing</h2>
+    <div class="memory-timeline">
+      <div class="timeline-item" data-aos="fade-right">
+        <div class="timeline-content">
+          <h3>Sensory Memory</h3>
+          <p>The initial stage of memory:</p>
+          <ul>
+            <li>Iconic (visual) memory: ~250ms</li>
+            <li>Echoic (auditory) memory: 2–4s</li>
+            <li>Haptic (touch) memory</li>
+          </ul>
+        </div>
+      </div>
+      <div class="timeline-item" data-aos="fade-left">
+        <div class="timeline-content">
+          <h3>Working Memory</h3>
+          <p>Active information processing:</p>
+          <ul>
+            <li>Phonological loop</li>
+            <li>Visuospatial sketchpad</li>
+            <li>Central executive system</li>
+          </ul>
+        </div>
+      </div>
+      <div class="timeline-item" data-aos="fade-right">
+        <div class="timeline-content">
+          <h3>Long-term Memory</h3>
+          <p>Permanent storage system:</p>
+          <ul>
+            <li>Episodic memory</li>
+            <li>Semantic memory</li>
+            <li>Procedural memory</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Quiz Section -->
+  <section class="quiz-section">
+    <div class="container">
+      <h2 class="section-title" data-aos="fade-up">Test Your Knowledge</h2>
+      <div class="quiz-container" data-aos="fade-up">
+        <div class="quiz-question">
+          <h3>Question 1:</h3>
+          <p>Which type of memory has the shortest duration?</p>
+          <div class="quiz-options">
+            <div class="quiz-option" data-correct="true">Sensory Memory</div>
+            <div class="quiz-option" data-correct="false">Working Memory</div>
+            <div class="quiz-option" data-correct="false">Long-term Memory</div>
+            <div class="quiz-option" data-correct="false">Procedural Memory</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Floating Info -->
+  <div class="floating-info" id="floatingInfo">
+    <h4>Quick Fact</h4>
+    <p id="randomFact"></p>
+  </div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    // Initialize AOS animations
+    AOS.init({
+      duration: 1000,
+      once: true,
+      offset: 200
+    });
+    
+    // Hide the loader when the page is fully loaded
+    window.addEventListener('load', () => {
+      document.querySelector('.loader').classList.add('hidden');
+    });
+    
+    // Update the progress bar width based on scroll position
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      document.querySelector('.progress-bar').style.width = scrolled + '%';
+    });
+    
+    // Mobile menu toggle functionality
+    const mobileToggle = document.querySelector('.mobile-menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    mobileToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+    
+    // Nav bar toggle functionality (optional button to hide/show the entire nav)
+    const nav = document.querySelector('nav');
+    const navToggle = document.querySelector('.nav-toggle');
+    navToggle.addEventListener('click', () => {
+      nav.classList.toggle('nav-hidden');
+      navToggle.innerHTML = nav.classList.contains('nav-hidden')
+        ? '<i class="fas fa-bars"></i>'
+        : '<i class="fas fa-times"></i>';
+    });
+    
+    // ---------------- Memory Game Implementation ----------------
+    function createMemoryGame() {
+      const memoryGame = document.getElementById('memoryGame');
+      const symbols = ['🧠', '👁️', '👂', '🤔', '💭', '💡', '📝', '🎯'];
+      const gameSymbols = [...symbols, ...symbols];
+      let flippedCards = [];
+      let matchedPairs = 0;
+    
+      // Shuffle the symbols randomly
+      gameSymbols.sort(() => Math.random() - 0.5);
+    
+      gameSymbols.forEach((symbol, index) => {
+        const card = document.createElement('div');
+        card.className = 'memory-card';
+        card.dataset.symbol = symbol;
+        card.dataset.index = index;
+        card.textContent = '❓';
+    
+        card.addEventListener('click', () => {
+          if (flippedCards.length < 2 && !flippedCards.includes(card)) {
+            flipCard(card);
+          }
         });
-
-        // Hide loader when page is loaded
-        window.addEventListener('load', () => {
-            document.querySelector('.loader').classList.add('hidden');
-        });
-
-        // Progress bar
-        window.addEventListener('scroll', () => {
-            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrolled = (winScroll / height) * 100;
-            document.querySelector('.progress-bar').style.width = scrolled + '%';
-        });
-
-        // Memory Game Implementation
-        function createMemoryGame() {
-            const memoryGame = document.getElementById('memoryGame');
-            const symbols = ['🧠', '👁️', '👂', '🤔', '💭', '💡', '📝', '🎯'];
-            const gameSymbols = [...symbols, ...symbols];
-            let flippedCards = [];
-            let matchedPairs = 0;
-
-            // Shuffle array
-            gameSymbols.sort(() => Math.random() - 0.5);
-
-            gameSymbols.forEach((symbol, index) => {
-                const card = document.createElement('div');
-                card.className = 'memory-card';
-                card.dataset.symbol = symbol;
-                card.dataset.index = index;
-                card.textContent = '❓';
-
-                card.addEventListener('click', () => {
-                    if (flippedCards.length < 2 && !flippedCards.includes(card)) {
-                        flipCard(card);
-                    }
-                });
-
-                memoryGame.appendChild(card);
-            });
-
-            function flipCard(card) {
-                card.textContent = card.dataset.symbol;
-                flippedCards.push(card);
-
-                if (flippedCards.length === 2) {
-                    setTimeout(checkMatch, 1000);
-                }
-            }
-
-            function checkMatch() {
-                const [card1, card2] = flippedCards;
-                if (card1.dataset.symbol === card2.dataset.symbol) {
-                    matchedPairs++;
-                    if (matchedPairs === symbols.length) {
-                        showFloatingInfo('Congratulations! You\'ve completed the memory game!');
-                    }
-                } else {
-                    card1.textContent = '❓';
-                    card2.textContent = '❓';
-                }
-                flippedCards = [];
-            }
+    
+        memoryGame.appendChild(card);
+      });
+    
+      function flipCard(card) {
+        card.textContent = card.dataset.symbol;
+        flippedCards.push(card);
+    
+        if (flippedCards.length === 2) {
+          setTimeout(checkMatch, 1000);
         }
-
-        // Quiz functionality
-        document.querySelectorAll('.quiz-option').forEach(option => {
-            option.addEventListener('click', function() {
-                const isCorrect = this.dataset.correct === 'true';
-                
-                document.querySelectorAll('.quiz-option').forEach(opt => {
-                    opt.classList.remove('correct', 'incorrect');
-                });
-                
-                this.classList.add(isCorrect ? 'correct' : 'incorrect');
-                showFloatingInfo(isCorrect ? 'Correct! Great job!' : 'Try again!');
-            });
-        });
-
-        // Floating info functionality
-        function showFloatingInfo(message) {
-            const floatingInfo = document.getElementById('floatingInfo');
-            document.getElementById('randomFact').textContent = message;
-            floatingInfo.classList.add('show');
-            setTimeout(() => {
-                floatingInfo.classList.remove('show');
-            }, 3000);
+      }
+    
+      function checkMatch() {
+        const [card1, card2] = flippedCards;
+        if (card1.dataset.symbol === card2.dataset.symbol) {
+          matchedPairs++;
+          if (matchedPairs === symbols.length) {
+            showFloatingInfo("Congratulations! You've completed the memory game!");
+          }
+        } else {
+          card1.textContent = '❓';
+          card2.textContent = '❓';
         }
-
-        // Cognitive psychology facts
-        const facts = [
-            'The brain processes images seen for as little as 13 milliseconds.',
-            'Working memory can hold approximately 7 (±2) items at once.',
-            'The brain uses about 20% of the body\'s total energy.',
-            'Multitasking is actually rapid task-switching.',
-            'Sleep is crucial for memory consolidation.',
-            'The brain can store about 2.5 petabytes of information.',
-        ];
-
-        setInterval(() => {
-            const randomFact = facts[Math.floor(Math.random() * facts.length)];
-            showFloatingInfo(randomFact);
-        }, 15000);
-
-        // Initialize memory game
-        createMemoryGame();
-    </script>
+        flippedCards = [];
+      }
+    }
+    
+    // ---------------- Quiz Functionality ----------------
+    document.querySelectorAll('.quiz-option').forEach(option => {
+      option.addEventListener('click', function() {
+        const isCorrect = this.dataset.correct === 'true';
+        
+        document.querySelectorAll('.quiz-option').forEach(opt => {
+          opt.classList.remove('correct', 'incorrect');
+        });
+        
+        this.classList.add(isCorrect ? 'correct' : 'incorrect');
+        showFloatingInfo(isCorrect ? "Correct! Great job!" : "Try again!");
+      });
+    });
+    
+    // ---------------- Floating Info Functionality ----------------
+    function showFloatingInfo(message) {
+      const floatingInfo = document.getElementById('floatingInfo');
+      document.getElementById('randomFact').textContent = message;
+      floatingInfo.classList.add('show');
+      setTimeout(() => {
+        floatingInfo.classList.remove('show');
+      }, 3000);
+    }
+    
+    // Cognitive psychology fun facts
+    const facts = [
+      "The brain processes images seen for as little as 13 milliseconds.",
+      "Working memory can hold approximately 7 (±2) items at once.",
+      "The brain uses about 20% of the body's total energy.",
+      "Multitasking is actually rapid task-switching.",
+      "Sleep is crucial for memory consolidation.",
+      "The brain can store about 2.5 petabytes of information."
+    ];
+    
+    setInterval(() => {
+      const randomFact = facts[Math.floor(Math.random() * facts.length)];
+      showFloatingInfo(randomFact);
+    }, 15000);
+    
+    // Initialize the memory game
+    createMemoryGame();
+  </script>
 </body>
 </html>
