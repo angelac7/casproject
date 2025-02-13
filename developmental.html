@@ -282,6 +282,35 @@
         right: 0;
       }
     }
+    /* Optional nav-toggle for closable nav bar (like cognitive.html) */
+    .nav-toggle {
+      position: fixed;
+      bottom: 30px;
+      left: 30px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 1002;
+      transition: var(--transition);
+    }
+    .nav-toggle:hover {
+      background: var(--primary-light);
+      transform: translateY(-5px);
+    }
+    .nav-hidden {
+      transform: translateY(-100%);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+    }
     /* ===============================
        UPDATED HERO SECTION (Matching Cognitive Page)
        =============================== */
@@ -341,6 +370,15 @@
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
+    }
+    /* Mobile adjustments for Hero Section */
+    @media (max-width: 768px) {
+      .hero-content h1 {
+        font-size: 2.5rem;
+      }
+      .hero-content p {
+        font-size: 1.1rem;
+      }
     }
     /* ===============================
        DEVELOPMENT PAGE SPECIFIC STYLES (Other Sections)
@@ -625,6 +663,8 @@
       </div>
     </div>
   </nav>
+  <!-- Optional Nav Toggle Button for closable nav bar -->
+  <button class="nav-toggle"><i class="fas fa-times"></i></button>
 
   <!-- Updated Hero Section (Matching Cognitive Page) -->
   <section class="cognitive-hero">
@@ -925,6 +965,16 @@
       const navLinks = document.querySelector('.nav-links');
       mobileToggle.addEventListener('click', () => {
         navLinks.classList.toggle('active');
+      });
+
+      /* Nav Toggle for closable nav bar */
+      const nav = document.querySelector('nav');
+      const navToggle = document.querySelector('.nav-toggle');
+      navToggle.addEventListener('click', () => {
+        nav.classList.toggle('nav-hidden');
+        navToggle.innerHTML = nav.classList.contains('nav-hidden')
+          ? '<i class="fas fa-bars"></i>'
+          : '<i class="fas fa-times"></i>';
       });
 
       /* Card Hover Effects for 3D Interaction */
