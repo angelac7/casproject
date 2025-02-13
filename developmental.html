@@ -7,7 +7,7 @@
   <!-- AOS & FontAwesome -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-
+  
   <style>
     /* ===============================
        BASE STYLES (Same as Index/Cognitive)
@@ -283,53 +283,34 @@
       }
     }
     /* ===============================
-       HERO SECTION (Same as Cognitive Page)
+       UPDATED HERO SECTION (Matching Cognitive Page)
        =============================== */
-    .hero {
-      min-height: 100vh;
+    .cognitive-hero {
+      background: linear-gradient(135deg, #f0e6ff, #e6f0ff);
+      padding: 160px 0 80px;
+      min-height: 80vh;
       display: flex;
       align-items: center;
-      justify-content: center;
-      text-align: center;
-      background: linear-gradient(135deg, var(--secondary) 0%, #ffffff 100%);
-      margin-top: 60px;
-      padding: 0 5%;
       position: relative;
       overflow: hidden;
+      margin-top: 60px; /* offset for fixed nav */
     }
-    .interactive-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #ffffff;
-      opacity: 0.1;
-    }
-    .floating-shapes {
+    .cognitive-hero::before {
+      content: '';
       position: absolute;
       width: 100%;
       height: 100%;
-      overflow: hidden;
-      z-index: 0;
-      perspective: 1000px;
-    }
-    .shape {
-      position: absolute;
-      background: var(--primary-light);
-      border-radius: 50%;
+      background: url('/api/placeholder/1200/800') center/cover;
       opacity: 0.1;
-      filter: blur(5px);
-      transform-style: preserve-3d;
-      animation: float3D 20s infinite;
+      animation: pulse 4s infinite;
     }
-    @keyframes float3D {
-      0%, 100% { transform: translateZ(0) rotateX(0) rotateY(0); }
-      25% { transform: translateZ(100px) rotateX(45deg) rotateY(45deg); }
-      50% { transform: translateZ(0) rotateX(90deg) rotateY(90deg); }
-      75% { transform: translateZ(-100px) rotateX(45deg) rotateY(135deg); }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
     }
     .hero-content {
+      text-align: center;
       position: relative;
       z-index: 1;
       animation: contentFadeIn 1.5s ease-out;
@@ -338,60 +319,28 @@
       from { opacity: 0; transform: translateY(50px) scale(0.9); }
       to { opacity: 1; transform: translateY(0) scale(1); }
     }
-    .hero h1 {
-      font-size: 4.0rem;
-      margin-bottom: 1.5rem;
-      color: var(--primary);
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-      position: relative;
-      letter-spacing: 2px;
-      animation: titleGlow 2s infinite;
-    }
-    @keyframes titleGlow {
-      0%, 100% {
-        text-shadow: 0 0 10px rgba(124,93,250,0.3),
-                     0 0 20px rgba(124,93,250,0.2),
-                     0 0 30px rgba(124,93,250,0.1);
-      }
-      50% {
-        text-shadow: 0 0 20px rgba(124,93,250,0.5),
-                     0 0 30px rgba(124,93,250,0.3),
-                     0 0 40px rgba(124,93,250,0.2);
-      }
-    }
-    .hero h1::after {
-      content: '';
-      position: absolute;
-      bottom: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100px;
-      height: 3px;
-      background: linear-gradient(90deg, var(--primary), var(--primary-light));
-      animation: lineExpand 1.5s ease-out 0.5s forwards, lineGlow 2s infinite;
-    }
-    @keyframes lineExpand {
-      from { width: 0; }
-      to { width: 100px; }
-    }
-    @keyframes lineGlow {
-      0%, 100% { box-shadow: 0 0 10px var(--primary); }
-      50% { box-shadow: 0 0 20px var(--primary-light); }
-    }
-    .hero p {
-      font-size: 1.1rem;
-      max-width: 800px;
-      margin: 0 auto;
-      opacity: 0;
-      animation: fadeInUp 1s ease-out 0.8s forwards;
-      background: linear-gradient(45deg, var(--text), var(--primary));
+    .hero-content h1 {
+      font-size: 4rem;
+      background: linear-gradient(45deg, var(--primary), var(--primary-light));
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
+      margin-bottom: 1.5rem;
+      animation: slideInDown 1s ease-out;
     }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes slideInDown {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .hero-content p {
+      font-size: 1.3rem;
+      max-width: 800px;
+      margin: 0 auto;
+      animation: fadeIn 1s ease-out 0.5s both;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
     /* ===============================
        DEVELOPMENT PAGE SPECIFIC STYLES (Other Sections)
@@ -677,22 +626,16 @@
     </div>
   </nav>
 
-  <!-- Hero Section (Same as Cognitive Page) -->
-  <section class="hero">
-    <div class="interactive-bg"></div>
-    <div class="floating-shapes">
-      <div class="shape"></div>
-      <div class="shape"></div>
-      <div class="shape"></div>
-      <div class="shape"></div>
-      <div class="shape"></div>
-    </div>
-    <div class="hero-content" data-aos="fade-up" data-aos-duration="1200">
-      <h1>Developmental Psychology</h1>
-      <p>
-        Explore the fascinating journey of human development—from infancy to late adulthood.
-        Understand how cognitive, social, and emotional changes shape who we become.
-      </p>
+  <!-- Updated Hero Section (Matching Cognitive Page) -->
+  <section class="cognitive-hero">
+    <div class="container">
+      <div class="hero-content" data-aos="fade-up">
+        <h1>Developmental Psychology</h1>
+        <p>
+          Explore the fascinating journey of human development—from infancy to late adulthood.
+          Understand how cognitive, social, and emotional changes shape who we become.
+        </p>
+      </div>
     </div>
   </section>
 
@@ -958,7 +901,7 @@
         } else {
           nav.classList.remove('scrolled');
         }
-        const hero = document.querySelector('.hero') || document.querySelector('.dev-hero');
+        const hero = document.querySelector('.cognitive-hero');
         if (hero) {
           hero.style.transform = `translateY(${window.scrollY * 0.3}px)`;
         }
@@ -1012,7 +955,7 @@
 
       /* Particle Effect for Hero Section */
       function createParticles() {
-        const hero = document.querySelector('.hero') || document.querySelector('.dev-hero');
+        const hero = document.querySelector('.cognitive-hero');
         if (!hero) return;
         for (let i = 0; i < 50; i++) {
           const particle = document.createElement('div');
