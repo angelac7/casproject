@@ -1,680 +1,776 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mood Tracker</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mood Tracker</title>
 
-    <!-- Load React -->
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <!-- Load React -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 
-    <!-- AOS Animation Library -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <!-- AOS Animation Library -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 
-    <!-- Add FontAwesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 
-    <style>
-        :root {
-            --primary: #a388ee;
-            --primary-dark: #8a66ea;
-            --secondary: #f5f0ff;
-            --background: #ffffff;
-            --text: #2c2c2c;
-            --spacing: 2rem;
-            --transition: all 0.3s ease;
-        }
+  <style>
+    /* Import Poppins font */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', sans-serif;
-        }
+    :root {
+      --primary: #7c5dfa;
+      --primary-light: #a388ee;
+      --secondary: #f5f0ff;
+      --background: #ffffff;
+      --text: #2c2c2c;
+      --spacing: 2rem;
+      --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-        body {
-            background: var(--background);
-            color: var(--text);
-            line-height: 1.6;
-        }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
 
-        nav {
-            background: white;
-            padding: 1.5rem 10%;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-            z-index: 1000;
-            transition: var(--transition);
-        }
+    body {
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
 
-        .nav-links {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 3rem;
-        }
+    /* ---------------- Navigation ---------------- */
+    nav {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 1.5rem 10%;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+      transition: var(--transition);
+    }
 
-        .nav-links a {
-            color: var(--text);
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            transition: var(--transition);
-            font-size: 1.1rem;
-            position: relative;
-        }
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
 
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            width: 0;
-            height: 2px;
-            background: var(--primary);
-            transition: var(--transition);
-            transform: translateX(-50%);
-        }
+    .nav-logo a {
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
 
-        .nav-links a:hover::after {
-            width: 100%;
-        }
+    .nav-links {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 3rem;
+    }
 
-        .nav-links a.active {
-            color: var(--primary);
-        }
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      transition: var(--transition);
+      font-size: 1.1rem;
+      position: relative;
+      overflow: hidden;
+    }
 
-        .nav-links a.active::after {
-            width: 100%;
-        }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--primary);
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
 
-        .hero {
-            background: linear-gradient(135deg, var(--secondary), #e6f0ff);
-            padding: 120px 0 60px;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
+    .nav-links a:hover::after {
+      transform: translateX(0);
+    }
 
-        .hero h1 {
-            font-size: 3.5rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+    .nav-links a.active {
+      color: var(--primary);
+    }
 
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 600px;
-            margin: 0 auto;
-            color: var(--text);
-        }
+    /* Mobile Menu Toggle */
+    .mobile-menu-toggle {
+      display: none;
+    }
 
-        .main-content {
-            max-width: 1000px;
-            margin: 2rem auto;
-            padding: 1rem;
-        }
+    @media (max-width: 768px) {
+      .mobile-menu-toggle {
+        display: block;
+        position: absolute;
+        top: 50%;
+        right: 5%;
+        transform: translateY(-50%);
+        font-size: 1.5rem;
+        color: var(--text);
+        cursor: pointer;
+        z-index: 1100;
+      }
+      .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 70%;
+        height: 100vh;
+        background: rgba(255, 255, 255, 0.98);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 1.5rem;
+        transition: right 0.3s ease;
+        z-index: 1050;
+      }
+      .nav-links.active {
+        right: 0;
+      }
+    }
 
-        .mood-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-            margin-bottom: 2rem;
-        }
+    /* Optional Nav Toggle Button */
+    .nav-toggle {
+      position: fixed;
+      bottom: 30px;
+      left: 30px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 1002;
+      transition: var(--transition);
+    }
 
-        .mood-card:hover {
-            transform: translateY(-5px);
-        }
+    .nav-toggle:hover {
+      background: var(--primary-light);
+      transform: translateY(-5px);
+    }
 
-        .mood-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin: 1.5rem 0;
-        }
+    /* ---------------- Hero Section ---------------- */
+    .hero {
+      background: linear-gradient(135deg, var(--secondary), #e6f0ff);
+      padding: 160px 0 80px;
+      text-align: center;
+      margin-top: 80px; /* offset for fixed nav */
+    }
 
-        .mood-button {
-            font-size: 2.5rem;
-            padding: 1rem;
-            border: none;
-            background: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border-radius: 50%;
-            width: 70px;
-            height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+    .hero h1 {
+      font-size: 3.5rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-        .mood-button:hover {
-            transform: scale(1.1);
-            background: var(--secondary);
-        }
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+      color: var(--text);
+    }
 
-        .mood-button.selected {
-            background: var(--primary);
-            transform: scale(1.1);
-            box-shadow: 0 4px 15px rgba(163, 136, 238, 0.3);
-        }
+    /* ---------------- Main Content ---------------- */
+    .main-content {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
 
-        .mood-input {
-            width: 100%;
-            padding: 1rem;
-            margin: 1rem 0;
-            border: 2px solid var(--secondary);
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: var(--transition);
-            resize: vertical;
-        }
+    .mood-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+      margin-bottom: 2rem;
+    }
 
-        .mood-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(163, 136, 238, 0.2);
-        }
+    .mood-card:hover {
+      transform: translateY(-5px);
+    }
 
-        .mood-submit {
-            width: 100%;
-            padding: 1rem;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 1.1rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
+    .mood-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
 
-        .mood-submit:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(163, 136, 238, 0.3);
-        }
+    .mood-button {
+      font-size: 2.5rem;
+      padding: 1rem;
+      border: none;
+      background: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-radius: 50%;
+      width: 70px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-        .mood-stats {
-            background: var(--secondary);
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin-top: 2rem;
-        }
+    .mood-button:hover {
+      transform: scale(1.1);
+      background: var(--secondary);
+    }
 
-        .stat-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin: 1rem 0;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            transition: all 0.3s ease;
-        }
+    .mood-button.selected {
+      background: var(--primary);
+      transform: scale(1.1);
+      box-shadow: 0 4px 15px rgba(163, 136, 238, 0.3);
+    }
 
-        .stat-card:hover {
-            transform: translateX(5px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
+    .mood-input {
+      width: 100%;
+      padding: 1rem;
+      margin: 1rem 0;
+      border: 2px solid var(--secondary);
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: var(--transition);
+      resize: vertical;
+    }
 
-        .stat-icon {
-            font-size: 1.5rem;
-            color: var(--primary);
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--secondary);
-            border-radius: 50%;
-        }
+    .mood-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(124, 93, 250, 0.2);
+    }
 
-        .mood-history {
-            margin-top: 2rem;
-        }
+    .mood-submit {
+      width: 100%;
+      padding: 1rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
 
-        .mood-entry {
-            background: white;
-            padding: 1rem;
-            border-radius: 10px;
-            margin: 1rem 0;
-            transition: all 0.3s ease;
-            border-left: 4px solid var(--primary);
-        }
+    .mood-submit:hover {
+      background: var(--primary-light);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(163, 136, 238, 0.3);
+    }
 
-        .mood-entry:hover {
-            transform: translateX(5px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
+    .mood-stats {
+      background: var(--secondary);
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin-top: 2rem;
+    }
 
-        .mood-date {
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 0.5rem;
-        }
+    .stat-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin: 1rem 0;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: all 0.3s ease;
+    }
 
-        .mood-note {
-            font-size: 1rem;
-            color: var(--text);
-            padding: 0.5rem 0;
-        }
+    .stat-card:hover {
+      transform: translateX(5px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
 
-        /* Journal Section Styles */
-        .journal-section {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin-top: 2rem;
-        }
+    .stat-icon {
+      font-size: 1.5rem;
+      color: var(--primary);
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--secondary);
+      border-radius: 50%;
+    }
 
-        .journal-prompt {
-            background: var(--secondary);
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin: 1rem 0;
-        }
+    .mood-history {
+      margin-top: 2rem;
+    }
 
-        .journal-prompt-title {
-            font-size: 1.3rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            font-weight: 600;
-        }
+    .mood-entry {
+      background: white;
+      padding: 1rem;
+      border-radius: 10px;
+      margin: 1rem 0;
+      transition: all 0.3s ease;
+      border-left: 4px solid var(--primary);
+    }
 
-        .journal-controls {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
+    .mood-entry:hover {
+      transform: translateX(5px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
 
-        .journal-button {
-            flex: 1;
-            padding: 0.8rem;
-            border: 2px solid var(--primary);
-            border-radius: 8px;
-            background: white;
-            color: var(--primary);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+    .mood-date {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 0.5rem;
+    }
 
-        .journal-button:hover {
-            background: var(--secondary);
-            transform: translateY(-2px);
-        }
+    .mood-note {
+      font-size: 1rem;
+      color: var(--text);
+      padding: 0.5rem 0;
+    }
 
-        .journal-button.primary {
-            background: var(--primary);
-            color: white;
-        }
+    /* ---------------- Journal Section ---------------- */
+    .journal-section {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      margin-top: 2rem;
+    }
 
-        .journal-button.primary:hover {
-            background: var(--primary-dark);
-        }
+    .journal-prompt {
+      background: var(--secondary);
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin: 1rem 0;
+    }
 
-        .journal-entry {
-            background: var(--secondary);
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin-top: 1rem;
-        }
+    .journal-prompt-title {
+      font-size: 1.3rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
 
-        @media (max-width: 768px) {
-            .nav-links {
-                gap: 1rem;
-                flex-wrap: wrap;
-            }
+    .journal-controls {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
 
-            .hero h1 {
-                font-size: 2.5rem;
-            }
+    .journal-button {
+      flex: 1;
+      padding: 0.8rem;
+      border: 2px solid var(--primary);
+      border-radius: 8px;
+      background: white;
+      color: var(--primary);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
 
-            .mood-buttons {
-                gap: 1rem;
-            }
+    .journal-button:hover {
+      background: var(--secondary);
+      transform: translateY(-2px);
+    }
 
-            .mood-button {
-                font-size: 2rem;
-                width: 60px;
-                height: 60px;
-            }
+    .journal-button.primary {
+      background: var(--primary);
+      color: white;
+    }
 
-            .journal-controls {
-                flex-direction: column;
-            }
-        }
+    .journal-button.primary:hover {
+      background: var(--primary-light);
+    }
 
-        html {
-            scroll-behavior: smooth;
-        }
+    .journal-entry {
+      background: var(--secondary);
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin-top: 1rem;
+    }
 
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      .mood-buttons {
+        gap: 1rem;
+      }
+      .mood-button {
+        font-size: 2rem;
+        width: 60px;
+        height: 60px;
+      }
+      .journal-controls {
+        flex-direction: column;
+      }
+    }
 
-        ::-webkit-scrollbar-track {
-            background: var(--secondary);
-        }
+    html {
+      scroll-behavior: smooth;
+    }
 
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 5px;
-        }
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-dark);
-        }
-    </style>
+    ::-webkit-scrollbar-track {
+      background: var(--secondary);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-light);
+    }
+  </style>
 </head>
 <body>
-    <nav>
-        <div class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="cognitive.html">Cognitive</a>
-            <a href="developmental.html">Development</a>
-            <a href="social.html">Social</a>
-            <a href="research.html">Research</a>
-            <a href="mood-tracker.html" class="active">Mood Tracker</a>
-            <a href="resources.html">Resources</a>
-        </div>
-    </nav>
-
-    <section class="hero">
-        <div data-aos="fade-up">
-            <h1>Daily Mood Tracker</h1>
-            <p>Track your emotional well-being and gain insights into your mood patterns over time. Understanding your emotions is the first step toward better mental health.</p>
-        </div>
-    </section>
-
-    <div class="main-content">
-        <div id="mood-tracker-root"></div>
+  <!-- ---------------- Navigation ---------------- -->
+  <nav>
+    <div class="nav-container">
+      <div class="nav-logo">
+        <a href="index.html">JAspire</a>
+      </div>
+      <div class="mobile-menu-toggle">
+        <i class="fas fa-bars"></i>
+      </div>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="cognitive.html">Cognitive</a>
+        <a href="developmental.html">Development</a>
+        <a href="social.html">Social</a>
+        <a href="research.html">Research</a>
+        <a href="mood-tracker.html" class="active">Mood Tracker</a>
+        <a href="resources.html">Resources</a>
+      </div>
     </div>
+  </nav>
 
-    <script type="text/babel">
-        function MoodTracker() {
-            const [moodData, setMoodData] = React.useState(() => {
-                const saved = localStorage.getItem('moodData');
-                return saved ? JSON.parse(saved) : [];
-            });
-            const [currentMood, setCurrentMood] = React.useState(3);
-            const [moodNote, setMoodNote] = React.useState('');
-            const [streak, setStreak] = React.useState(0);
-            const [currentPromptIndex, setCurrentPromptIndex] = React.useState(0);
-            const [journalEntry, setJournalEntry] = React.useState('');
+  <!-- Optional nav-toggle button -->
+  <button class="nav-toggle"><i class="fas fa-times"></i></button>
 
-            const moodEmojis = ['😢', '😕', '😐', '🙂', '😊'];
-            const moodLabels = ['Very Low', 'Low', 'Neutral', 'Good', 'Excellent'];
+  <!-- ---------------- Hero Section ---------------- -->
+  <section class="hero">
+    <div data-aos="fade-up">
+      <h1>Daily Mood Tracker</h1>
+      <p>
+        Track your emotional well-being and gain insights into your mood patterns over time.
+        Understanding your emotions is the first step toward better mental health.
+      </p>
+    </div>
+  </section>
 
-            const journalingPrompts = [
-                {
-                    title: "Thought Challenge",
-                    prompt: "What's a challenging thought you had today? Let's break it down:\n1. What's the situation?\n2. What are your automatic thoughts?\n3. What evidence supports and doesn't support this thought?\n4. What's a more balanced perspective?"
-                },
-                {
-                    title: "Emotion Explorer",
-                    prompt: "Identify an emotion you felt strongly today:\n1. What triggered this emotion?\n2. Where did you feel it in your body?\n3. What did you do in response?\n4. What would be a helpful way to respond next time?"
-                },
-                {
-                    title: "Gratitude Reflection",
-                    prompt: "Let's practice gratitude:\n1. What are three things that went well today?\n2. Who are you grateful for today and why?\n3. What's something about yourself you're grateful for?"
-                },
-                {
-                    title: "Behavior Pattern",
-                    prompt: "Think about your actions today:\n1. What did you do that helped your mood?\n2. What did you do that might have hurt your mood?\n3. What's one small change you could make tomorrow?"
-                },
-                {
-                    title: "Future Focus",
-                    prompt: "Let's plan positively:\n1. What's one thing you're looking forward to?\n2. What's a small step you can take tomorrow toward a goal?\n3. How can you show yourself kindness tomorrow?"
-                }
-            ];
+  <!-- ---------------- Main Content ---------------- -->
+  <div class="main-content">
+    <div id="mood-tracker-root"></div>
+  </div>
 
-            React.useEffect(() => {
-                localStorage.setItem('moodData', JSON.stringify(moodData));
-                calculateStreak();
-            }, [moodData]);
+  <!-- ---------------- React Component ---------------- -->
+  <script type="text/babel">
+    function MoodTracker() {
+      const [moodData, setMoodData] = React.useState(() => {
+        const saved = localStorage.getItem('moodData');
+        return saved ? JSON.parse(saved) : [];
+      });
+      const [currentMood, setCurrentMood] = React.useState(3);
+      const [moodNote, setMoodNote] = React.useState('');
+      const [streak, setStreak] = React.useState(0);
+      const [currentPromptIndex, setCurrentPromptIndex] = React.useState(0);
+      const [journalEntry, setJournalEntry] = React.useState('');
 
-            const calculateStreak = () => {
-                let currentStreak = 0;
-                const today = new Date().toLocaleDateString();
-                
-                for (let i = moodData.length - 1; i >= 0; i--) {
-                    const entryDate = new Date(moodData[i].date);
-                    const expectedDate = new Date();
-                    expectedDate.setDate(expectedDate.getDate() - currentStreak);
-                    
-                    if (entryDate.toLocaleDateString() === expectedDate.toLocaleDateString()) {
-                        currentStreak++;
-                    } else {
-                        break;
-                    }
-                }
-                setStreak(currentStreak);
-            };
+      const moodEmojis = ['😢', '😕', '😐', '🙂', '😊'];
+      const moodLabels = ['Very Low', 'Low', 'Neutral', 'Good', 'Excellent'];
 
-            const getAverageMood = () => {
-                if (moodData.length === 0) return 0;
-                const sum = moodData.reduce((acc, curr) => acc + curr.mood, 0);
-                return (sum / moodData.length).toFixed(1);
-            };
-
-            const getMoodTrend = () => {
-                if (moodData.length < 3) return null;
-                const recentMoods = moodData.slice(-3);
-                const average = recentMoods.reduce((acc, curr) => acc + curr.mood, 0) / 3;
-                
-                if (average < 3) {
-                    return "Your mood has been lower than usual lately. Consider reaching out to someone you trust.";
-                } else if (average > 4) {
-                    return "You've been maintaining a great mood! Keep up whatever you're doing!";
-                }
-                return "Your mood has been stable.";
-            };
-
-            const handleNextPrompt = () => {
-                setCurrentPromptIndex((prevIndex) => 
-                    prevIndex === journalingPrompts.length - 1 ? 0 : prevIndex + 1
-                );
-            };
-
-            const handleMoodSubmit = () => {
-                const newMoodEntry = {
-                    date: new Date().toLocaleDateString(),
-                    mood: currentMood,
-                    note: moodNote,
-                    journalEntry: journalEntry,
-                    promptTitle: journalingPrompts[currentPromptIndex].title,
-                    timestamp: new Date().getTime()
-                };
-                setMoodData([...moodData, newMoodEntry]);
-                setMoodNote('');
-                setJournalEntry('');
-            };
-
-            return (
-                <div data-aos="fade-up">
-                    <div className="mood-card">
-                        <h2 style={{ fontSize: '1.8rem', marginBottom: '1.5rem', color: 'var(--primary)', textAlign: 'center' }}>
-                            How are you feeling today?
-                        </h2>
-
-                        {streak > 0 && (
-                            <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
-                                <span style={{ 
-                                    background: 'var(--primary)',
-                                    color: 'white',
-                                    padding: '0.5rem 1rem',
-                                    borderRadius: '20px',
-                                    fontSize: '1.1rem'
-                                }}>
-                                    🔥 {streak} Day Streak!
-                                </span>
-                            </div>
-                        )}
-                        
-                        <div className="mood-buttons">
-                            {moodEmojis.map((emoji, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => setCurrentMood(index + 1)}
-                                    className={`mood-button ${currentMood === index + 1 ? 'selected' : ''}`}
-                                >
-                                    {emoji}
-                                </button>
-                            ))}
-                        </div>
-                        
-                        <div style={{ textAlign: 'center', margin: '1rem 0', fontSize: '1.2rem' }}>
-                            {moodLabels[currentMood - 1]}
-                        </div>
-
-                        <textarea
-                            value={moodNote}
-                            onChange={(e) => setMoodNote(e.target.value)}
-                            placeholder="What's on your mind today? (optional)"
-                            className="mood-input"
-                            rows="3"
-                        />
-                    </div>
-
-                    {moodData.length > 0 && (
-                        <div className="mood-stats">
-                            <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'var(--primary)' }}>
-                                Your Mood Insights
-                            </h3>
-
-                            <div className="stat-card">
-                                <div className="stat-icon">
-                                    <i className="fas fa-chart-line"></i>
-                                </div>
-                                <div>
-                                    <h4>Average Mood</h4>
-                                    <p>{getAverageMood()} / 5</p>
-                                </div>
-                            </div>
-
-                            <div className="stat-card">
-                                <div className="stat-icon">
-                                    <i className="fas fa-fire"></i>
-                                </div>
-                                <div>
-                                    <h4>Current Streak</h4>
-                                    <p>{streak} {streak === 1 ? 'day' : 'days'}</p>
-                                </div>
-                            </div>
-
-                            <div className="stat-card">
-                                <div className="stat-icon">
-                                    <i className="fas fa-brain"></i>
-                                </div>
-                                <div>
-                                    <h4>Mood Trend</h4>
-                                    <p>{getMoodTrend()}</p>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Guided Journaling Section */}
-                    <div className="journal-section" data-aos="fade-up">
-                        <h3 style={{ fontSize: '1.8rem', marginBottom: '1.5rem', color: 'var(--primary)', textAlign: 'center' }}>
-                            Guided Journaling
-                        </h3>
-                        
-                        <div className="journal-prompt">
-                            <div className="journal-prompt-title">
-                                {journalingPrompts[currentPromptIndex].title}
-                            </div>
-                            <p style={{ whiteSpace: 'pre-line' }}>
-                                {journalingPrompts[currentPromptIndex].prompt}
-                            </p>
-                            <textarea
-                                value={journalEntry}
-                                onChange={(e) => setJournalEntry(e.target.value)}
-                                placeholder="Write your response here..."
-                                className="mood-input"
-                                rows="6"
-                            />
-                            <div className="journal-controls">
-                                <button onClick={handleNextPrompt} className="journal-button">
-                                    Try Another Prompt
-                                </button>
-                            </div>
-                        </div>
-
-                        <button onClick={handleMoodSubmit} className="mood-submit">
-                            Save Today's Entry
-                        </button>
-                    </div>
-
-                    {/* Recent Entries Section */}
-                    <div className="mood-history">
-                        <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'var(--primary)' }}>
-                            Recent Entries
-                        </h3>
-                        {moodData.slice(-5).reverse().map((entry, index) => (
-                            <div key={index} className="mood-entry" data-aos="fade-left" data-aos-delay={index * 100}>
-                                <div className="mood-date">
-                                    <i className="far fa-calendar-alt"></i> {entry.date}
-                                </div>
-                                <div style={{ fontSize: '1.5rem', margin: '0.5rem 0' }}>
-                                    {moodEmojis[entry.mood - 1]} {moodLabels[entry.mood - 1]}
-                                </div>
-                                {entry.note && (
-                                    <div className="mood-note">
-                                        <i className="far fa-comment-alt"></i> {entry.note}
-                                    </div>
-                                )}
-                                {entry.journalEntry && (
-                                    <div className="journal-entry">
-                                        <div style={{ fontWeight: 600, marginBottom: '0.5rem', color: 'var(--primary)' }}>
-                                            {entry.promptTitle} Response:
-                                        </div>
-                                        <div style={{ whiteSpace: 'pre-line' }}>
-                                            {entry.journalEntry}
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            );
+      const journalingPrompts = [
+        {
+          title: "Thought Challenge",
+          prompt: "What's a challenging thought you had today? Let's break it down:\n1. What's the situation?\n2. What are your automatic thoughts?\n3. What evidence supports and doesn't support this thought?\n4. What's a more balanced perspective?"
+        },
+        {
+          title: "Emotion Explorer",
+          prompt: "Identify an emotion you felt strongly today:\n1. What triggered this emotion?\n2. Where did you feel it in your body?\n3. What did you do in response?\n4. What would be a helpful way to respond next time?"
+        },
+        {
+          title: "Gratitude Reflection",
+          prompt: "Let's practice gratitude:\n1. What are three things that went well today?\n2. Who are you grateful for today and why?\n3. What's something about yourself you're grateful for?"
+        },
+        {
+          title: "Behavior Pattern",
+          prompt: "Think about your actions today:\n1. What did you do that helped your mood?\n2. What did you do that might have hurt your mood?\n3. What's one small change you could make tomorrow?"
+        },
+        {
+          title: "Future Focus",
+          prompt: "Let's plan positively:\n1. What's one thing you're looking forward to?\n2. What's a small step you can take tomorrow toward a goal?\n3. How can you show yourself kindness tomorrow?"
         }
+      ];
 
-        const root = ReactDOM.createRoot(document.getElementById('mood-tracker-root'));
-        root.render(<MoodTracker />);
+      React.useEffect(() => {
+        localStorage.setItem('moodData', JSON.stringify(moodData));
+        calculateStreak();
+      }, [moodData]);
 
-        // Initialize AOS
-        AOS.init({
-            duration: 1000,
-            once: true,
-            mirror: false
-        });
+      const calculateStreak = () => {
+        let currentStreak = 0;
+        const today = new Date().toLocaleDateString();
+        
+        for (let i = moodData.length - 1; i >= 0; i--) {
+          const entryDate = new Date(moodData[i].date);
+          const expectedDate = new Date();
+          expectedDate.setDate(expectedDate.getDate() - currentStreak);
+          
+          if (entryDate.toLocaleDateString() === expectedDate.toLocaleDateString()) {
+            currentStreak++;
+          } else {
+            break;
+          }
+        }
+        setStreak(currentStreak);
+      };
 
-        // Navbar scroll effect
-        window.addEventListener('scroll', () => {
-            const nav = document.querySelector('nav');
-            if (window.scrollY > 50) {
-                nav.style.padding = '1rem 10%';
-                nav.style.background = 'rgba(255, 255, 255, 0.95)';
-                nav.style.backdropFilter = 'blur(10px)';
-            } else {
-                nav.style.padding = '1.5rem 10%';
-                nav.style.background = 'white';
-                nav.style.backdropFilter = 'none';
-            }
-        });
-    </script>
+      const getAverageMood = () => {
+        if (moodData.length === 0) return 0;
+        const sum = moodData.reduce((acc, curr) => acc + curr.mood, 0);
+        return (sum / moodData.length).toFixed(1);
+      };
+
+      const getMoodTrend = () => {
+        if (moodData.length < 3) return null;
+        const recentMoods = moodData.slice(-3);
+        const average = recentMoods.reduce((acc, curr) => acc + curr.mood, 0) / 3;
+        
+        if (average < 3) {
+          return "Your mood has been lower than usual lately. Consider reaching out to someone you trust.";
+        } else if (average > 4) {
+          return "You've been maintaining a great mood! Keep up whatever you're doing!";
+        }
+        return "Your mood has been stable.";
+      };
+
+      const handleNextPrompt = () => {
+        setCurrentPromptIndex((prevIndex) =>
+          prevIndex === journalingPrompts.length - 1 ? 0 : prevIndex + 1
+        );
+      };
+
+      const handleMoodSubmit = () => {
+        const newMoodEntry = {
+          date: new Date().toLocaleDateString(),
+          mood: currentMood,
+          note: moodNote,
+          journalEntry: journalEntry,
+          promptTitle: journalingPrompts[currentPromptIndex].title,
+          timestamp: new Date().getTime()
+        };
+        setMoodData([...moodData, newMoodEntry]);
+        setMoodNote('');
+        setJournalEntry('');
+      };
+
+      return (
+        <div data-aos="fade-up">
+          <div className="mood-card">
+            <h2 style={{ fontSize: '1.8rem', marginBottom: '1.5rem', color: 'var(--primary)', textAlign: 'center' }}>
+              How are you feeling today?
+            </h2>
+
+            {streak > 0 && (
+              <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+                <span style={{
+                  background: 'var(--primary)',
+                  color: 'white',
+                  padding: '0.5rem 1rem',
+                  borderRadius: '20px',
+                  fontSize: '1.1rem'
+                }}>
+                  🔥 {streak} Day Streak!
+                </span>
+              </div>
+            )}
+            
+            <div className="mood-buttons">
+              {moodEmojis.map((emoji, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentMood(index + 1)}
+                  className={`mood-button ${currentMood === index + 1 ? 'selected' : ''}`}
+                >
+                  {emoji}
+                </button>
+              ))}
+            </div>
+            
+            <div style={{ textAlign: 'center', margin: '1rem 0', fontSize: '1.2rem' }}>
+              {moodLabels[currentMood - 1]}
+            </div>
+
+            <textarea
+              value={moodNote}
+              onChange={(e) => setMoodNote(e.target.value)}
+              placeholder="What's on your mind today? (optional)"
+              className="mood-input"
+              rows="3"
+            />
+          </div>
+
+          {moodData.length > 0 && (
+            <div className="mood-stats">
+              <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'var(--primary)' }}>
+                Your Mood Insights
+              </h3>
+
+              <div className="stat-card">
+                <div className="stat-icon">
+                  <i className="fas fa-chart-line"></i>
+                </div>
+                <div>
+                  <h4>Average Mood</h4>
+                  <p>{getAverageMood()} / 5</p>
+                </div>
+              </div>
+
+              <div className="stat-card">
+                <div className="stat-icon">
+                  <i className="fas fa-fire"></i>
+                </div>
+                <div>
+                  <h4>Current Streak</h4>
+                  <p>{streak} {streak === 1 ? 'day' : 'days'}</p>
+                </div>
+              </div>
+
+              <div className="stat-card">
+                <div className="stat-icon">
+                  <i className="fas fa-brain"></i>
+                </div>
+                <div>
+                  <h4>Mood Trend</h4>
+                  <p>{getMoodTrend()}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Guided Journaling Section */}
+          <div className="journal-section" data-aos="fade-up">
+            <h3 style={{ fontSize: '1.8rem', marginBottom: '1.5rem', color: 'var(--primary)', textAlign: 'center' }}>
+              Guided Journaling
+            </h3>
+            
+            <div className="journal-prompt">
+              <div className="journal-prompt-title">
+                {journalingPrompts[currentPromptIndex].title}
+              </div>
+              <p style={{ whiteSpace: 'pre-line' }}>
+                {journalingPrompts[currentPromptIndex].prompt}
+              </p>
+              <textarea
+                value={journalEntry}
+                onChange={(e) => setJournalEntry(e.target.value)}
+                placeholder="Write your response here..."
+                className="mood-input"
+                rows="6"
+              />
+              <div className="journal-controls">
+                <button onClick={handleNextPrompt} className="journal-button">
+                  Try Another Prompt
+                </button>
+              </div>
+            </div>
+
+            <button onClick={handleMoodSubmit} className="mood-submit">
+              Save Today's Entry
+            </button>
+          </div>
+
+          {/* Recent Entries Section */}
+          <div className="mood-history">
+            <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'var(--primary)' }}>
+              Recent Entries
+            </h3>
+            {moodData.slice(-5).reverse().map((entry, index) => (
+              <div key={index} className="mood-entry" data-aos="fade-left" data-aos-delay={index * 100}>
+                <div className="mood-date">
+                  <i className="far fa-calendar-alt"></i> {entry.date}
+                </div>
+                <div style={{ fontSize: '1.5rem', margin: '0.5rem 0' }}>
+                  {moodEmojis[entry.mood - 1]} {moodLabels[entry.mood - 1]}
+                </div>
+                {entry.note && (
+                  <div className="mood-note">
+                    <i className="far fa-comment-alt"></i> {entry.note}
+                  </div>
+                )}
+                {entry.journalEntry && (
+                  <div className="journal-entry">
+                    <div style={{ fontWeight: 600, marginBottom: '0.5rem', color: 'var(--primary)' }}>
+                      {entry.promptTitle} Response:
+                    </div>
+                    <div style={{ whiteSpace: 'pre-line' }}>
+                      {entry.journalEntry}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('mood-tracker-root'));
+    root.render(<MoodTracker />);
+
+    // Initialize AOS
+    AOS.init({
+      duration: 1000,
+      once: true,
+      mirror: false
+    });
+  </script>
+
+  <!-- ---------------- Navigation JS ---------------- -->
+  <script>
+    // Mobile menu toggle functionality
+    const mobileToggle = document.querySelector('.mobile-menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    mobileToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+
+    // Nav bar toggle functionality (optional)
+    const nav = document.querySelector('nav');
+    const navToggle = document.querySelector('.nav-toggle');
+    navToggle.addEventListener('click', () => {
+      nav.classList.toggle('nav-hidden');
+      navToggle.innerHTML = nav.classList.contains('nav-hidden')
+        ? '<i class="fas fa-bars"></i>'
+        : '<i class="fas fa-times"></i>';
+    });
+  </script>
 </body>
 </html>
