@@ -1,639 +1,699 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Psychology - Interactive Guide</title>
-    
-    <!-- Animation Libraries -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    
-    <style>
-        :root {
-            --primary: #a388ee;
-            --secondary: #f5f0ff;
-            --background: #ffffff;
-            --text: #2c2c2c;
-            --accent: #ff7eb3;
-            --success: #4CAF50;
-            --error: #ff6b6b;
-            --spacing: 2rem;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', sans-serif;
-        }
-
-        body {
-            background: var(--background);
-            color: var(--text);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* Loading Animation */
-        .loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            transition: opacity 0.5s ease;
-        }
-
-        .loader.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .social-loader {
-            width: 100px;
-            height: 100px;
-            position: relative;
-            animation: rotate 2s linear infinite;
-        }
-
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Navigation */
-        nav {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 1.5rem 10%;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-        }
-
-        .nav-links {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 3rem;
-        }
-
-        .nav-links a {
-            color: var(--text);
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            transition: all 0.3s ease;
-            font-size: 1.1rem;
-            position: relative;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: var(--accent);
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-        }
-
-        .nav-links a:hover::after {
-            transform: scaleX(1);
-        }
-
-        /* Hero Section */
-        .social-hero {
-            background: linear-gradient(135deg, #f0e6ff, #ffe6f0);
-            padding: 160px 0 80px;
-            min-height: 80vh;
-            display: flex;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .social-connections {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.1;
-            pointer-events: none;
-        }
-
-        .hero-content {
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-content h1 {
-            font-size: 4rem;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            animation: slideInDown 1s ease-out;
-        }
-
-        .hero-content p {
-            font-size: 1.3rem;
-            max-width: 800px;
-            margin: 0 auto;
-            animation: fadeIn 1s ease-out 0.5s both;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 var(--spacing);
-        }
-
-        /* Theory Cards */
-        .theory-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            padding: 4rem 0;
-        }
-
-        .theory-card {
-            background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-        }
-
-        .theory-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            z-index: 0;
-        }
-
-        .theory-card:hover {
-            transform: translateY(-10px) rotate(1deg);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-        }
-
-        .theory-card:hover::before {
-            opacity: 0.1;
-        }
-
-        .theory-card > * {
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Interactive Elements */
-        .interactive-section {
-            background: var(--secondary);
-            padding: 4rem 0;
-            margin: 4rem 0;
-        }
-
-        .scenario-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .scenario-option {
-            padding: 1rem;
-            margin: 0.5rem 0;
-            border: 2px solid var(--primary);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .scenario-option:hover {
-            background: var(--secondary);
-            transform: translateX(10px);
-        }
-
-        /* Research Timeline */
-        .research-timeline {
-            position: relative;
-            padding: 4rem 0;
-        }
-
-        .timeline-item {
-            display: flex;
-            gap: 2rem;
-            margin: 2rem 0;
-            padding: 2rem;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-        }
-
-        .timeline-date {
-            min-width: 120px;
-            font-weight: bold;
-            color: var(--primary);
-        }
-
-        /* Experiment Showcase */
-        .experiment-showcase {
-            padding: 4rem 0;
-            background: linear-gradient(135deg, var(--secondary), #fff);
-        }
-
-        .experiment-card {
-            background: white;
-            border-radius: 15px;
-            padding: 2rem;
-            margin: 2rem 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-        }
-
-        .experiment-card:hover {
-            transform: scale(1.02);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        }
-
-        /* Floating Elements */
-        .floating-info {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: white;
-            padding: 1rem;
-            border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            transform: translateY(150%);
-            transition: transform 0.3s ease;
-            z-index: 1000;
-            max-width: 300px;
-        }
-
-        .floating-info.show {
-            transform: translateY(0);
-        }
-
-        /* Progress Bar */
-        .progress-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--primary);
-            transform-origin: left;
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-            z-index: 1001;
-        }
-
-        /* Interactive Quiz */
-        .quiz-section {
-            padding: 4rem 0;
-        }
-
-        .quiz-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .quiz-option {
-            padding: 1rem;
-            margin: 0.5rem 0;
-            border: 2px solid var(--primary);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .quiz-option:hover {
-            background: var(--secondary);
-        }
-
-        .quiz-option.correct {
-            background: var(--success);
-            color: white;
-        }
-
-        .quiz-option.incorrect {
-            background: var(--error);
-            color: white;
-        }
-
-        /* Animations */
-        @keyframes slideInDown {
-            from {
-                transform: translateY(-100px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .nav-links {
-                flex-direction: column;
-                padding: 1rem 0;
-            }
-
-            .hero-content h1 {
-                font-size: 2.5rem;
-            }
-
-            .theory-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .timeline-item {
-                flex-direction: column;
-            }
-
-            .timeline-date {
-                margin-bottom: 1rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Psychology - Interactive Guide</title>
+  
+  <!-- AOS & Animate.css & FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  
+  <style>
+    /* ===============================
+       BASE STYLES (Adjusted to match Cognitive/Developmental UI)
+       =============================== */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    :root {
+      --primary: #a388ee; /* Social-specific primary */
+      --primary-light: #c2b8f7;
+      --accent: #ff7eb3;
+      --secondary: #f5f0ff;
+      --background: #ffffff;
+      --text: #2c2c2c;
+      --spacing: 2rem;
+      --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      --success: #4CAF50;
+      --error: #ff6b6b;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--spacing);
+    }
+    /* Loader */
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      transition: opacity 0.5s ease;
+    }
+    .loader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .social-loader {
+      width: 100px;
+      height: 100px;
+      position: relative;
+      animation: rotate 2s linear infinite;
+    }
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    /* Progress Bar */
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--primary);
+      transform-origin: left;
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+      z-index: 1001;
+    }
+    /* Navigation */
+    nav {
+      background: rgba(255,255,255,0.95);
+      padding: 1.5rem 10%;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      transition: var(--transition);
+    }
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-logo a {
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    .nav-links {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 3rem;
+    }
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      transition: var(--transition);
+      font-size: 1.1rem;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+    .nav-links a:hover::after {
+      transform: scaleX(1);
+    }
+    /* Mobile Menu Toggle */
+    .mobile-menu-toggle {
+      display: none;
+    }
+    @media (max-width: 768px) {
+      .mobile-menu-toggle {
+        display: block;
+        position: absolute;
+        top: 50%;
+        right: 5%;
+        transform: translateY(-50%);
+        font-size: 1.5rem;
+        color: var(--text);
+        cursor: pointer;
+        z-index: 1100;
+      }
+      .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 70%;
+        height: 100vh;
+        background: rgba(255,255,255,0.98);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 1.5rem;
+        transition: right 0.3s ease;
+        z-index: 1050;
+      }
+      .nav-links.active {
+        right: 0;
+      }
+    }
+    /* Nav Toggle for Closable Nav (Hamburger) */
+    .nav-toggle {
+      position: fixed;
+      bottom: 30px;
+      left: 30px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 1002;
+      transition: var(--transition);
+    }
+    .nav-toggle:hover {
+      background: var(--primary-light);
+      transform: translateY(-5px);
+    }
+    .nav-hidden {
+      transform: translateY(-100%);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+    }
+    /* ===============================
+       UPDATED HERO SECTION (Matching Cognitive/Developmental UI)
+       =============================== */
+    .social-hero {
+      background: linear-gradient(135deg, #f0e6ff, #ffe6f0);
+      padding: 160px 0 80px;
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      margin-top: 60px; /* offset for fixed nav */
+    }
+    .social-hero::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: url('/api/placeholder/1200/800') center/cover;
+      opacity: 0.1;
+      animation: pulse 4s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    .hero-content {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      animation: contentFadeIn 1.5s ease-out;
+    }
+    @keyframes contentFadeIn {
+      from { opacity: 0; transform: translateY(50px) scale(0.9); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .hero-content h1 {
+      font-size: 4rem;
+      background: linear-gradient(45deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 1.5rem;
+      animation: slideInDown 1s ease-out;
+    }
+    @keyframes slideInDown {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .hero-content p {
+      font-size: 1.3rem;
+      max-width: 800px;
+      margin: 0 auto;
+      animation: fadeIn 1s ease-out 0.5s both;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @media (max-width: 768px) {
+      .hero-content h1 {
+        font-size: 2.5rem;
+      }
+      .hero-content p {
+        font-size: 1.1rem;
+      }
+    }
+    /* ===============================
+       PAGE CONTENT STYLES
+       =============================== */
+    /* Section Titles */
+    .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      margin: 4rem 0 2rem;
+      color: var(--primary);
+    }
+    /* Theory Cards Grid */
+    .theory-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      padding-bottom: 4rem;
+    }
+    .theory-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .theory-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, var(--primary), var(--accent));
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      z-index: 0;
+    }
+    .theory-card:hover {
+      transform: translateY(-10px) rotate(1deg);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    }
+    .theory-card:hover::before {
+      opacity: 0.1;
+    }
+    .theory-card > * {
+      position: relative;
+      z-index: 1;
+    }
+    /* Interactive Scenarios */
+    .interactive-section {
+      background: var(--secondary);
+      padding: 4rem 0;
+      margin: 4rem 0;
+    }
+    .scenario-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .scenario-option {
+      padding: 1rem;
+      margin: 0.5rem 0;
+      border: 2px solid var(--primary);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .scenario-option:hover {
+      background: var(--secondary);
+      transform: translateX(10px);
+    }
+    /* Experiment Showcase */
+    .experiment-showcase {
+      padding: 4rem 0;
+      background: linear-gradient(135deg, var(--secondary), #fff);
+    }
+    .experiment-card {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      margin: 2rem 0;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+    .experiment-card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+    .learn-more-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      margin-top: 1rem;
+    }
+    .learn-more-btn:hover {
+      background: var(--primary-light);
+      transform: translateY(-2px);
+    }
+    /* Interactive Quiz */
+    .quiz-section {
+      padding: 4rem 0;
+    }
+    .quiz-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .quiz-option {
+      padding: 1rem;
+      margin: 0.5rem 0;
+      border: 2px solid var(--primary);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .quiz-option:hover {
+      background: var(--secondary);
+    }
+    .quiz-option.correct {
+      background: var(--success);
+      color: white;
+    }
+    .quiz-option.incorrect {
+      background: var(--error);
+      color: white;
+    }
+    /* Floating Info */
+    .floating-info {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: white;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      transform: translateY(150%);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+      max-width: 300px;
+    }
+    .floating-info.show {
+      transform: translateY(0);
+    }
+  </style>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div class="loader">
-        <div class="social-loader">
-            <img src="/api/placeholder/100/100" alt="Social connections loader" />
-        </div>
+  <!-- Loader -->
+  <div class="loader">
+    <div class="social-loader">
+      <img src="/api/placeholder/100/100" alt="Social connections loader" />
     </div>
+  </div>
 
-    <!-- Progress Bar -->
-    <div class="progress-bar"></div>
+  <!-- Progress Bar -->
+  <div class="progress-bar"></div>
 
-    <nav>
-        <div class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="cognitive.html">Cognitive Psychology</a>
-            <a href="developmental.html">Development</a>
-            <a href="social.html">Social Psychology</a>
-            <a href="research.html">Research</a>
-            <a href="mood-tracker.html">Mood Tracker</a>
-            <a href="resources.html">Resources</a>
-        </div>
-    </nav>
-
-    <section class="social-hero">
-        <div class="social-connections"></div>
-        <div class="container">
-            <div class="hero-content" data-aos="fade-up">
-                <h1>Social Psychology</h1>
-                <p>Discover how our thoughts, feelings, and behaviors are influenced by the presence of others and our social environment.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="container">
-        <h2 class="section-title" data-aos="fade-up">Key Theories</h2>
-        <div class="theory-grid">
-            <div class="theory-card" data-aos="fade-up" data-aos-delay="100">
-                <h3>Social Identity Theory</h3>
-                <p>Explores how people's sense of who they are is based on their group memberships.</p>
-                <ul>
-                    <li>Group categorization</li>
-                    <li>Social identification</li>
-                    <li>Social comparison</li>
-                    <li>Intergroup behavior</li>
-                </ul>
-            </div>
-            <div class="theory-card" data-aos="fade-up" data-aos-delay="200">
-                <h3>Attribution Theory</h3>
-                <p>How people explain the causes of behavior and events.</p>
-                <ul>
-                    <li>Internal attribution</li>
-                    <li>External attribution</li>
-                    <li>Fundamental attribution error</li>
-                    <li>Self-serving bias</li>
-                </ul>
-            </div>
-            <div class="theory-card" data-aos="fade-up" data-aos-delay="300">
-                <h3>Social Influence</h3>
-                <p>The ways in which people impact the behaviors of others.</p>
-                <ul>
-                    <li>Conformity</li>
-                    <li>Compliance</li>
-                    <li>Obedience</li>
-                    <li>Group dynamics</li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <section class="interactive-section">
-        <div class="container">
-            <h2 class="section-title" data-aos="fade-up">Interactive Scenarios</h2>
-            <div class="scenario-container" data-aos="fade-up">
-                <h3>Scenario 1: Conformity Experiment</h3>
-                <p>You're in a group where everyone gives an obviously wrong answer. What do you do?</p>
-                <div class="scenario-options">
-                    <div class="scenario-option" onclick="handleScenario(1)">Give the correct answer</div>
-                    <div class="scenario-option" onclick="handleScenario(2)">Conform to the group</div>
-                    <div class="scenario-option" onclick="handleScenario(3)">Express uncertainty</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="experiment-showcase">
-        <div class="container">
-            <h2 class="section-title" data-aos="fade-up">Famous Experiments</h2>
-            <div class="experiment-card" data-aos="fade-up">
-                <h3>Milgram Experiment</h3>
-                <p>Study on obedience to authority figures:</p>
-                <ul>
-                    <li>Participants were ordered to administer electric shocks</li>
-                    <li>Revealed how ordinary people can follow harmful orders</li>
-                    <li>Demonstrated the power of authority</li>
-                </ul>
-                <button class="learn-more-btn" onclick="showExperimentDetails('milgram')">Learn More</button>
-            </div>
-            <div class="experiment-card" data-aos="fade-up" data-aos-delay="100">
-                <h3>Stanford Prison Experiment</h3>
-                <p>Research on the impact of perceived power:</p>
-                <ul>
-                    <li>Students assigned roles of prisoners and guards</li>
-                    <li>Showed how roles can affect behavior</li>
-                    <li>Highlighted the power of social situations</li>
-                </ul>
-                <button class="learn-more-btn" onclick="showExperimentDetails('stanford')">Learn More</button>
-            </div>
-            <div class="experiment-card" data-aos="fade-up" data-aos-delay="200">
-                <h3>Asch Conformity Studies</h3>
-                <p>Investigation of social conformity:</p>
-                <ul>
-                    <li>Participants faced group pressure</li>
-                    <li>Demonstrated conformity to majority opinions</li>
-                    <li>Explored social influence on judgment</li>
-                </ul>
-                <button class="learn-more-btn" onclick="showExperimentDetails('asch')">Learn More</button>
-            </div>
-        </div>
-    </section>
-
-    <section class="quiz-section">
-        <div class="container">
-            <h2 class="section-title" data-aos="fade-up">Test Your Knowledge</h2>
-            <div class="quiz-container" data-aos="fade-up">
-                <div class="quiz-question">
-                    <h3>Question 1:</h3>
-                    <p>Which theory explains how people attribute causes to behavior?</p>
-                    <div class="quiz-options">
-                        <div class="quiz-option" data-correct="true">Attribution Theory</div>
-                        <div class="quiz-option" data-correct="false">Social Identity Theory</div>
-                        <div class="quiz-option" data-correct="false">Cognitive Dissonance Theory</div>
-                        <div class="quiz-option" data-correct="false">Self-Perception Theory</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <div class="floating-info" id="floatingInfo">
-        <h4>Social Psychology Fact</h4>
-        <p id="randomFact">Did you know? The bystander effect shows that people are less likely to help someone in need when others are present.</p>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <div class="nav-logo">
+        <a href="index.html">JAspire</a>
+      </div>
+      <div class="mobile-menu-toggle">
+        <i class="fas fa-bars"></i>
+      </div>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="cognitive.html">Cognitive Psychology</a>
+        <a href="developmental.html">Development</a>
+        <a href="social.html">Social Psychology</a>
+        <a href="research.html">Research</a>
+        <a href="mood-tracker.html">Mood Tracker</a>
+        <a href="resources.html">Resources</a>
+      </div>
     </div>
+  </nav>
+  <!-- Nav Toggle Button (for closable nav) -->
+  <button class="nav-toggle"><i class="fas fa-times"></i></button>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-    <script>
-        // Initialize AOS
-        AOS.init({
-            duration: 1000,
-            once: true,
-            offset: 200
+  <!-- Hero Section -->
+  <section class="social-hero">
+    <div class="container">
+      <div class="hero-content" data-aos="fade-up">
+        <h1>Social Psychology</h1>
+        <p>Discover how our thoughts, feelings, and behaviors are influenced by the presence of others and our social environment.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Key Theories Section -->
+  <section class="container">
+    <h2 class="section-title" data-aos="fade-up">Key Theories</h2>
+    <div class="theory-grid">
+      <div class="theory-card" data-aos="fade-up" data-aos-delay="100">
+        <h3>Social Identity Theory</h3>
+        <p>Explores how people's sense of who they are is based on their group memberships.</p>
+        <ul>
+          <li>Group categorization</li>
+          <li>Social identification</li>
+          <li>Social comparison</li>
+          <li>Intergroup behavior</li>
+        </ul>
+      </div>
+      <div class="theory-card" data-aos="fade-up" data-aos-delay="200">
+        <h3>Attribution Theory</h3>
+        <p>How people explain the causes of behavior and events.</p>
+        <ul>
+          <li>Internal attribution</li>
+          <li>External attribution</li>
+          <li>Fundamental attribution error</li>
+          <li>Self-serving bias</li>
+        </ul>
+      </div>
+      <div class="theory-card" data-aos="fade-up" data-aos-delay="300">
+        <h3>Social Influence</h3>
+        <p>The ways in which people impact the behaviors of others.</p>
+        <ul>
+          <li>Conformity</li>
+          <li>Compliance</li>
+          <li>Obedience</li>
+          <li>Group dynamics</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Scenarios Section -->
+  <section class="interactive-section">
+    <div class="container">
+      <h2 class="section-title" data-aos="fade-up">Interactive Scenarios</h2>
+      <div class="scenario-container" data-aos="fade-up">
+        <h3>Scenario 1: Conformity Experiment</h3>
+        <p>You're in a group where everyone gives an obviously wrong answer. What do you do?</p>
+        <div class="scenario-options">
+          <div class="scenario-option" onclick="handleScenario(1)">Give the correct answer</div>
+          <div class="scenario-option" onclick="handleScenario(2)">Conform to the group</div>
+          <div class="scenario-option" onclick="handleScenario(3)">Express uncertainty</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experiment Showcase Section -->
+  <section class="experiment-showcase">
+    <div class="container">
+      <h2 class="section-title" data-aos="fade-up">Famous Experiments</h2>
+      <div class="experiment-card" data-aos="fade-up">
+        <h3>Milgram Experiment</h3>
+        <p>Study on obedience to authority figures:</p>
+        <ul>
+          <li>Participants were ordered to administer electric shocks</li>
+          <li>Revealed how ordinary people can follow harmful orders</li>
+          <li>Demonstrated the power of authority</li>
+        </ul>
+        <button class="learn-more-btn" onclick="showExperimentDetails('milgram')">Learn More</button>
+      </div>
+      <div class="experiment-card" data-aos="fade-up" data-aos-delay="100">
+        <h3>Stanford Prison Experiment</h3>
+        <p>Research on the impact of perceived power:</p>
+        <ul>
+          <li>Students assigned roles of prisoners and guards</li>
+          <li>Showed how roles can affect behavior</li>
+          <li>Highlighted the power of social situations</li>
+        </ul>
+        <button class="learn-more-btn" onclick="showExperimentDetails('stanford')">Learn More</button>
+      </div>
+      <div class="experiment-card" data-aos="fade-up" data-aos-delay="200">
+        <h3>Asch Conformity Studies</h3>
+        <p>Investigation of social conformity:</p>
+        <ul>
+          <li>Participants faced group pressure</li>
+          <li>Demonstrated conformity to majority opinions</li>
+          <li>Explored social influence on judgment</li>
+        </ul>
+        <button class="learn-more-btn" onclick="showExperimentDetails('asch')">Learn More</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Quiz Section -->
+  <section class="quiz-section">
+    <div class="container">
+      <h2 class="section-title" data-aos="fade-up">Test Your Knowledge</h2>
+      <div class="quiz-container" data-aos="fade-up">
+        <div class="quiz-question">
+          <h3>Question 1:</h3>
+          <p>Which theory explains how people attribute causes to behavior?</p>
+          <div class="quiz-options">
+            <div class="quiz-option" data-correct="true">Attribution Theory</div>
+            <div class="quiz-option" data-correct="false">Social Identity Theory</div>
+            <div class="quiz-option" data-correct="false">Cognitive Dissonance Theory</div>
+            <div class="quiz-option" data-correct="false">Self-Perception Theory</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Floating Info (for feedback and fun facts) -->
+  <div class="floating-info" id="floatingInfo">
+    <h4>Social Psychology Fact</h4>
+    <p id="randomFact">Did you know? The bystander effect shows that people are less likely to help someone in need when others are present.</p>
+  </div>
+
+  <!-- ===============================
+       SCRIPTS
+       =============================== -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    // Initialize AOS animations
+    AOS.init({
+      duration: 1000,
+      once: true,
+      offset: 200
+    });
+
+    // Hide loader when page is loaded
+    window.addEventListener('load', () => {
+      document.querySelector('.loader').classList.add('hidden');
+    });
+
+    // Update Progress Bar on Scroll
+    function updateProgressBar() {
+      const scrolled = window.scrollY;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = (scrolled / maxScroll);
+      document.querySelector('.progress-bar').style.transform = `scaleX(${scrollPercent})`;
+    }
+    window.addEventListener('scroll', updateProgressBar);
+
+    // Mobile Menu Toggle
+    const mobileToggle = document.querySelector('.mobile-menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    mobileToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+
+    // Nav Toggle for Closable Nav (Hamburger)
+    const nav = document.querySelector('nav');
+    const navToggle = document.querySelector('.nav-toggle');
+    navToggle.addEventListener('click', () => {
+      nav.classList.toggle('nav-hidden');
+      navToggle.innerHTML = nav.classList.contains('nav-hidden')
+        ? '<i class="fas fa-bars"></i>'
+        : '<i class="fas fa-times"></i>';
+    });
+
+    // Scenario Handling
+    function handleScenario(choice) {
+      let feedback = '';
+      switch(choice) {
+        case 1:
+          feedback = 'You chose to resist conformity. This shows independence but might lead to social pressure.';
+          break;
+        case 2:
+          feedback = 'You chose to conform. This is a common response due to normative social influence.';
+          break;
+        case 3:
+          feedback = 'You chose to express uncertainty. This shows both independence and social awareness.';
+          break;
+      }
+      showFloatingInfo(feedback);
+    }
+
+    // Experiment Details
+    function showExperimentDetails(experiment) {
+      let details = '';
+      switch(experiment) {
+        case 'milgram':
+          details = 'The Milgram experiment showed that 65% of participants would administer what they believed to be dangerous electric shocks when ordered by an authority figure.';
+          break;
+        case 'stanford':
+          details = 'The Stanford Prison Experiment had to be stopped after just 6 days due to how quickly participants internalized their roles.';
+          break;
+        case 'asch':
+          details = 'In the Asch conformity studies, 37% of participants conformed to the obviously incorrect majority at least once.';
+          break;
+      }
+      showFloatingInfo(details);
+    }
+
+    // Quiz Functionality
+    document.querySelectorAll('.quiz-option').forEach(option => {
+      option.addEventListener('click', function() {
+        const isCorrect = this.dataset.correct === 'true';
+        document.querySelectorAll('.quiz-option').forEach(opt => {
+          opt.classList.remove('correct', 'incorrect');
         });
+        this.classList.add(isCorrect ? 'correct' : 'incorrect');
+        showFloatingInfo(isCorrect ? 'Correct! Well done!' : 'Try again!');
+      });
+    });
 
-        // Hide loader when page is loaded
-        window.addEventListener('load', () => {
-            document.querySelector('.loader').classList.add('hidden');
-        });
+    // Floating Info Functionality
+    function showFloatingInfo(message) {
+      const floatingInfo = document.getElementById('floatingInfo');
+      document.getElementById('randomFact').textContent = message;
+      floatingInfo.classList.add('show');
+      setTimeout(() => {
+        floatingInfo.classList.remove('show');
+      }, 3000);
+    }
 
-        // Progress bar
-        function updateProgressBar() {
-            const scrolled = window.scrollY;
-            const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-            const scrollPercent = (scrolled / maxScroll) * 100;
-            document.querySelector('.progress-bar').style.transform = `scaleX(${scrollPercent / 100})`;
-        }
-
-        window.addEventListener('scroll', updateProgressBar);
-
-        // Scenario handling
-        function handleScenario(choice) {
-            let feedback = '';
-            switch(choice) {
-                case 1:
-                    feedback = 'You chose to resist conformity. This shows independence but might lead to social pressure.';
-                    break;
-                case 2:
-                    feedback = 'You chose to conform. This is a common response due to normative social influence.';
-                    break;
-                case 3:
-                    feedback = 'You chose to express uncertainty. This shows both independence and social awareness.';
-                    break;
-            }
-            showFloatingInfo(feedback);
-        }
-
-        // Experiment details
-        function showExperimentDetails(experiment) {
-            let details = '';
-            switch(experiment) {
-                case 'milgram':
-                    details = 'The Milgram experiment showed that 65% of participants would administer what they believed to be dangerous electric shocks when ordered by an authority figure.';
-                    break;
-                case 'stanford':
-                    details = 'The Stanford Prison Experiment had to be stopped after just 6 days due to how quickly participants internalized their roles.';
-                    break;
-                case 'asch':
-                    details = 'In the Asch conformity studies, 37% of participants conformed to the obviously incorrect majority at least once.';
-                    break;
-            }
-            showFloatingInfo(details);
-        }
-
-        // Quiz functionality
-        document.querySelectorAll('.quiz-option').forEach(option => {
-            option.addEventListener('click', function() {
-                const isCorrect = this.dataset.correct === 'true';
-                
-                // Remove previous classes
-                document.querySelectorAll('.quiz-option').forEach(opt => {
-                    opt.classList.remove('correct', 'incorrect');
-                });
-                
-                // Add appropriate class
-                this.classList.add(isCorrect ? 'correct' : 'incorrect');
-                
-                // Show feedback
-                showFloatingInfo(isCorrect ? 'Correct! Well done!' : 'Try again!');
-            });
-        });
-
-        // Floating info functionality
-        function showFloatingInfo(message) {
-            const floatingInfo = document.getElementById('floatingInfo');
-            document.getElementById('randomFact').textContent = message;
-            floatingInfo.classList.add('show');
-            setTimeout(() => {
-                floatingInfo.classList.remove('show');
-            }, 3000);
-        }
-
-        // Random social psychology facts
-        const facts = [
-            'The bystander effect shows people are less likely to help when others are present.',
-            'People tend to attribute others\' behavior to personality and their own to circumstances.',
-            'Groups can make more extreme decisions than individuals would.',
-            'We tend to like people more after they\'ve done us a favor.',
-            'Social roles can dramatically influence behavior.',
-        ];
-
-        setInterval(() => {
-            const randomFact = facts[Math.floor(Math.random() * facts.length)];
-            showFloatingInfo(randomFact);
-        }, 15000);
-    </script>
+    // Random Social Psychology Facts
+    const facts = [
+      "The bystander effect shows people are less likely to help when others are present.",
+      "People tend to attribute others' behavior to personality while excusing their own based on circumstances.",
+      "Group dynamics can lead to more extreme decisions than individuals would make alone.",
+      "We tend to like someone more after they’ve done us a favor.",
+      "Social roles can dramatically influence behavior."
+    ];
+    setInterval(() => {
+      const randomFact = facts[Math.floor(Math.random() * facts.length)];
+      showFloatingInfo(randomFact);
+    }, 15000);
+  </script>
 </body>
 </html>
