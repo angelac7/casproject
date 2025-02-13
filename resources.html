@@ -1,467 +1,587 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Psychology Resources</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
-    
-    <style>
-        :root {
-            --primary: #a388ee;
-            --secondary: #f5f0ff;
-            --background: #ffffff;
-            --text: #2c2c2c;
-            --accent: #ff7eb3;
-            --success: #4CAF50;
-            --error: #ff6b6b;
-            --spacing: 2rem;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Psychology Resources</title>
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', sans-serif;
-        }
+  <!-- AOS Animation Library -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet" />
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 
-        body {
-            background: var(--background);
-            color: var(--text);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+  <style>
+    /* Import Poppins font */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-        /* Loading Animation */
-        .loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            transition: opacity 0.5s ease;
-        }
+    :root {
+      --primary: #7c5dfa;
+      --primary-light: #a388ee;
+      --secondary: #f5f0ff;
+      --background: #ffffff;
+      --text: #2c2c2c;
+      --accent: #ff7eb3;
+      --success: #4CAF50;
+      --error: #ff6b6b;
+      --spacing: 2rem;
+      --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-        .loader.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
 
-        .loader-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid var(--secondary);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
+    body {
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+    /* Loading Animation */
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      transition: opacity 0.5s ease;
+    }
 
-        /* Navigation */
-        nav {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 1.5rem 10%;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-        }
+    .loader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
 
-        .nav-links {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 3rem;
-        }
+    .loader-spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid var(--secondary);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
 
-        .nav-links a {
-            color: var(--text);
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            transition: all 0.3s ease;
-            font-size: 1.1rem;
-            position: relative;
-        }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
 
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: 0;
-            left: 0;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            transition: width 0.3s ease;
-        }
+    /* ---------------- Navigation ---------------- */
+    nav {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 1.5rem 10%;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+      transition: var(--transition);
+    }
 
-        .nav-links a:hover::after {
-            width: 100%;
-        }
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
 
-        /* Hero Section */
-        .resources-hero {
-            background: linear-gradient(135deg, #f0e6ff, #ffe6f0);
-            padding: 160px 0 80px;
-            min-height: 60vh;
-            display: flex;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-        }
+    .nav-logo a {
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
 
-        .hero-content {
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
+    .nav-links {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 3rem;
+    }
 
-        .hero-content h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            animation: slideInDown 1s ease-out;
-        }
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      transition: var(--transition);
+      font-size: 1.1rem;
+      position: relative;
+      overflow: hidden;
+    }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 var(--spacing);
-        }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
 
-        /* Resource Cards */
-        .resources-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            padding: 4rem 0;
-        }
+    .nav-links a:hover::after {
+      transform: translateX(0);
+    }
 
-        .resource-card {
-            background: white;
-            border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-        }
+    .nav-links a.active {
+      color: var(--primary);
+    }
 
-        .resource-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            z-index: 0;
-        }
+    /* Mobile Menu Toggle */
+    .mobile-menu-toggle {
+      display: none;
+    }
 
-        .resource-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-        }
+    @media (max-width: 768px) {
+      .mobile-menu-toggle {
+        display: block;
+        position: absolute;
+        top: 50%;
+        right: 5%;
+        transform: translateY(-50%);
+        font-size: 1.5rem;
+        color: var(--text);
+        cursor: pointer;
+        z-index: 1100;
+      }
+      .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 70%;
+        height: 100vh;
+        background: rgba(255, 255, 255, 0.98);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 1.5rem;
+        transition: right 0.3s ease;
+        z-index: 1050;
+      }
+      .nav-links.active {
+        right: 0;
+      }
+    }
 
-        .resource-card:hover::before {
-            opacity: 0.1;
-        }
+    /* Optional Nav Toggle Button */
+    .nav-toggle {
+      position: fixed;
+      bottom: 30px;
+      left: 30px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 1002;
+      transition: var(--transition);
+    }
 
-        .resource-card > * {
-            position: relative;
-            z-index: 1;
-        }
+    .nav-toggle:hover {
+      background: var(--primary-light);
+      transform: translateY(-5px);
+    }
 
-        /* Search Bar */
-        .search-container {
-            max-width: 600px;
-            margin: 2rem auto;
-            position: relative;
-        }
+    /* ---------------- Hero Section ---------------- */
+    .resources-hero {
+      background: linear-gradient(135deg, #f0e6ff, #ffe6f0);
+      padding: 160px 0 80px;
+      min-height: 60vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      margin-top: 80px; /* offset for fixed nav */
+    }
 
-        .search-input {
-            width: 100%;
-            padding: 1rem 2rem;
-            border: 2px solid var(--primary);
-            border-radius: 25px;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-        }
+    .hero-content {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
 
-        .search-input:focus {
-            outline: none;
-            box-shadow: 0 0 15px rgba(163, 136, 238, 0.3);
-        }
+    .hero-content h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(45deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: slideInDown 1s ease-out;
+    }
 
-        /* Interactive Elements */
-        .interactive-section {
-            background: var(--secondary);
-            padding: 4rem 0;
-            margin: 4rem 0;
-        }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--spacing);
+    }
 
-        .resource-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            justify-content: center;
-            padding: 2rem 0;
-        }
+    /* ---------------- Resource Cards ---------------- */
+    .resources-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      padding: 4rem 0;
+    }
 
-        .resource-link {
-            padding: 0.5rem 1.5rem;
-            background: white;
-            border-radius: 20px;
-            text-decoration: none;
-            color: var(--text);
-            transition: all 0.3s ease;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-        }
+    .resource-card {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
 
-        .resource-link:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            background: var(--primary);
-            color: white;
-        }
+    .resource-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, var(--primary), var(--accent));
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      z-index: 0;
+    }
 
-        /* FAQ Section */
-        .faq-section {
-            padding: 4rem 0;
-        }
+    .resource-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    }
 
-        .faq-item {
-            background: white;
-            border-radius: 10px;
-            margin: 1rem 0;
-            padding: 1.5rem;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+    .resource-card:hover::before {
+      opacity: 0.1;
+    }
 
-        .faq-item:hover {
-            transform: translateX(10px);
-        }
+    .resource-card > * {
+      position: relative;
+      z-index: 1;
+    }
 
-        .faq-question {
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    /* ---------------- Search Bar ---------------- */
+    .search-container {
+      max-width: 600px;
+      margin: 2rem auto;
+      position: relative;
+    }
 
-        .faq-answer {
-            margin-top: 1rem;
-            display: none;
-        }
+    .search-input {
+      width: 100%;
+      padding: 1rem 2rem;
+      border: 2px solid var(--primary);
+      border-radius: 25px;
+      font-size: 1.1rem;
+      transition: var(--transition);
+    }
 
-        .faq-item.active .faq-answer {
-            display: block;
-            animation: fadeIn 0.5s ease-out;
-        }
+    .search-input:focus {
+      outline: none;
+      box-shadow: 0 0 15px rgba(124, 93, 250, 0.3);
+    }
 
-        /* Animations */
-        @keyframes slideInDown {
-            from {
-                transform: translateY(-100px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
+    /* ---------------- Interactive Elements ---------------- */
+    .interactive-section {
+      background: var(--secondary);
+      padding: 4rem 0;
+      margin: 4rem 0;
+    }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+    .resource-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      padding: 2rem 0;
+    }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .nav-links {
-                flex-direction: column;
-                padding: 1rem 0;
-            }
+    .resource-link {
+      padding: 0.5rem 1.5rem;
+      background: white;
+      border-radius: 20px;
+      text-decoration: none;
+      color: var(--text);
+      transition: var(--transition);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
 
-            .hero-content h1 {
-                font-size: 2.5rem;
-            }
-        }
-    </style>
+    .resource-link:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      background: var(--primary);
+      color: white;
+    }
+
+    /* ---------------- FAQ Section ---------------- */
+    .faq-section {
+      padding: 4rem 0;
+    }
+
+    .faq-item {
+      background: white;
+      border-radius: 10px;
+      margin: 1rem 0;
+      padding: 1.5rem;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .faq-item:hover {
+      transform: translateX(10px);
+    }
+
+    .faq-question {
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .faq-answer {
+      margin-top: 1rem;
+      display: none;
+    }
+
+    .faq-item.active .faq-answer {
+      display: block;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    /* ---------------- Animations ---------------- */
+    @keyframes slideInDown {
+      from {
+        transform: translateY(-100px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* ---------------- Responsive Design ---------------- */
+    @media (max-width: 768px) {
+      .nav-links {
+        flex-direction: column;
+        padding: 1rem 0;
+      }
+      .hero-content h1 {
+        font-size: 2.5rem;
+      }
+    }
+  </style>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div class="loader">
-        <div class="loader-spinner"></div>
+  <!-- Loading Screen -->
+  <div class="loader">
+    <div class="loader-spinner"></div>
+  </div>
+
+  <!-- ---------------- Navigation ---------------- -->
+  <nav>
+    <div class="nav-container">
+      <div class="nav-logo">
+        <a href="index.html">JAspire</a>
+      </div>
+      <div class="mobile-menu-toggle">
+        <i class="fas fa-bars"></i>
+      </div>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="cognitive.html">Cognitive</a>
+        <a href="developmental.html">Development</a>
+        <a href="social.html">Social</a>
+        <a href="research.html">Research</a>
+        <a href="mood-tracker.html">Mood Tracker</a>
+        <a href="resources.html" class="active">Resources</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Optional Nav Toggle Button -->
+  <button class="nav-toggle"><i class="fas fa-times"></i></button>
+
+  <!-- ---------------- Hero Section ---------------- -->
+  <section class="resources-hero">
+    <div class="container">
+      <div class="hero-content" data-aos="fade-up">
+        <h1>Psychology Resources</h1>
+        <p>Access a comprehensive collection of psychology resources, tools, and learning materials.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------------- Main Content ---------------- -->
+  <section class="container">
+    <div class="search-container" data-aos="fade-up">
+      <input type="text" class="search-input" placeholder="Search resources..." id="resourceSearch" />
     </div>
 
-    <nav>
-        <div class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="cognitive.html">Cognitive Psychology</a>
-            <a href="developmental.html">Development</a>
-            <a href="social.html">Social Psychology</a>
-            <a href="research.html">Research</a>
-            <a href="mood-tracker.html">Mood Tracker</a>
-            <a href="resources.html">Resources</a>
+    <div class="resources-grid">
+      <div class="resource-card" data-aos="fade-up" data-aos-delay="100">
+        <h3>Study Guides</h3>
+        <p>Comprehensive guides for core psychology topics:</p>
+        <ul>
+          <li>Memory and cognition</li>
+          <li>Development stages</li>
+          <li>Social behavior</li>
+          <li>Research methods</li>
+        </ul>
+        <button class="resource-link" onclick="showResourceDetails('guides')">Access Guides</button>
+      </div>
+
+      <div class="resource-card" data-aos="fade-up" data-aos-delay="200">
+        <h3>Research Tools</h3>
+        <p>Tools and resources for psychology research:</p>
+        <ul>
+          <li>Statistical calculators</li>
+          <li>Research templates</li>
+          <li>Data analysis tools</li>
+          <li>Citation guides</li>
+        </ul>
+        <button class="resource-link" onclick="showResourceDetails('tools')">View Tools</button>
+      </div>
+
+      <div class="resource-card" data-aos="fade-up" data-aos-delay="300">
+        <h3>Practice Materials</h3>
+        <p>Interactive learning resources:</p>
+        <ul>
+          <li>Practice quizzes</li>
+          <li>Case studies</li>
+          <li>Virtual experiments</li>
+          <li>Discussion topics</li>
+        </ul>
+        <button class="resource-link" onclick="showResourceDetails('practice')">Start Learning</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="interactive-section">
+    <div class="container">
+      <h2 data-aos="fade-up">Quick Links</h2>
+      <div class="resource-links" data-aos="fade-up">
+        <a href="#" class="resource-link">Study Tips</a>
+        <a href="#" class="resource-link">Research Methods</a>
+        <a href="#" class="resource-link">Statistics Help</a>
+        <a href="#" class="resource-link">Writing Guides</a>
+        <a href="#" class="resource-link">Career Resources</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq-section container">
+    <h2 data-aos="fade-up">Frequently Asked Questions</h2>
+    <div class="faq-container">
+      <div class="faq-item" data-aos="fade-up">
+        <div class="faq-question" onclick="toggleFAQ(this)">
+          How do I access the study materials?
+          <span class="toggle">+</span>
         </div>
-    </nav>
-
-    <section class="resources-hero">
-        <div class="container">
-            <div class="hero-content" data-aos="fade-up">
-                <h1>Psychology Resources</h1>
-                <p>Access a comprehensive collection of psychology resources, tools, and learning materials.</p>
-            </div>
+        <div class="faq-answer">
+          Click on any resource card or quick link to access the respective study materials. All resources are organized by topic and difficulty level.
         </div>
-    </section>
+      </div>
 
-    <section class="container">
-        <div class="search-container" data-aos="fade-up">
-            <input type="text" class="search-input" placeholder="Search resources..." id="resourceSearch">
+      <div class="faq-item" data-aos="fade-up">
+        <div class="faq-question" onclick="toggleFAQ(this)">
+          Are these resources free to use?
+          <span class="toggle">+</span>
         </div>
-
-        <div class="resources-grid">
-            <div class="resource-card" data-aos="fade-up" data-aos-delay="100">
-                <h3>Study Guides</h3>
-                <p>Comprehensive guides for core psychology topics:</p>
-                <ul>
-                    <li>Memory and cognition</li>
-                    <li>Development stages</li>
-                    <li>Social behavior</li>
-                    <li>Research methods</li>
-                </ul>
-                <button class="resource-link" onclick="showResourceDetails('guides')">Access Guides</button>
-            </div>
-
-            <div class="resource-card" data-aos="fade-up" data-aos-delay="200">
-                <h3>Research Tools</h3>
-                <p>Tools and resources for psychology research:</p>
-                <ul>
-                    <li>Statistical calculators</li>
-                    <li>Research templates</li>
-                    <li>Data analysis tools</li>
-                    <li>Citation guides</li>
-                </ul>
-                <button class="resource-link" onclick="showResourceDetails('tools')">View Tools</button>
-            </div>
-
-            <div class="resource-card" data-aos="fade-up" data-aos-delay="300">
-                <h3>Practice Materials</h3>
-                <p>Interactive learning resources:</p>
-                <ul>
-                    <li>Practice quizzes</li>
-                    <li>Case studies</li>
-                    <li>Virtual experiments</li>
-                    <li>Discussion topics</li>
-                </ul>
-                <button class="resource-link" onclick="showResourceDetails('practice')">Start Learning</button>
-            </div>
+        <div class="faq-answer">
+          Yes, all resources provided on this platform are free for educational purposes. Some advanced tools might require registration.
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <section class="interactive-section">
-        <div class="container">
-            <h2 data-aos="fade-up">Quick Links</h2>
-            <div class="resource-links" data-aos="fade-up">
-                <a href="#" class="resource-link">Study Tips</a>
-                <a href="#" class="resource-link">Research Methods</a>
-                <a href="#" class="resource-link">Statistics Help</a>
-                <a href="#" class="resource-link">Writing Guides</a>
-                <a href="#" class="resource-link">Career Resources</a>
-            </div>
-        </div>
-    </section>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    // Initialize AOS
+    AOS.init({
+      duration: 1000,
+      once: true,
+    });
 
-    <section class="faq-section container">
-        <h2 data-aos="fade-up">Frequently Asked Questions</h2>
-        <div class="faq-container">
-            <div class="faq-item" data-aos="fade-up">
-                <div class="faq-question" onclick="toggleFAQ(this)">
-                    How do I access the study materials?
-                    <span class="toggle">+</span>
-                </div>
-                <div class="faq-answer">
-                    Click on any resource card or quick link to access the respective study materials. All resources are organized by topic and difficulty level.
-                </div>
-            </div>
+    // Hide loader when page is loaded
+    window.addEventListener('load', () => {
+      document.querySelector('.loader').classList.add('hidden');
+    });
 
-            <div class="faq-item" data-aos="fade-up">
-                <div class="faq-question" onclick="toggleFAQ(this)">
-                    Are these resources free to use?
-                    <span class="toggle">+</span>
-                </div>
-                <div class="faq-answer">
-                    Yes, all resources provided on this platform are free for educational purposes. Some advanced tools might require registration.
-                </div>
-            </div>
-        </div>
-    </section>
+    // Resource search functionality
+    document.getElementById('resourceSearch').addEventListener('input', function (e) {
+      const searchTerm = e.target.value.toLowerCase();
+      const cards = document.querySelectorAll('.resource-card');
+      
+      cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        card.style.display = text.includes(searchTerm) ? 'block' : 'none';
+      });
+    });
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-    <script>
-        // Initialize AOS
-        AOS.init({
-            duration: 1000,
-            once: true,
-        });
+    // Show resource details
+    function showResourceDetails(type) {
+      alert(`Accessing ${type} resources... This feature will be implemented soon.`);
+    }
 
-        // Hide loader when page is loaded
-        window.addEventListener('load', () => {
-            document.querySelector('.loader').classList.add('hidden');
-        });
+    // Toggle FAQ answers
+    function toggleFAQ(element) {
+      const item = element.parentElement;
+      const toggle = item.querySelector('.toggle');
 
-        // Resource search functionality
-        document.getElementById('resourceSearch').addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
-            const cards = document.querySelectorAll('.resource-card');
-            
-            cards.forEach(card => {
-                const text = card.textContent.toLowerCase();
-                if(text.includes(searchTerm)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        });
+      if (item.classList.contains('active')) {
+        item.classList.remove('active');
+        toggle.textContent = '+';
+      } else {
+        item.classList.add('active');
+        toggle.textContent = '-';
+      }
+    }
+  </script>
 
-        // Show resource details
-        function showResourceDetails(type) {
-            alert(`Accessing ${type} resources... This feature will be implemented soon.`);
-        }
+  <!-- ---------------- Navigation JS ---------------- -->
+  <script>
+    // Mobile menu toggle functionality
+    const mobileToggle = document.querySelector('.mobile-menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    mobileToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
 
-        // Toggle FAQ answers
-        function toggleFAQ(element) {
-            const item = element.parentElement;
-            const answer = item.querySelector('.faq-answer');
-            const toggle = item.querySelector('.toggle');
-
-            if(item.classList.contains('active')) {
-                item.classList.remove('active');
-                toggle.textContent = '+';
-            } else {
-                item.classList.add('active');
-                toggle.textContent = '-';
-            }
-        }
-    </script>
+    // Nav bar toggle functionality (optional)
+    const nav = document.querySelector('nav');
+    const navToggle = document.querySelector('.nav-toggle');
+    navToggle.addEventListener('click', () => {
+      nav.classList.toggle('nav-hidden');
+      navToggle.innerHTML = nav.classList.contains('nav-hidden')
+        ? '<i class="fas fa-bars"></i>'
+        : '<i class="fas fa-times"></i>';
+    });
+  </script>
 </body>
 </html>
