@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JAspire - Developmental Psychology</title>
+  <!-- AOS & FontAwesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  
+  <style>
+    /* ===============================
+       BASE STYLES (Same as Index/Cognitive)
+       =============================== */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    :root {
+      --primary: #7c5dfa;
+      --primary-light: #a388ee;
+      --secondary: #f5f0ff;
+      --background: #ffffff;
+      --text: #2c2c2c;
+      --spacing: 2rem;
+      --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--spacing);
+    }
+    /* Loader */
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: white;
+      z-index: 2000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .loader-spinner {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid var(--primary);
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    /* Custom Cursor */
+    .cursor {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.2s ease, width 0.2s ease, height 0.2s ease;
+      display: none;
+      mix-blend-mode: difference;
+      animation: cursorPulse 2s infinite;
+    }
+    @keyframes cursorPulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.5); opacity: 0.5; }
+    }
+    .cursor-dot {
+      width: 4px;
+      height: 4px;
+      background: var(--primary);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      display: none;
+      transition: transform 0.1s ease;
+    }
+    .cursor.hover {
+      transform: scale(2);
+      background: rgba(124,93,250,0.1);
+      mix-blend-mode: normal;
+      animation: cursorHover 1s infinite;
+    }
+    @keyframes cursorHover {
+      0%, 100% { transform: scale(2); }
+      50% { transform: scale(2.2); }
+    }
+    @media (min-width: 1024px) {
+      .cursor, .cursor-dot { display: block; }
+    }
+    /* Progress Bar */
+    .progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: transparent;
+      z-index: 1001;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+      width: 0%;
+      transition: width 0.3s ease-out;
+      position: relative;
+      animation: progressGlow 2s infinite;
+    }
+    @keyframes progressGlow {
+      0%, 100% { box-shadow: 0 0 10px var(--primary); }
+      50% { box-shadow: 0 0 20px var(--primary-light); }
+    }
+    .progress-bar::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 10px;
+      height: 10px;
+      background: var(--primary);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--primary);
+      animation: progressDot 2s infinite;
+    }
+    @keyframes progressDot {
+      0%, 100% { transform: translateY(-50%) scale(1); opacity: 1; }
+      50% { transform: translateY(-50%) scale(1.5); opacity: 0.5; }
+    }
+    /* Floating Info */
+    .floating-info {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(124,93,250,0.9);
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      opacity: 0;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      z-index: 1000;
+    }
+    .floating-info.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-10px);
+    }
+    /* ===============================
+       NAVIGATION (Mobile Compatible)
+       =============================== */
+    nav {
+      background: rgba(255,255,255,0.95);
+      padding: 1.5rem 10%;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      transition: var(--transition);
+    }
+    nav.scrolled {
+      padding: 1rem 10%;
+      background: rgba(255,255,255,0.98);
+      transform: translateY(0);
+      animation: navSlideDown 0.5s ease-out;
+    }
+    @keyframes navSlideDown {
+      from { transform: translateY(-100%); }
+      to { transform: translateY(0); }
+    }
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-logo a {
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    .nav-links {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 3rem;
+    }
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      transition: var(--transition);
+      font-size: 1.1rem;
+      position: relative;
+      overflow: hidden;
+      animation: linkFadeIn 0.5s ease-out backwards;
+    }
+    .nav-links a:nth-child(1) { animation-delay: 0.1s; }
+    .nav-links a:nth-child(2) { animation-delay: 0.2s; }
+    .nav-links a:nth-child(3) { animation-delay: 0.3s; }
+    .nav-links a:nth-child(4) { animation-delay: 0.4s; }
+    .nav-links a:nth-child(5) { animation-delay: 0.5s; }
+    .nav-links a:nth-child(6) { animation-delay: 0.6s; }
+    .nav-links a:nth-child(7) { animation-delay: 0.7s; }
+    @keyframes linkFadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .nav-links a::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      bottom: 0;
+      left: -100%;
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      transition: var(--transition);
+    }
+    .nav-links a:hover {
+      color: var(--primary);
+      transform: translateY(-2px);
+    }
+    .nav-links a:hover::before {
+      left: 0;
+      animation: gradientFlow 2s linear infinite;
+    }
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+    /* Mobile menu toggle button */
+    .mobile-menu-toggle {
+      display: none;
+    }
+    @media (max-width: 768px) {
+      .mobile-menu-toggle {
+        display: block;
+        position: absolute;
+        top: 50%;
+        right: 5%;
+        transform: translateY(-50%);
+        font-size: 1.5rem;
+        color: var(--text);
+        cursor: pointer;
+        z-index: 1100;
+      }
+      .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 70%;
+        height: 100vh;
+        background: rgba(255,255,255,0.98);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 1.5rem;
+        transition: right 0.3s ease;
+        z-index: 1050;
+      }
+      .nav-links.active {
+        right: 0;
+      }
+    }
+    /* Optional nav-toggle for closable nav bar (like cognitive.html) */
+    .nav-toggle {
+      position: fixed;
+      bottom: 30px;
+      left: 30px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 1002;
+      transition: var(--transition);
+    }
+    .nav-toggle:hover {
+      background: var(--primary-light);
+      transform: translateY(-5px);
+    }
+    .nav-hidden {
+      transform: translateY(-100%);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+    }
+    /* ===============================
+       UPDATED HERO SECTION (Matching Cognitive Page)
+       =============================== */
+    .cognitive-hero {
+      background: linear-gradient(135deg, #f0e6ff, #e6f0ff);
+      padding: 160px 0 80px;
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      margin-top: 60px; /* offset for fixed nav */
+    }
+    .cognitive-hero::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: url('/api/placeholder/1200/800') center/cover;
+      opacity: 0.1;
+      animation: pulse 4s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    .hero-content {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      animation: contentFadeIn 1.5s ease-out;
+    }
+    @keyframes contentFadeIn {
+      from { opacity: 0; transform: translateY(50px) scale(0.9); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .hero-content h1 {
+      font-size: 4rem;
+      background: linear-gradient(45deg, var(--primary), var(--primary-light));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 1.5rem;
+      animation: slideInDown 1s ease-out;
+    }
+    @keyframes slideInDown {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .hero-content p {
+      font-size: 1.3rem;
+      max-width: 800px;
+      margin: 0 auto;
+      animation: fadeIn 1s ease-out 0.5s both;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    /* Mobile adjustments for Hero Section */
+    @media (max-width: 768px) {
+      .hero-content h1 {
+        font-size: 2.5rem;
+      }
+      .hero-content p {
+        font-size: 1.1rem;
+      }
+    }
+    /* ===============================
+       DEVELOPMENT PAGE SPECIFIC STYLES (Other Sections)
+       =============================== */
+    .theory-section {
+      padding: 4rem 0;
+      background: var(--secondary);
+      margin: 2rem 0;
+    }
+    .theory-section .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      color: var(--primary);
+    }
+    .theory-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      padding: 0 1rem;
+    }
+    .theory-item {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+    .theory-item:hover {
+      transform: scale(1.02);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+    .theory-item h3 {
+      color: var(--primary);
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .theory-item ul {
+      margin-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .learn-more-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .learn-more-btn:hover {
+      background: var(--primary-light);
+      transform: translateY(-2px);
+    }
+    .theory-details {
+      padding: 2rem;
+      background: white;
+      border-radius: 15px;
+      margin-top: 1rem;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      display: none;
+    }
+    .theory-details.active {
+      display: block;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    .stage-description {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: var(--secondary);
+      border-radius: 8px;
+    }
+    /* Interactive Quiz Section */
+    .interactive-quiz {
+      background: white;
+      padding: 3rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      margin: 4rem 0;
+    }
+    .quiz-container {
+      margin-top: 1rem;
+    }
+    .quiz-option {
+      padding: 1rem 2rem;
+      margin: 0.5rem 0;
+      border: 2px solid var(--primary);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .quiz-option::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--primary);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 0;
+    }
+    .quiz-option:hover::before {
+      opacity: 0.1;
+    }
+    .quiz-option.correct {
+      background: #4CAF50;
+      color: white;
+      border-color: #4CAF50;
+    }
+    .quiz-option.incorrect {
+      background: #ff6b6b;
+      color: white;
+      border-color: #ff6b6b;
+    }
+    /* Interactive Timeline Section */
+    .timeline-section {
+      padding: 4rem 0;
+    }
+    .timeline-section .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      color: var(--primary);
+    }
+    .timeline-container {
+      overflow-x: auto;
+      margin: 2rem 0;
+      cursor: grab;
+      padding-bottom: 1rem;
+    }
+    .timeline {
+      display: flex;
+      gap: 1rem;
+      transition: transform 0.3s ease;
+    }
+    .timeline-item {
+      flex: 0 0 auto;
+      background: var(--secondary);
+      padding: 1rem 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+    .timeline-item:hover,
+    .timeline-item.active {
+      background: var(--primary);
+      color: white;
+      transform: scale(1.05);
+    }
+    .timeline-details {
+      background: var(--secondary);
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin-top: 1rem;
+    }
+    /* Development Assessment Tools Styles */
+    .assessment-section {
+      padding: 4rem 0;
+    }
+    .assessment-tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      justify-content: center;
+    }
+    .assessment-tab {
+      background: var(--secondary);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .assessment-tab.active {
+      background: var(--primary);
+      color: white;
+    }
+    .assessment-content .assessment-panel {
+      display: none;
+      background: var(--secondary);
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin-top: 1rem;
+    }
+    .assessment-content .assessment-panel.active {
+      display: block;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    /* Additional Animations */
+    @keyframes slideInLeft {
+      from { transform: translateX(-50px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    .animate-slideInLeft {
+      animation: slideInLeft 0.5s ease-out;
+    }
+    @keyframes fadeInScale {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .animate-fadeInScale {
+      animation: fadeInScale 0.5s ease-out;
+    }
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-10px); }
+      60% { transform: translateY(-5px); }
+    }
+    .animate-bounce {
+      animation: bounce 0.5s ease;
+    }
+    /* Scroll to Top Button */
+    .scroll-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: var(--primary);
+      color: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(100px);
+      transition: var(--transition);
+      z-index: 999;
+      box-shadow: 0 5px 15px rgba(124,93,250,0.3);
+    }
+    .scroll-to-top.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .scroll-to-top:hover {
+      background: var(--primary-light);
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(124,93,250,0.4);
+    }
+  </style>
+</head>
+<body>
+  <!-- Loader -->
+  <div class="loader">
+    <div class="loader-spinner"></div>
+  </div>
+
+  <!-- Custom Cursor Elements -->
+  <div class="cursor"></div>
+  <div class="cursor-dot"></div>
+
+  <!-- Scroll Progress Bar -->
+  <div class="progress-container">
+    <div class="progress-bar"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <div class="nav-logo">
+        <a href="index.html">JAspire</a>
+      </div>
+      <div class="mobile-menu-toggle">
+        <i class="fas fa-bars"></i>
+      </div>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link" data-tooltip="Back to Home">Home</a>
+        <a href="cognitive.html" class="nav-link" data-tooltip="Explore Cognitive Psychology">Cognitive</a>
+        <a href="developmental.html" class="nav-link" data-tooltip="Learn About Development" style="color: var(--primary);">Development</a>
+        <a href="social.html" class="nav-link" data-tooltip="Understand Social Behavior">Social</a>
+        <a href="research.html" class="nav-link" data-tooltip="Latest Research">Research</a>
+        <a href="mood-tracker.html" class="nav-link" data-tooltip="Track Your Mood">Mood Tracker</a>
+        <a href="resources.html" class="nav-link" data-tooltip="Helpful Resources">Resources</a>
+      </div>
+    </div>
+  </nav>
+  <!-- Optional Nav Toggle Button for closable nav bar -->
+  <button class="nav-toggle"><i class="fas fa-times"></i></button>
+
+  <!-- Updated Hero Section (Matching Cognitive Page) -->
+  <section class="cognitive-hero">
+    <div class="container">
+      <div class="hero-content" data-aos="fade-up">
+        <h1>Developmental Psychology</h1>
+        <p>
+          Explore the fascinating journey of human development—from infancy to late adulthood.
+          Understand how cognitive, social, and emotional changes shape who we become.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Developmental Theories Section -->
+  <section class="theory-section">
+    <div class="container">
+      <h2 class="section-title" data-aos="fade-up">Developmental Theories</h2>
+      <div class="theory-grid">
+        <!-- Piaget's Theory -->
+        <div class="theory-item" data-aos="fade-up" data-aos-delay="100">
+          <h3>Piaget's Theory</h3>
+          <p>Four stages of cognitive development:</p>
+          <ul>
+            <li>Sensorimotor (0-2 years)</li>
+            <li>Preoperational (2-7 years)</li>
+            <li>Concrete Operational (7-11 years)</li>
+            <li>Formal Operational (11+ years)</li>
+          </ul>
+          <button class="learn-more-btn" onclick="showTheoryDetails('piaget')">Learn More</button>
+        </div>
+
+        <div class="theory-details" id="piagetDetails">
+          <h4>Piaget's Theory of Cognitive Development</h4>
+          <p>Children actively construct their understanding of the world through distinct stages.</p>
+          <div class="stage-description">
+            <h4>Sensorimotor Stage (0-2 years)</h4>
+            <p>Infants learn through sensory and motor interactions. Object permanence emerges.</p>
+          </div>
+          <div class="stage-description">
+            <h4>Preoperational Stage (2-7 years)</h4>
+            <p>Symbols and language begin to develop, though thinking remains egocentric.</p>
+          </div>
+          <div class="stage-description">
+            <h4>Concrete Operational Stage (7-11 years)</h4>
+            <p>Logical thinking for concrete situations develops along with conservation skills.</p>
+          </div>
+          <div class="stage-description">
+            <h4>Formal Operational Stage (11+ years)</h4>
+            <p>Abstract reasoning and systematic problem-solving emerge, enabling advanced cognitive skills.</p>
+          </div>
+        </div>
+
+        <!-- Erikson's Theory -->
+        <div class="theory-item" data-aos="fade-up" data-aos-delay="200">
+          <h3>Erikson's Theory</h3>
+          <p>Eight stages of psychosocial development:</p>
+          <ul>
+            <li>Trust vs. Mistrust</li>
+            <li>Autonomy vs. Shame</li>
+            <li>Initiative vs. Guilt</li>
+            <li>Industry vs. Inferiority</li>
+          </ul>
+          <button class="learn-more-btn" onclick="showTheoryDetails('erikson')">Learn More</button>
+        </div>
+
+        <div class="theory-details" id="eriksonDetails">
+          <h4>Erikson's Theory of Psychosocial Development</h4>
+          <p>This theory focuses on social experiences across the lifespan and resolving key psychosocial conflicts.</p>
+          <div class="stage-description">
+            <h4>Trust vs. Mistrust (0-18 months)</h4>
+            <p>Establishing trust in caregivers lays the foundation for future relationships.</p>
+          </div>
+          <div class="stage-description">
+            <h4>Autonomy vs. Shame and Doubt (18 months-3 years)</h4>
+            <p>Children develop independence while learning limits and boundaries.</p>
+          </div>
+          <div class="stage-description">
+            <h4>Initiative vs. Guilt (3-5 years)</h4>
+            <p>Encouragement in exploration fosters initiative, whereas over-criticism may lead to guilt.</p>
+          </div>
+          <div class="stage-description">
+            <h4>Industry vs. Inferiority (5-12 years)</h4>
+            <p>Productive engagement and skill mastery develop competence and self-esteem.</p>
+          </div>
+        </div>
+
+        <!-- Vygotsky's Theory -->
+        <div class="theory-item" data-aos="fade-up" data-aos-delay="300">
+          <h3>Vygotsky's Theory</h3>
+          <p>Highlights the role of social interaction and cultural context in learning.</p>
+          <button class="learn-more-btn" onclick="showTheoryDetails('vygotsky')">Learn More</button>
+        </div>
+
+        <div class="theory-details" id="vygotskyDetails">
+          <h4>Vygotsky's Sociocultural Theory</h4>
+          <p>Learning is a collaborative process that is enhanced by guidance from more knowledgeable others.</p>
+          <div class="stage-description">
+            <h4>Zone of Proximal Development (ZPD)</h4>
+            <p>The difference between what a child can do independently and with support.</p>
+          </div>
+          <div class="stage-description">
+            <h4>Scaffolding</h4>
+            <p>Temporary support provided to help the learner progress until they can work independently.</p>
+          </div>
+          <div class="stage-description">
+            <h4>Social Learning</h4>
+            <p>Knowledge is acquired through interactions and collaborative problem-solving.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Quiz Section -->
+  <section class="container">
+    <h2 class="section-title" data-aos="fade-up">Interactive Learning</h2>
+    <div class="interactive-quiz">
+      <h3>Test Your Knowledge</h3>
+      <div class="quiz-container">
+        <div class="quiz-question" id="question1">
+          <p>Which stage of Piaget's theory involves abstract thinking?</p>
+          <div class="quiz-options">
+            <div class="quiz-option" data-correct="false">Sensorimotor Stage</div>
+            <div class="quiz-option" data-correct="false">Preoperational Stage</div>
+            <div class="quiz-option" data-correct="false">Concrete Operational Stage</div>
+            <div class="quiz-option" data-correct="true">Formal Operational Stage</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Timeline Section -->
+  <section class="timeline-section">
+    <div class="container">
+      <h2 class="section-title" data-aos="fade-up">Developmental Milestones Timeline</h2>
+      <div class="timeline-container" id="timelineContainer">
+        <div class="timeline" id="timeline">
+          <div class="timeline-item" data-key="infancy" data-aos="fade-up" data-aos-delay="100">Infancy (0-2)</div>
+          <div class="timeline-item" data-key="earlyChildhood" data-aos="fade-up" data-aos-delay="200">Early Childhood (2-7)</div>
+          <div class="timeline-item" data-key="childhood" data-aos="fade-up" data-aos-delay="300">Childhood (7-11)</div>
+          <div class="timeline-item" data-key="adolescence" data-aos="fade-up" data-aos-delay="400">Adolescence (11-18)</div>
+          <div class="timeline-item" data-key="youngAdulthood" data-aos="fade-up" data-aos-delay="500">Young Adulthood (18-40)</div>
+          <div class="timeline-item" data-key="middleAdulthood" data-aos="fade-up" data-aos-delay="600">Middle Adulthood (40-65)</div>
+          <div class="timeline-item" data-key="lateAdulthood" data-aos="fade-up" data-aos-delay="700">Late Adulthood (65+)</div>
+        </div>
+      </div>
+      <div class="timeline-details" id="timelineDetails">
+        <h3 id="timelineTitle">Select a milestone</h3>
+        <p id="timelineContent">Click on a timeline item to see details about typical physical, cognitive, social, language, and emotional developments.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Development Assessment Tools Section -->
+  <section class="assessment-section">
+    <div class="container">
+      <h2 class="section-title" data-aos="fade-up">Development Assessment Tools</h2>
+      <div class="assessment-tabs">
+        <button class="assessment-tab active" data-tab="child">Child Development Milestones</button>
+        <button class="assessment-tab" data-tab="adolescent">Adolescent Development Tracking</button>
+        <button class="assessment-tab" data-tab="adult">Adult Life Stage Transitions</button>
+      </div>
+      <div class="assessment-content">
+        <div class="assessment-panel active" id="child">
+          <h3>Child Development Milestones</h3>
+          <form id="childForm">
+            <label>Has your child started speaking in simple sentences?</label><br />
+            <input type="radio" name="speech" value="yes" /> Yes
+            <input type="radio" name="speech" value="no" /> No
+            <br /><br />
+            <label>Is your child able to follow simple instructions?</label><br />
+            <input type="radio" name="instructions" value="yes" /> Yes
+            <input type="radio" name="instructions" value="no" /> No
+            <br /><br />
+            <button type="button" class="learn-more-btn" onclick="submitAssessment('childForm')">Submit</button>
+          </form>
+        </div>
+        <div class="assessment-panel" id="adolescent">
+          <h3>Adolescent Development Tracking</h3>
+          <form id="adolescentForm">
+            <label>Is the adolescent managing school and social relationships effectively?</label><br />
+            <input type="radio" name="management" value="yes" /> Yes
+            <input type="radio" name="management" value="no" /> No
+            <br /><br />
+            <label>Does the adolescent demonstrate critical thinking and problem-solving skills?</label><br />
+            <input type="radio" name="thinking" value="yes" /> Yes
+            <input type="radio" name="thinking" value="no" /> No
+            <br /><br />
+            <button type="button" class="learn-more-btn" onclick="submitAssessment('adolescentForm')">Submit</button>
+          </form>
+        </div>
+        <div class="assessment-panel" id="adult">
+          <h3>Adult Life Stage Transitions</h3>
+          <form id="adultForm">
+            <label>Are you satisfied with your current career progression?</label><br />
+            <input type="radio" name="career" value="yes" /> Yes
+            <input type="radio" name="career" value="no" /> No
+            <br /><br />
+            <label>Do you feel balanced between work and personal life?</label><br />
+            <input type="radio" name="balance" value="yes" /> Yes
+            <input type="radio" name="balance" value="no" /> No
+            <br /><br />
+            <button type="button" class="learn-more-btn" onclick="submitAssessment('adultForm')">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scroll to Top Button -->
+  <div class="scroll-to-top">
+    <i class="fas fa-arrow-up"></i>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2024 JAspire</p>
+  </footer>
+
+  <!-- ===============================
+       SCRIPTS
+       =============================== -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Hide loader after a short delay
+      setTimeout(() => {
+        const loader = document.querySelector('.loader');
+        if(loader) loader.style.display = 'none';
+      }, 1000);
+
+      // Initialize AOS
+      AOS.init({
+        duration: 1000,
+        once: true,
+        offset: 200
+      });
+
+      /* Custom Cursor */
+      const cursor = document.querySelector('.cursor');
+      const cursorDot = document.querySelector('.cursor-dot');
+      document.addEventListener('mousemove', (e) => {
+        const x = e.clientX;
+        const y = e.clientY;
+        if(cursor){
+          cursor.style.transform = `translate(${x - cursor.offsetWidth / 2}px, ${y - cursor.offsetHeight / 2}px)`;
+        }
+        if(cursorDot){
+          cursorDot.style.transform = `translate(${x - cursorDot.offsetWidth / 2}px, ${y - cursorDot.offsetHeight / 2}px)`;
+        }
+        const target = e.target;
+        if (target.tagName.toLowerCase() === 'a' || target.classList.contains('topic-card')) {
+          cursor.classList.add('hover');
+        } else {
+          cursor.classList.remove('hover');
+        }
+      });
+
+      /* Progress Bar */
+      window.addEventListener('scroll', () => {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        document.querySelector('.progress-bar').style.width = scrolled + '%';
+      });
+
+      /* Navbar Scroll Effect & Hero Parallax */
+      window.addEventListener('scroll', () => {
+        const nav = document.querySelector('nav');
+        if (window.scrollY > 100) {
+          nav.classList.add('scrolled');
+        } else {
+          nav.classList.remove('scrolled');
+        }
+        const hero = document.querySelector('.cognitive-hero');
+        if (hero) {
+          hero.style.transform = `translateY(${window.scrollY * 0.3}px)`;
+        }
+      });
+
+      /* Scroll to Top Button */
+      const scrollToTop = document.querySelector('.scroll-to-top');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 500) {
+          scrollToTop.classList.add('visible');
+        } else {
+          scrollToTop.classList.remove('visible');
+        }
+      });
+      scrollToTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      /* Mobile Menu Toggle */
+      const mobileToggle = document.querySelector('.mobile-menu-toggle');
+      const navLinks = document.querySelector('.nav-links');
+      mobileToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+      });
+
+      /* Nav Toggle for closable nav bar */
+      const nav = document.querySelector('nav');
+      const navToggle = document.querySelector('.nav-toggle');
+      navToggle.addEventListener('click', () => {
+        nav.classList.toggle('nav-hidden');
+        navToggle.innerHTML = nav.classList.contains('nav-hidden')
+          ? '<i class="fas fa-bars"></i>'
+          : '<i class="fas fa-times"></i>';
+      });
+
+      /* Card Hover Effects for 3D Interaction */
+      const cards = document.querySelectorAll('.topic-card, .research-feature');
+      cards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const rotateX = (y - centerY) / 20;
+          const rotateY = (centerX - x) / 20;
+          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
+        });
+      });
+
+      /* Smooth Scroll for Internal Links */
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      /* Particle Effect for Hero Section */
+      function createParticles() {
+        const hero = document.querySelector('.cognitive-hero');
+        if (!hero) return;
+        for (let i = 0; i < 50; i++) {
+          const particle = document.createElement('div');
+          particle.className = 'particle';
+          const size = Math.random() * 5;
+          particle.style.width = size + 'px';
+          particle.style.height = size + 'px';
+          particle.style.left = Math.random() * 100 + 'vw';
+          particle.style.top = Math.random() * 100 + 'vh';
+          particle.style.setProperty('--moveX', Math.random() * 100 - 50 + 'vw');
+          particle.style.setProperty('--moveY', Math.random() * 100 - 50 + 'vh');
+          hero.appendChild(particle);
+        }
+      }
+      createParticles();
+
+      /* Interactive Timeline Functionality */
+      const timelineData = {
+        infancy: {
+          title: 'Infancy (0-2 years)',
+          content:
+            'Physical: Rapid growth, motor skills developing. Cognitive: Sensorimotor stage, object permanence. Social: Attachment to caregivers. Language: Babbling, early words. Emotional: Basic emotions, attachment formation.'
+        },
+        earlyChildhood: {
+          title: 'Early Childhood (2-7 years)',
+          content:
+            'Physical: Growth slows, fine motor skills improve. Cognitive: Preoperational thinking, symbolic play. Social: Interaction with peers and family. Language: Vocabulary expansion, simple sentences. Emotional: Emerging self-regulation.'
+        },
+        childhood: {
+          title: 'Childhood (7-11 years)',
+          content:
+            'Physical: Steady growth, improved coordination. Cognitive: Concrete operational stage, logical thinking. Social: Peer relationships deepen, school influences. Language: Complex sentences, improved literacy. Emotional: Better emotional control.'
+        },
+        adolescence: {
+          title: 'Adolescence (11-18 years)',
+          content:
+            'Physical: Puberty and rapid changes. Cognitive: Emergence of abstract thinking and identity formation. Social: Increased independence and peer influence. Language: Advanced communication skills. Emotional: Mood swings and search for identity.'
+        },
+        youngAdulthood: {
+          title: 'Young Adulthood (18-40 years)',
+          content:
+            'Physical: Peak physical performance. Cognitive: Continued learning and problem-solving. Social: Forming long-term relationships and establishing a career. Language: Professional communication. Emotional: Balancing responsibilities.'
+        },
+        middleAdulthood: {
+          title: 'Middle Adulthood (40-65 years)',
+          content:
+            'Physical: Gradual physical decline. Cognitive: Experience-based knowledge and crystallized intelligence. Social: Focus on career, family, and social roles. Language: Effective communication. Emotional: Reevaluation of life goals.'
+        },
+        lateAdulthood: {
+          title: 'Late Adulthood (65+ years)',
+          content:
+            'Physical: Reduced mobility and health issues. Cognitive: Potential cognitive decline with wisdom accumulation. Social: Retirement and family changes. Language: Adjusted communication. Emotional: Reflection and coping with loss.'
+        }
+      };
+      const timelineItems = document.querySelectorAll('.timeline-item');
+      const timelineTitle = document.getElementById('timelineTitle');
+      const timelineContent = document.getElementById('timelineContent');
+      const timelineDetails = document.getElementById('timelineDetails');
+      timelineItems.forEach((item) => {
+        item.addEventListener('click', () => {
+          timelineItems.forEach((i) => i.classList.remove('active'));
+          item.classList.add('active');
+          const key = item.getAttribute('data-key');
+          const data = timelineData[key];
+          if (data) {
+            timelineTitle.textContent = data.title;
+            timelineContent.textContent = data.content;
+            timelineDetails.classList.remove("animate-slideInLeft");
+            void timelineDetails.offsetWidth;
+            timelineDetails.classList.add("animate-slideInLeft");
+          }
+        });
+      });
+      let isDown = false;
+      let startX, scrollLeft;
+      const timelineContainer = document.getElementById('timelineContainer');
+      timelineContainer.addEventListener('mousedown', (e) => {
+        isDown = true;
+        timelineContainer.classList.add('active');
+        startX = e.pageX - timelineContainer.offsetLeft;
+        scrollLeft = timelineContainer.scrollLeft;
+      });
+      timelineContainer.addEventListener('mouseleave', () => { isDown = false; });
+      timelineContainer.addEventListener('mouseup', () => { isDown = false; });
+      timelineContainer.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - timelineContainer.offsetLeft;
+        const walk = (x - startX) * 2;
+        timelineContainer.scrollLeft = scrollLeft - walk;
+      });
+
+      /* Assessment Tools Tabs */
+      const assessmentTabs = document.querySelectorAll('.assessment-tab');
+      const assessmentPanels = document.querySelectorAll('.assessment-panel');
+      assessmentTabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+          const tabId = tab.getAttribute('data-tab');
+          assessmentTabs.forEach((t) => t.classList.remove('active'));
+          tab.classList.add('active');
+          assessmentPanels.forEach((panel) => {
+            panel.classList.remove('active');
+            if (panel.id === tabId) {
+              panel.classList.add('active');
+              panel.classList.remove('animate-fadeInScale');
+              void panel.offsetWidth;
+              panel.classList.add('animate-fadeInScale');
+            }
+          });
+        });
+      });
+
+      /* Assessment Form Submission */
+      window.submitAssessment = function(formId) {
+        const form = document.getElementById(formId);
+        alert('Assessment submitted! Thank you for your response.');
+        form.reset();
+      };
+
+      /* Interactive Quiz Functionality */
+      document.querySelectorAll('.quiz-option').forEach((option) => {
+        option.addEventListener('click', function () {
+          const isCorrect = this.dataset.correct === 'true';
+          document.querySelectorAll('.quiz-option').forEach((opt) => {
+            opt.classList.remove('correct', 'incorrect');
+          });
+          this.classList.add(isCorrect ? 'correct' : 'incorrect');
+          showFloatingInfo(isCorrect ? 'Correct! Well done!' : 'Try again!');
+        });
+      });
+
+      /* Floating Info with Bounce Animation */
+      function showFloatingInfo(message) {
+        const floatingInfo = document.getElementById('floatingInfo');
+        document.getElementById('randomFact').textContent = message;
+        floatingInfo.classList.add('show');
+        floatingInfo.classList.add('animate-bounce');
+        setTimeout(() => {
+          floatingInfo.classList.remove('animate-bounce');
+        }, 500);
+        setTimeout(() => {
+          floatingInfo.classList.remove('show');
+        }, 3000);
+      }
+
+      /* Random Facts for Floating Info */
+      const facts = [
+        'The brain develops from back to front.',
+        "Babies can recognize their mother's voice from birth.",
+        'Critical periods are windows of heightened brain plasticity.',
+        'Play is crucial for cognitive development.'
+      ];
+      setInterval(() => {
+        const randomFact = facts[Math.floor(Math.random() * facts.length)];
+        document.getElementById('randomFact').textContent = randomFact;
+        document.getElementById('floatingInfo').classList.add('show');
+        setTimeout(() => {
+          document.getElementById('floatingInfo').classList.remove('show');
+        }, 5000);
+      }, 15000);
+
+      /* Show Theory Details Function */
+      window.showTheoryDetails = function(theory) {
+        document.querySelectorAll('.theory-details').forEach((detail) => {
+          detail.classList.remove('active');
+        });
+        const detailsElement = document.getElementById(theory + 'Details');
+        if (detailsElement) {
+          detailsElement.classList.add('active');
+          detailsElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      };
+    });
+  </script>
+
+  <!-- Floating Info (Quick Fact / Quiz Feedback) -->
+  <div class="floating-info" id="floatingInfo">
+    <h4>Quick Fact</h4>
+    <p id="randomFact">Did you know? The brain develops from back to front, with the prefrontal cortex being the last to fully develop.</p>
+  </div>
+</body>
+</html>

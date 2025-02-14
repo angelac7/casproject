@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Research - Psychology</title>
+  
+  <!-- AOS, Font Awesome, and Google Fonts (Poppins) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <style>
+    /* Root Variables */
+    :root {
+      --primary: #7c5dfa;
+      --primary-light: #a388ee;
+      --secondary: #f5f0ff;
+      --background: #ffffff;
+      --text: #2c2c2c;
+      --spacing: 2rem;
+      --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    /* Global Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    /* ---------------- Loader ---------------- */
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      transition: opacity 0.5s ease;
+    }
+    .loader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .loader-spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid var(--secondary);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    /* ---------------- Navigation ---------------- */
+    nav {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 1.5rem 10%;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+      transition: var(--transition);
+    }
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+    .nav-logo a {
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    .nav-links {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 3rem;
+    }
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      transition: var(--transition);
+      font-size: 1.1rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--primary);
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+    .nav-links a:hover::after {
+      transform: translateX(0);
+    }
+    .mobile-menu-toggle {
+      display: none;
+    }
+    @media (max-width: 768px) {
+      .mobile-menu-toggle {
+        display: block;
+        position: absolute;
+        top: 50%;
+        right: 5%;
+        transform: translateY(-50%);
+        font-size: 1.5rem;
+        color: var(--text);
+        cursor: pointer;
+        z-index: 1100;
+      }
+      .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 70%;
+        height: 100vh;
+        background: rgba(255, 255, 255, 0.98);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 1.5rem;
+        transition: right 0.3s ease;
+        z-index: 1050;
+      }
+      .nav-links.active {
+        right: 0;
+      }
+    }
+    .nav-toggle {
+      position: fixed;
+      bottom: 30px;
+      left: 30px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 1002;
+      transition: var(--transition);
+    }
+    .nav-toggle:hover {
+      background: var(--primary-light);
+      transform: translateY(-5px);
+    }
+    /* ---------------- Research Hero Section ---------------- */
+    .research-hero {
+      background: linear-gradient(135deg, #f0e6ff, #e6f0ff);
+      padding: 160px 0 80px;
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      margin-top: 60px;
+    }
+    .research-hero::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: url('/api/placeholder/1200/800') center/cover;
+      opacity: 0.1;
+      animation: pulse 4s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    .hero-content {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      animation: contentFadeIn 1.5s ease-out;
+    }
+    @keyframes contentFadeIn {
+      from { opacity: 0; transform: translateY(50px) scale(0.9); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .hero-content h1 {
+      font-size: 4rem;
+      background: linear-gradient(45deg, var(--primary), var(--primary-light));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 1.5rem;
+      animation: slideInDown 1s ease-out;
+    }
+    @keyframes slideInDown {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .hero-content p {
+      font-size: 1.3rem;
+      max-width: 800px;
+      margin: 0 auto;
+      animation: fadeIn 1s ease-out 0.5s both;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    /* ---------------- Container ---------------- */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--spacing);
+    }
+    
+    /* ---------------- Assessment Tools Section ---------------- */
+    .assessment-tools {
+      padding: 4rem 0;
+      background: var(--secondary);
+    }
+    .assessment-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      padding: 2rem;
+    }
+    .assessment-card {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .assessment-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    }
+    .assessment-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+    .assessment-card:hover::before {
+      transform: scaleX(1);
+    }
+    .assessment-icon {
+      width: 50px;
+      height: 50px;
+      background: var(--secondary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+    }
+    .assessment-card:hover .assessment-icon {
+      background: var(--primary);
+      color: white;
+    }
+    .assessment-title {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+    .assessment-description {
+      color: #666;
+      margin-bottom: 1.5rem;
+    }
+    .assessment-questions {
+      display: none;
+      margin-top: 1.5rem;
+      animation: fadeIn 0.5s ease-out;
+    }
+    .assessment-card.active .assessment-questions {
+      display: block;
+    }
+    .question-item {
+      background: var(--secondary);
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: slideIn 0.5s ease-out forwards;
+    }
+    @keyframes slideIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .rating-scale {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    .rating-button {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 2px solid var(--primary);
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+    .rating-button:hover,
+    .rating-button.selected {
+      background: var(--primary);
+      color: white;
+    }
+    /* ---------------- Submit & Feedback (Unified Button Style) ---------------- */
+    .assessment-submit {
+      padding: 0.75rem 1.5rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      margin-top: 1rem;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .assessment-submit:hover {
+      background: var(--primary-light);
+    }
+    .assessment-feedback {
+      margin-top: 1rem;
+      font-weight: bold;
+      color: var(--primary);
+    }
+    /* ---------------- Symptom Checker Styles ---------------- */
+    .symptom-checker {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    .symptom-button {
+      padding: 1rem;
+      border: 2px solid var(--primary);
+      border-radius: 8px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .symptom-button.selected {
+      background: var(--primary);
+      color: white;
+    }
+    .symptom-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .selected-symptoms {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+    .symptom-tag {
+      background: var(--secondary);
+      color: var(--primary);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+    }
+    .analyze-button {
+      width: 100%;
+      padding: 1rem 2rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 1rem 0;
+      transition: background-color 0.3s ease;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .analyze-button:hover {
+      background: var(--primary-light);
+    }
+    .diagnosis-result {
+      margin-top: 2rem;
+      padding: 1rem;
+      border-radius: 8px;
+      display: none;
+    }
+    .diagnosis-result.warning {
+      background: #fff3cd;
+      border: 1px solid #ffeeba;
+      color: #856404;
+    }
+    .diagnosis-result.info {
+      background: #cce5ff;
+      border: 1px solid #b8daff;
+      color: #004085;
+    }
+    /* ---------------- Input Styles ---------------- */
+    input[type="text"] {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid var(--secondary);
+      border-radius: 8px;
+      margin-top: 0.5rem;
+      transition: border-color 0.3s ease;
+    }
+    input[type="text"]:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    /* ---------------- Floating Action Button (Scroll-to-top) ---------------- */
+    .fab {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background: var(--primary);
+      border-radius: 50%;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1.5rem;
+      z-index: 1000;
+    }
+    .fab:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      background: var(--primary-light);
+    }
+    /* ---------------- Responsive Adjustments ---------------- */
+    @media (max-width: 768px) {
+      .assessment-grid {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+      }
+      .assessment-card {
+        padding: 1.5rem;
+      }
+      .hero-content h1 {
+        font-size: 2.5rem;
+      }
+    }
+    @media (max-width: 480px) {
+      .hero-content h1 {
+        font-size: 2rem;
+      }
+      .assessment-title {
+        font-size: 1.25rem;
+      }
+      .rating-scale {
+        justify-content: space-between;
+      }
+      .rating-button {
+        width: 25px;
+        height: 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loader -->
+  <div class="loader">
+    <div class="loader-spinner"></div>
+  </div>
+  
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <div class="nav-logo">
+        <a href="index.html">JAspire</a>
+      </div>
+      <div class="mobile-menu-toggle">
+        <i class="fas fa-bars"></i>
+      </div>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="cognitive.html">Cognitive</a>
+        <a href="developmental.html">Development</a>
+        <a href="social.html">Social</a>
+        <a href="research.html">Research</a>
+        <a href="mood-tracker.html">Mood Tracker</a>
+        <a href="resources.html">Resources</a>
+      </div>
+    </div>
+  </nav>
+  <!-- Optional nav-toggle button -->
+  <button class="nav-toggle"><i class="fas fa-times"></i></button>
+  
+  <!-- Research Hero Section -->
+  <section class="research-hero">
+    <div class="container">
+      <div class="hero-content" data-aos="fade-up">
+        <h1>Research in Psychology</h1>
+        <p data-aos="fade-up">Exploring rigorous scientific methods to understand the mind and behavior.</p>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Assessment Tools Section -->
+  <section class="assessment-tools">
+    <div class="container">
+      <h2 class="text-center" data-aos="fade-up">Psychological Assessment Tools</h2>
+      <div class="assessment-grid">
+        <!-- Mental Health Screening -->
+        <div class="assessment-card" data-aos="fade-up">
+          <div class="assessment-icon">🧠</div>
+          <h3 class="assessment-title">Mental Health Screening</h3>
+          <p class="assessment-description">Non-diagnostic screening tools for common mental health concerns.</p>
+          <div class="assessment-questions">
+            <div class="question-item">
+              <p>Over the past 2 weeks, how often have you felt down or depressed?</p>
+              <div class="rating-scale">
+                <button class="rating-button">1</button>
+                <button class="rating-button">2</button>
+                <button class="rating-button">3</button>
+                <button class="rating-button">4</button>
+                <button class="rating-button">5</button>
+              </div>
+            </div>
+            <div class="question-item">
+              <p>How often do you feel overwhelmed by daily tasks?</p>
+              <div class="rating-scale">
+                <button class="rating-button">1</button>
+                <button class="rating-button">2</button>
+                <button class="rating-button">3</button>
+                <button class="rating-button">4</button>
+                <button class="rating-button">5</button>
+              </div>
+            </div>
+            <div class="question-item">
+              <p>Do you experience difficulty sleeping?</p>
+              <div class="rating-scale">
+                <button class="rating-button">1</button>
+                <button class="rating-button">2</button>
+                <button class="rating-button">3</button>
+                <button class="rating-button">4</button>
+                <button class="rating-button">5</button>
+              </div>
+            </div>
+            <div class="progress-bar"><div class="progress-fill"></div></div>
+            <button class="assessment-submit" onclick="submitAssessment(this)">Submit Answers</button>
+            <div class="assessment-feedback" style="display: none;"></div>
+          </div>
+        </div>
+        
+        <!-- Cognitive Function Tests (Interactive Quiz Card) -->
+        <div class="assessment-card" id="cognitiveCard" data-aos="fade-up" data-aos-delay="100">
+          <div class="assessment-icon">💡</div>
+          <h3 class="assessment-title">Cognitive Function Tests</h3>
+          <p class="assessment-description">Test your memory, processing speed, and pattern recognition.</p>
+          <div class="assessment-questions" id="cognitiveQuizContainer"></div>
+        </div>
+        
+        <!-- Personality Assessment -->
+        <div class="assessment-card" data-aos="fade-up" data-aos-delay="200">
+          <div class="assessment-icon">❤️</div>
+          <h3 class="assessment-title">Personality Assessment</h3>
+          <p class="assessment-description">Explore your personality traits and tendencies.</p>
+          <div class="assessment-questions">
+            <div class="question-item">
+              <p>In social situations, do you prefer to initiate or observe?</p>
+              <div class="rating-scale">
+                <button class="rating-button">1</button>
+                <button class="rating-button">2</button>
+                <button class="rating-button">3</button>
+                <button class="rating-button">4</button>
+                <button class="rating-button">5</button>
+              </div>
+            </div>
+            <div class="question-item">
+              <p>How do you typically make important decisions?</p>
+              <div class="rating-scale">
+                <button class="rating-button">1</button>
+                <button class="rating-button">2</button>
+                <button class="rating-button">3</button>
+                <button class="rating-button">4</button>
+                <button class="rating-button">5</button>
+              </div>
+            </div>
+            <div class="question-item">
+              <p>What energizes you more: time alone or time with others?</p>
+              <div class="rating-scale">
+                <button class="rating-button">1</button>
+                <button class="rating-button">2</button>
+                <button class="rating-button">3</button>
+                <button class="rating-button">4</button>
+                <button class="rating-button">5</button>
+              </div>
+            </div>
+            <div class="progress-bar"><div class="progress-fill"></div></div>
+            <button class="assessment-submit" onclick="submitAssessment(this)">Submit Answers</button>
+            <div class="assessment-feedback" style="display: none;"></div>
+          </div>
+        </div>
+        
+        <!-- Emotional Intelligence -->
+        <div class="assessment-card" data-aos="fade-up" data-aos-delay="300">
+          <div class="assessment-icon">📊</div>
+          <h3 class="assessment-title">Emotional Intelligence</h3>
+          <p class="assessment-description">Evaluate your emotional awareness and management.</p>
+          <div class="assessment-questions">
+            <div class="question-item">
+              <p>How well can you identify your emotions as they occur?</p>
+              <div class="rating-scale">
+                <button class="rating-button">1</button>
+                <button class="rating-button">2</button>
+                <button class="rating-button">3</button>
+                <button class="rating-button">4</button>
+                <button class="rating-button">5</button>
+              </div>
+            </div>
+            <div class="question-item">
+              <p>How do you typically respond to stress?</p>
+              <div class="rating-scale">
+                <button class="rating-button">1</button>
+                <button class="rating-button">2</button>
+                <button class="rating-button">3</button>
+                <button class="rating-button">4</button>
+                <button class="rating-button">5</button>
+              </div>
+            </div>
+            <div class="question-item">
+              <p>Can you easily recognize others' emotional states?</p>
+              <div class="rating-scale">
+                <button class="rating-button">1</button>
+                <button class="rating-button">2</button>
+                <button class="rating-button">3</button>
+                <button class="rating-button">4</button>
+                <button class="rating-button">5</button>
+              </div>
+            </div>
+            <div class="progress-bar"><div class="progress-fill"></div></div>
+            <button class="assessment-submit" onclick="submitAssessment(this)">Submit Answers</button>
+            <div class="assessment-feedback" style="display: none;"></div>
+          </div>
+        </div>
+        
+        <!-- Behavioral Pattern Analysis -->
+        <div class="assessment-card" data-aos="fade-up" data-aos-delay="400">
+          <div class="assessment-icon">📈</div>
+          <h3 class="assessment-title">Behavioral Pattern Analysis</h3>
+          <p class="assessment-description">Analyze your behavioral tendencies and habits.</p>
+          <div class="assessment-questions">
+            <div class="question-item">
+              <p>How consistent are your daily routines?</p>
+              <div class="rating-scale">
+                <button class="rating-button">1</button>
+                <button class="rating-button">2</button>
+                <button class="rating-button">3</button>
+                <button class="rating-button">4</button>
+                <button class="rating-button">5</button>
+              </div>
+            </div>
+            <div class="question-item">
+              <p>How do you typically react to unexpected changes?</p>
+              <div class="rating-scale">
+                <button class="rating-button">1</button>
+                <button class="rating-button">2</button>
+                <button class="rating-button">3</button>
+                <button class="rating-button">4</button>
+                <button class="rating-button">5</button>
+              </div>
+            </div>
+            <div class="question-item">
+              <p>What motivates you to achieve your goals?</p>
+              <input type="text" placeholder="Describe your motivation">
+            </div>
+            <div class="progress-bar"><div class="progress-fill"></div></div>
+            <button class="assessment-submit" onclick="submitAssessment(this)">Submit Answers</button>
+            <div class="assessment-feedback" style="display: none;"></div>
+          </div>
+        </div>
+        
+        <!-- Memory & Learning Tests -->
+        <div class="assessment-card" data-aos="fade-up" data-aos-delay="500">
+          <div class="assessment-icon">🧩</div>
+          <h3 class="assessment-title">Memory & Learning Tests</h3>
+          <p class="assessment-description">Test your ability to remember details and recall information.</p>
+          <div class="assessment-questions">
+            <div class="question-item">
+              <p>Recall the sequence: Green, Orange, Purple, Blue, Red</p>
+              <input type="text" placeholder="Enter the sequence" data-correct="green, orange, purple, blue, red">
+            </div>
+            <div class="question-item">
+              <p>Remember this number: 582-910-467</p>
+              <input type="text" placeholder="Enter the number" data-correct="582-910-467">
+            </div>
+            <div class="question-item">
+              <p>What was the third word in the list: cat, dog, bird, fish, rabbit?</p>
+              <input type="text" placeholder="Enter the third word" data-correct="bird">
+            </div>
+            <div class="question-item">
+              <p>What is the first item in the list: chair, table, lamp, sofa, shelf?</p>
+              <input type="text" placeholder="Enter the first item" data-correct="chair">
+            </div>
+            <div class="progress-bar"><div class="progress-fill"></div></div>
+            <button class="assessment-submit" onclick="submitAssessment(this)">Submit Answers</button>
+            <div class="assessment-feedback" style="display: none;"></div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+  
+  <!-- Symptom Checker Section -->
+  <section class="container">
+    <h2 data-aos="fade-up">Scientific Symptom Research</h2>
+    <div class="symptom-checker" data-aos="fade-up">
+      <h3>Symptom Analysis Tool</h3>
+      <p class="text-gray-600 mb-4">
+        Select up to 4 symptoms to analyze potential patterns. Please note that this list does not include all possible symptoms. If yours does not appear here please consult a healthcare professional.
+      </p>
+      <div id="symptoms-grid" class="grid-container"></div>
+      <div class="selected-symptoms" id="selected-symptoms"></div>
+      <button class="analyze-button" onclick="analyzeSymptoms()">Analyze Symptoms</button>
+      <div id="diagnosis-result" class="diagnosis-result"></div>
+    </div>
+  </section>
+  
+  <!-- Floating Action Button (Scroll-to-top) -->
+  <div class="fab" onclick="scrollToTop()">↑</div>
+  
+  <!-- ---------------- Scripts ---------------- -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    // Initialize AOS animations
+    AOS.init({
+      duration: 1000,
+      once: true,
+      offset: 100
+    });
+    
+    // Hide loader when page is loaded & initialize symptom checker
+    window.addEventListener('load', () => {
+      document.querySelector('.loader').classList.add('hidden');
+      initializeSymptomChecker();
+    });
+    
+    /* ---------------- Navigation Scripts ---------------- */
+    const mobileToggle = document.querySelector('.mobile-menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    mobileToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+    
+    const navToggle = document.querySelector('.nav-toggle');
+    const nav = document.querySelector('nav');
+    navToggle.addEventListener('click', () => {
+      nav.classList.toggle('nav-hidden');
+      navToggle.innerHTML = nav.classList.contains('nav-hidden')
+        ? '<i class="fas fa-bars"></i>'
+        : '<i class="fas fa-times"></i>';
+    });
+    
+    /* ---------------- Assessment Card Functionality ---------------- */
+    document.querySelectorAll('.assessment-card').forEach(card => {
+      card.addEventListener('click', () => {
+        // Remove active class from all cards
+        document.querySelectorAll('.assessment-card').forEach(c => {
+          c.classList.remove('active');
+        });
+        // Add active class to clicked card
+        card.classList.add('active');
+        // Update progress bar if applicable
+        const progressBar = card.querySelector('.progress-fill');
+        if (progressBar) {
+          const questions = card.querySelectorAll('.question-item');
+          updateProgress(progressBar, 0, questions.length);
+        }
+      });
+    });
+    
+    document.querySelectorAll('.rating-button').forEach(button => {
+      button.addEventListener('click', (e) => {
+        const parent = e.target.closest('.rating-scale');
+        parent.querySelectorAll('.rating-button').forEach(b => b.classList.remove('selected'));
+        button.classList.add('selected');
+        const card = button.closest('.assessment-card');
+        const progressBar = card.querySelector('.progress-fill');
+        if (progressBar) {
+          const answered = card.querySelectorAll('.rating-button.selected').length;
+          const total = card.querySelectorAll('.question-item').length;
+          updateProgress(progressBar, answered, total);
+        }
+        e.stopPropagation();
+      });
+    });
+    
+    function updateProgress(progressBar, answered, total) {
+      const percentage = (answered / total) * 100;
+      progressBar.style.width = percentage + '%';
+    }
+    
+    /* ---------------- Submit Assessment Function ---------------- */
+    function submitAssessment(btn) {
+      const card = btn.closest('.assessment-card');
+      let allCorrectText = true;
+      const textInputs = Array.from(card.querySelectorAll('input[type="text"][data-correct]'));
+      textInputs.forEach(input => {
+        const correctAnswer = input.getAttribute('data-correct');
+        if (input.value.trim().toLowerCase() !== correctAnswer.trim().toLowerCase()) {
+          input.style.borderColor = "red";
+          allCorrectText = false;
+        } else {
+          input.style.borderColor = "green";
+        }
+      });
+      
+      let ratingFeedback = "";
+      const ratingButtons = card.querySelectorAll('.rating-button.selected');
+      if (ratingButtons.length > 0 && textInputs.length === 0) {
+        const ratings = Array.from(ratingButtons).map(btn => parseInt(btn.textContent));
+        const averageRating = ratings.reduce((a, b) => a + b, 0) / ratings.length;
+        if (averageRating <= 2) {
+          ratingFeedback = "Your responses indicate minimal concerns. Keep up the good work!";
+        } else if (averageRating <= 3) {
+          ratingFeedback = "Your responses indicate mild concerns. Consider monitoring your well-being.";
+        } else if (averageRating <= 4) {
+          ratingFeedback = "Your responses indicate moderate concerns. It might be helpful to consult a professional.";
+        } else {
+          ratingFeedback = "Your responses indicate significant concerns. Please consider seeking professional help.";
+        }
+      }
+      
+      let feedback = "";
+      if (textInputs.length > 0) {
+        feedback = allCorrectText ? "All your answers are correct! Well done!" : "Some of your answers are incorrect. Please review and try again.";
+      } else {
+        feedback = ratingFeedback || "Thank you for your responses.";
+      }
+      showFeedback(card, feedback);
+    }
+    
+    function showFeedback(card, message) {
+      const feedbackContainer = card.querySelector('.assessment-feedback');
+      if (feedbackContainer) {
+        feedbackContainer.style.display = 'block';
+        feedbackContainer.innerHTML = message;
+      } else {
+        const newDiv = document.createElement('div');
+        newDiv.className = 'assessment-feedback';
+        newDiv.innerHTML = message;
+        card.appendChild(newDiv);
+      }
+    }
+    
+    /* ---------------- Cognitive Function Tests Interactive Quiz ---------------- */
+    const cognitiveQuestions = [
+      {
+        level: "Basic",
+        question: "What number comes next: 2, 4, 6, 8, ?",
+        answer: "10",
+        explanation: "This is an arithmetic sequence with a difference of 2 between each number."
+      },
+      {
+        level: "Easy",
+        question: "Complete the pattern: Monday, Wednesday, Friday, ?",
+        answer: "Sunday",
+        explanation: "The pattern skips one day each time."
+      },
+      {
+        level: "Medium",
+        question: "What number completes the sequence: 1, 4, 9, 16, 25, ?",
+        answer: "36",
+        explanation: "These are perfect squares: 1², 2², 3², 4², 5², and 6² = 36."
+      },
+      {
+        level: "Challenging",
+        question: "In the sequence 2, 6, 12, 20, 30, what's the next number?",
+        answer: "42",
+        explanation: "The differences between numbers are 4, 6, 8, 10, so the next difference is 12."
+      },
+      {
+        level: "Hard",
+        question: "What comes next: 3, 8, 15, 24, 35, ?",
+        answer: "48",
+        explanation: "The differences are 5, 7, 9, 11 so the next difference is 13; 35 + 13 = 48."
+      },
+      {
+        level: "Expert",
+        question: "Complete: 1, 11, 21, 1211, 111221, ?",
+        answer: "312211",
+        explanation: "Each term describes the previous term."
+      },
+      {
+        level: "Very Hard",
+        question: "What is the next number in the sequence: 7, 14, 28, 56, ?",
+        answer: "112",
+        explanation: "Each number doubles: 7×2=14, 14×2=28, 28×2=56, so 56×2=112."
+      },
+      {
+        level: "Legendary",
+        question: "Complete the Fibonacci sequence: 1, 1, 2, 3, 5, 8, 13, ?",
+        answer: "21",
+        explanation: "Each number is the sum of the two preceding numbers."
+      }
+    ];
+    
+    let currentCognitiveIndex = 0;
+    const cognitiveUserAnswers = {};
+    let cognitiveShowFeedback = false;
+    
+    function renderCognitiveQuiz() {
+      const container = document.getElementById("cognitiveQuizContainer");
+      const currentQuestion = cognitiveQuestions[currentCognitiveIndex];
+      container.innerHTML = `
+        <div class="question-item">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-sm font-medium text-gray-500">
+              Question ${currentCognitiveIndex + 1} of ${cognitiveQuestions.length}
+            </span>
+            <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+              ${currentQuestion.level}
+            </span>
+          </div>
+          <h2 class="text-lg font-semibold mb-3">${currentQuestion.question}</h2>
+          <input
+            type="text"
+            id="cognitiveAnswerInput"
+            class="w-full p-3 border rounded-lg mb-3"
+            placeholder="Enter your answer"
+            value="${cognitiveUserAnswers[currentCognitiveIndex] || ''}"
+          />
+          <div class="flex gap-4 mb-3">
+            <button id="cognitiveCheckBtn" class="assessment-submit">Check Answer</button>
+            ${currentCognitiveIndex < cognitiveQuestions.length - 1 ? `<button id="cognitiveNextBtn" class="assessment-submit">Next Question</button>` : ''}
+          </div>
+          <div id="cognitiveFeedback" class="mt-4 p-4 rounded-lg" style="display:none;"></div>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-2.5 mt-3">
+          <div id="cognitiveProgressBar" class="bg-blue-600 h-2.5 rounded-full transition-all duration-300" style="width: ${((currentCognitiveIndex + 1) / cognitiveQuestions.length) * 100}%"></div>
+        </div>
+      `;
+      
+      document.getElementById("cognitiveCheckBtn").addEventListener("click", () => {
+        cognitiveShowFeedback = true;
+        checkCognitiveAnswer();
+      });
+      const nextBtn = document.getElementById("cognitiveNextBtn");
+      if (nextBtn) {
+        nextBtn.addEventListener("click", nextCognitiveQuestion);
+      }
+    }
+    
+    function checkCognitiveAnswer() {
+      const input = document.getElementById("cognitiveAnswerInput");
+      const userAnswer = input.value.trim();
+      cognitiveUserAnswers[currentCognitiveIndex] = userAnswer;
+      const currentQuestion = cognitiveQuestions[currentCognitiveIndex];
+      const feedbackDiv = document.getElementById("cognitiveFeedback");
+      const isCorrect = userAnswer.toLowerCase() === currentQuestion.answer.toLowerCase();
+      feedbackDiv.style.display = "block";
+      feedbackDiv.className = "p-4 rounded-lg " + (isCorrect ? "bg-green-100" : "bg-red-100");
+      feedbackDiv.innerHTML = `
+        <div class="flex items-center gap-2">
+          ${isCorrect ? '<i class="fas fa-check-circle" style="color: green;"></i>' : '<i class="fas fa-exclamation-circle" style="color: red;"></i>'}
+          <span style="color: ${isCorrect ? "green" : "red"};">
+            ${isCorrect ? "Correct!" : "Incorrect. Try again!"}
+          </span>
+        </div>
+        <p class="mt-2 text-gray-700">${currentQuestion.explanation}</p>
+      `;
+    }
+    
+    function nextCognitiveQuestion() {
+      if (currentCognitiveIndex < cognitiveQuestions.length - 1) {
+        currentCognitiveIndex++;
+        cognitiveShowFeedback = false;
+        renderCognitiveQuiz();
+      }
+    }
+    
+    document.addEventListener("DOMContentLoaded", renderCognitiveQuiz);
+    
+    /* ---------------- Symptom Checker Scripts ---------------- */
+    const diseasePatterns = {
+      "Common Cold": ["Cough", "Fever", "Fatigue", "Breathing Problems"],
+      "Flu": ["Fever", "Fatigue", "Body Aches", "Headache", "Cough", "Sore Throat", "Chills"],
+      "Pneumonia": ["Cough", "Fever", "Chest Pain", "Breathing Problems", "Fatigue", "Sweating", "Chills"],
+      "Bronchitis": ["Cough", "Sore Throat", "Fatigue", "Breathing Problems", "Wheezing"],
+      "COVID-19": ["Cough", "Fever", "Fatigue", "Shortness of Breath", "Loss of Taste", "Loss of Smell", "Headache", "Muscle Pain", "Sore Throat", "Chills"],
+      "Tuberculosis": ["Cough", "Fever", "Fatigue", "Night Sweats", "Chest Pain", "Weight Loss"],
+      "Asthma": ["Wheezing", "Breathing Problems", "Cough", "Shortness of Breath", "Chest Pain"]
+    };
+    
+    const symptoms = [
+      "Abdominal Pain", "Indigestion", "Heartburn", "Constipation", "Diarrhea", "Nausea", "Vomiting", 
+      "Bloody Stool", "Loss of Appetite", "Bloating", "Gas", "Flatulence",
+      "Breathing Problems", "Cough", "Wheezing", "Shortness of Breath", "Chest Pain", "Sore Throat",
+      "Hoarseness", "Lung Pain", "Mucus Production", "Tightness in Chest",
+      "Chest Pain", "Heartburn", "Palpitations", "Weak Pulse", "Rapid Heartbeat", "Swollen Legs",
+      "Dizziness", "Fainting", "Irregular Heartbeat", "Blood Pressure Changes",
+      "Headache", "Dizziness and Vertigo", "Seizures", "Tingling or Numbness", "Loss of Coordination",
+      "Confusion", "Memory Loss", "Blurred Vision", "Tinnitus (Ringing in Ears)", "Loss of Taste", "Loss of Smell",
+      "Sensitivity to Light", "Sensitivity to Sound", "Visual Disturbances",
+      "Joint Pain", "Muscle Pain", "Back Pain", "Neck Pain", "Muscle Weakness", "Stiffness",
+      "Limited Range of Motion", "Swelling", "Muscle Spasms", "Bone Pain",
+      "Anxiety", "Depression", "Mood Swings", "Irritability", "Sleep Problems", "Fatigue",
+      "Stress", "Panic Attacks", "Poor Concentration", "Changes in Appetite",
+      "Rash", "Itching", "Dry Skin", "Excessive Sweating", "Hair Loss", "Nail Changes",
+      "Skin Discoloration", "Bruising", "Skin Lesions", "Changes in Moles",
+      "Fever", "Chills", "Night Sweats", "Weight Loss", "Weight Gain", "Fatigue",
+      "Weakness", "Loss of Balance", "Poor Appetite", "Excessive Thirst",
+      "Frequent Infections", "Slow Healing", "Enlarged Lymph Nodes", "Allergic Reactions",
+      "Autoimmune Symptoms", "Inflammation", "Joint Swelling", "Skin Reactions",
+      "Heat Intolerance", "Cold Intolerance", "Excessive Hunger", "Excessive Thirst",
+      "Frequent Urination", "Hormonal Changes", "Menstrual Changes", "Blood Sugar Changes"
+    ];
+    
+    let selectedSymptoms = [];
+    
+    function initializeSymptomChecker() {
+      const gridContainer = document.getElementById('symptoms-grid');
+      symptoms.forEach(symptom => {
+        const button = document.createElement('button');
+        button.className = 'symptom-button';
+        button.textContent = symptom;
+        button.onclick = () => toggleSymptom(symptom);
+        gridContainer.appendChild(button);
+      });
+    }
+    
+    function toggleSymptom(symptom) {
+      const index = selectedSymptoms.indexOf(symptom);
+      if (index > -1) {
+        selectedSymptoms.splice(index, 1);
+      } else if (selectedSymptoms.length < 4) {
+        selectedSymptoms.push(symptom);
+      }
+      updateSymptomUI();
+    }
+    
+    function updateSymptomUI() {
+      const buttons = document.querySelectorAll('.symptom-button');
+      buttons.forEach(button => {
+        const isSelected = selectedSymptoms.includes(button.textContent);
+        button.className = 'symptom-button' + (isSelected ? ' selected' : '');
+        button.disabled = selectedSymptoms.length >= 4 && !isSelected;
+      });
+      const selectedContainer = document.getElementById('selected-symptoms');
+      selectedContainer.innerHTML = selectedSymptoms.map(symptom => `<span class="symptom-tag">${symptom}</span>`).join('');
+    }
+    
+    function analyzeSymptoms() {
+      if (selectedSymptoms.length === 0) {
+        showDiagnosis("Please select at least one symptom.", "warning");
+        return;
+      }
+      const matches = Object.entries(diseasePatterns).map(([disease, patternSymptoms]) => {
+        const matchCount = patternSymptoms.filter(s => selectedSymptoms.includes(s)).length;
+        const percentage = (matchCount / patternSymptoms.length) * 100;
+        return { disease, percentage };
+      });
+      const bestMatch = matches.reduce((prev, current) => current.percentage > prev.percentage ? current : prev);
+      if (bestMatch.percentage >= 50) {
+        showDiagnosis(
+          `Based on your symptoms, you may have ${bestMatch.disease} (${Math.round(bestMatch.percentage)}% match).<br><br>
+          <em>This is not a medical diagnosis. Please consult a healthcare professional.</em>`,
+          "info"
+        );
+      } else {
+        showDiagnosis("No clear pattern matched. Please consult a healthcare professional for proper diagnosis.", "warning");
+      }
+    }
+    
+    function showDiagnosis(message, type) {
+      const diagnosisResult = document.getElementById('diagnosis-result');
+      diagnosisResult.innerHTML = message;
+      diagnosisResult.className = `diagnosis-result ${type}`;
+      diagnosisResult.style.display = 'block';
+    }
+    
+    /* ---------------- Scroll-to-Top Function ---------------- */
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    window.addEventListener('scroll', () => {
+      const fab = document.querySelector('.fab');
+      fab.style.display = window.scrollY > 500 ? 'flex' : 'none';
+    });
+    
+  </script>
+</body>
+</html>
